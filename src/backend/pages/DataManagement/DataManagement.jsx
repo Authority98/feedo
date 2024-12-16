@@ -15,9 +15,10 @@ import DataSubmission from '../Dashboard/sections/DataSubmission/DataSubmission'
 import './DataManagement.css';
 import SectionForm from './SectionForm/SectionForm';
 import { eventEmitter, EVENTS } from '../../../services/eventEmitter';
-import { FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
+import { FiCheckCircle, FiAlertCircle, FiHelpCircle, FiMessageCircle } from 'react-icons/fi';
 import { useProfileProgress } from '../../../hooks/useProfileProgress';
-import { Tabs, Tab, Box, useTheme } from '@mui/material';
+import { Tabs, Tab, Box, useTheme, Button, Tooltip, Zoom } from '@mui/material';
+import QuestionDialog from '../../../components/QuestionDialog/QuestionDialog';
 
 const DataManagement = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -28,6 +29,7 @@ const DataManagement = () => {
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') || '');
   const { submissionItems } = useProfileProgress();
   const theme = useTheme();
+  const [openQuestionDialog, setOpenQuestionDialog] = useState(false);
 
   // Fetch sections data
   const fetchSections = async () => {
@@ -216,52 +218,118 @@ const DataManagement = () => {
   return (
     <div className="data-management">
       <main className="main-content">
-        <Box sx={{ width: '100%', bgcolor: 'background.paper', mb: 2 }}>
-          <Tabs
-            value={activeTab}
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label="data management tabs"
-            sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
-              '& .MuiTab-root': {
-                textTransform: 'none',
-                minHeight: '48px',
-                fontWeight: 500,
-              }
-            }}
-          >
-            {sections.map(section => {
-              const submissionItem = submissionItems.find(item => item.id === section.id);
-              const isComplete = submissionItem?.status === 'complete';
-              
-              return (
-                <Tab
-                  key={section.id}
-                  label={
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      {section.label}
-                      {isComplete ? (
-                        <FiCheckCircle style={{ color: theme.palette.primary.main }} />
-                      ) : (
-                        <FiAlertCircle style={{ color: theme.palette.primary.main }} />
-                      )}
-                    </Box>
-                  }
-                  value={section.id}
-                  sx={{
-                    '&.Mui-selected': {
-                      color: 'primary.main',
+        <Box sx={{ 
+          width: '100%', 
+          bgcolor: 'background.paper', 
+          mb: 2,
+          borderRadius: 1,
+          overflow: 'hidden'
+        }}>
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center',
+            borderBottom: 1,
+            borderColor: 'divider',
+            gap: 2
+          }}>
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              aria-label="data management tabs"
+              sx={{
+                flex: 1,
+                '& .MuiTab-root': {
+                  textTransform: 'none',
+                  minHeight: '48px',
+                  fontWeight: 500,
+                }
+              }}
+            >
+              {sections.map(section => {
+                const submissionItem = submissionItems.find(item => item.id === section.id);
+                const isComplete = submissionItem?.status === 'complete';
+                
+                return (
+                  <Tab
+                    key={section.id}
+                    label={
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        {section.label}
+                        {isComplete ? (
+                          <FiCheckCircle style={{ color: theme.palette.primary.main }} />
+                        ) : (
+                          <FiAlertCircle style={{ color: theme.palette.primary.main }} />
+                        )}
+                      </Box>
                     }
-                  }}
-                />
-              );
-            })}
-          </Tabs>
+                    value={section.id}
+                    sx={{
+                      '&.Mui-selected': {
+                        color: 'primary.main',
+                      }
+                    }}
+                  />
+                );
+              })}
+            </Tabs>
+
+            {/* New Question Button Design */}
+            <Tooltip 
+              title="Add a question about this section" 
+              placement="left"
+              arrow
+            >
+              <Button
+                variant="text"
+                onClick={() => setOpenQuestionDialog(true)}
+                startIcon={<FiMessageCircle />}
+                sx={{
+                  mr: 2,
+                  color: 'text.secondary',
+                  '&:hover': {
+                    color: 'primary.main',
+                    bgcolor: 'action.hover',
+                  },
+                  transition: 'all 0.2s ease',
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  minWidth: 'auto',
+                  px: 2,
+                  height: '36px',
+                  borderRadius: '18px',
+                  fontSize: '0.875rem',
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  '&:hover .question-text': {
+                    maxWidth: '200px',
+                    marginLeft: '8px',
+                    opacity: 1
+                  }
+                }}
+              >
+                <Box component="span" sx={{ 
+                  maxWidth: 0,
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  opacity: 0,
+                  transition: 'all 0.3s ease',
+                }} className="question-text">
+                  Add a Question
+                </Box>
+              </Button>
+            </Tooltip>
+          </Box>
         </Box>
         {renderTabContent()}
+
+        {/* Question Dialog */}
+        <QuestionDialog 
+          open={openQuestionDialog}
+          onClose={() => setOpenQuestionDialog(false)}
+          currentSection={sections.find(section => section.id === activeTab)}
+        />
       </main>
       <DataSubmission />
     </div>

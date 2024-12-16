@@ -1,6 +1,14 @@
 # Feedo Platform Maintenance Log
 
 ## New Features
+- Added "Add a Question" feature to Data Management page
+  - Integrated button in tabs section with hover animation
+  - Modern dialog with file upload support
+  - Form validation and error handling
+  - Toast notifications for success/error states
+  - Support for multiple file attachments
+  - File size validation (max 10MB)
+
 - Made opportunity names clickable in recent activity for better UX
 - Made submission names clickable in recent activity for better UX
 - Added hover effects and styling for clickable elements
