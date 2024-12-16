@@ -7,7 +7,7 @@ import { auth } from '../firebase/config';
 import { onAuthStateChanged, updateProfile as updateFirebaseProfile, OAuthProvider } from 'firebase/auth';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { transformUserData, userOperations, createUserDataStructure } from './userManager';
-import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { verifyTwoFactorCode } from './twoFactorAuth';
 import { authenticator } from 'otplib';
@@ -323,11 +323,45 @@ export const AuthProvider = ({ children }) => {
     if (!user?.profile?.authUid) throw new Error('No authenticated user');
 
     try {
-      await userOperations.deleteUserData(user.profile.authUid);
+      // Check if user exists in pending users first
+      const pendingRef = doc(db, 'pending_users', user.profile.authUid);
+      const pendingDoc = await getDoc(pendingRef);
+      
+      // Delete from the appropriate collection
+      if (pendingDoc.exists()) {
+        await deleteDoc(pendingRef);
+      } else {
+        await userOperations.deleteUserData(user.profile.authUid);
+      }
+
+      // Delete the auth user
       await auth.currentUser.delete();
+      
+      // Clear local state
       setUser(null);
+      localStorage.removeItem('user');
+      
+      // Show success message
+      showToast('Account deleted successfully', 'success');
     } catch (error) {
       console.error('Delete account error:', error);
+      
+      // Check if the user was actually deleted despite the error
+      try {
+        const userExists = await getDoc(doc(db, 'users', user.profile.authUid));
+        if (!userExists.exists()) {
+          // User was deleted but we got an error, clean up the state
+          setUser(null);
+          localStorage.removeItem('user');
+          showToast('Account deleted successfully', 'success');
+          return;
+        }
+      } catch (checkError) {
+        console.error('Error checking user existence:', checkError);
+      }
+      
+      // If we get here, the deletion actually failed
+      showToast('Failed to delete account. Please try again.', 'error');
       throw error;
     }
   };

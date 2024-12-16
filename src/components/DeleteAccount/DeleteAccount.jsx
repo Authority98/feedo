@@ -62,7 +62,8 @@ const DeleteAccount = ({ isOpen, onClose, onConfirmDelete }) => {
       // Call the delete function
       await onConfirmDelete();
       
-      showToast('Account deleted successfully', 'success');
+      // Close the popup
+      onClose();
       
       // Navigate to home page after successful deletion
       navigate('/', { replace: true });
@@ -71,10 +72,13 @@ const DeleteAccount = ({ isOpen, onClose, onConfirmDelete }) => {
       
       if (error.code === 'auth/wrong-password') {
         setError('Incorrect password');
+      } else if (error.code === 'auth/requires-recent-login') {
+        setError('Please sign out and sign in again to delete your account');
+      } else if (error.code === 'auth/network-request-failed') {
+        setError('Network error. Please check your internet connection');
       } else {
         setError('Failed to delete account. Please try again.');
       }
-      showToast('Failed to delete account', 'error');
     } finally {
       setLoading(false);
     }

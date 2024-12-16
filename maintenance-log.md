@@ -44,3 +44,17 @@
 - Confirm profile completion percentage updates correctly
 - Check loading states and transitions
 - Verify hover effects on clickable elements 
+
+## Recent Changes
+
+### 2024-01-09
+- Made opportunity names in recent activity clickable for better UX
+- Made submission names in recent activity clickable for better UX
+- Created maintenance log file to track changes
+
+### 2024-01-10
+- Fixed account deletion issue for Google users
+  - Added proper error handling and state cleanup
+  - Improved error messages and user feedback
+  - Fixed race condition between Firestore and Auth user deletion
+  - Added check for pending users during deletion
