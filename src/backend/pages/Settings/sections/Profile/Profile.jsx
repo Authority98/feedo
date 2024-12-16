@@ -19,6 +19,7 @@ import { applicationOperations } from '../../../../../applications/applicationMa
 import { useToast } from '../../../../../components/Toast/ToastContext';
 import Button from '../../../../../components/Button/Button';
 import EnhanceWithAI from '../../../../../components/EnhanceWithAI/EnhanceWithAI';
+import { useProfileProgress } from '../../../../../hooks/useProfileProgress';
 
 const TYPE_COLORS = ['type-1', 'type-2', 'type-3', 'type-4', 'type-5', 
                     'type-6', 'type-7', 'type-8', 'type-9', 'type-10'];
@@ -242,9 +243,10 @@ const Profile = ({ activeSection, onSectionChange }) => {
     profileCompletion: 0
   });
 
-  // Use AuthContext instead of direct Firebase auth
+  // Use AuthContext and ProfileProgress hook
   const { user, loading: authLoading, updateProfile, refreshUser } = useAuth();
   const { showToast } = useToast();
+  const { progress, isLoading: progressLoading } = useProfileProgress();
 
   const menuItems = [
     { id: 'account', icon: FiUser, label: 'Account' },
@@ -420,57 +422,19 @@ const Profile = ({ activeSection, onSectionChange }) => {
         // Fetch application stats
         const applicationStats = await applicationOperations.getApplicationStats(user.profile.authUid);
 
-        // Calculate profile completion
-        const completedSections = calculateCompletedSections(user);
-        const totalSections = 4; // Personal, Education, Work Experience, Verification
-        const profileCompletion = Math.round((completedSections / totalSections) * 100);
-
         setStats({
           applications: applicationStats.total || 0,
-          profileCompletion: profileCompletion
+          profileCompletion: progress // Use progress from useProfileProgress hook
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
       }
     };
 
-    fetchStats();
-  }, [user]);
-
-  // Helper function to calculate completed sections
-  const calculateCompletedSections = (user) => {
-    let completed = 0;
-
-    // Check Personal Data
-    if (user?.profile?.firstName && 
-        user?.profile?.lastName && 
-        user?.profile?.email && 
-        user?.profile?.phoneNumber && 
-        user?.profile?.location && 
-        user?.profile?.professionalSummary) {
-      completed++;
+    if (!progressLoading) {
+      fetchStats();
     }
-
-    // Check Education
-    if (user?.education?.degreeLevel && 
-        user?.education?.fieldOfStudy && 
-        user?.education?.institutionName && 
-        user?.education?.graduationDate) {
-      completed++;
-    }
-
-    // Check Work Experience
-    if (user?.workExperience?.length > 0) {
-      completed++;
-    }
-
-    // Check Verification
-    if (user?.verification?.isVerified) {
-      completed++;
-    }
-
-    return completed;
-  };
+  }, [user, progress, progressLoading]);
 
   return (
     <div className="profile-section">
