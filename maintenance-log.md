@@ -1,6 +1,13 @@
 # Feedo Platform Maintenance Log
 
 ## New Features
+- Integrated Crisp Chat for customer support
+  - Added real-time chat functionality
+  - Automatic user information sync
+  - Profile photo integration
+  - Custom user data tracking
+  - Clean component lifecycle management
+
 - Added "Add a Question" feature to Data Management page
   - Integrated button in tabs section with hover animation
   - Modern dialog with file upload support
