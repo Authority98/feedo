@@ -81,6 +81,12 @@
   @apply text-gray-600 flex-1;  /* Add flex-1 to allow date to align right */
 }
 
+/* Clickable Opportunity Name */
+.opportunity-name {
+  @apply font-semibold text-gray-900 cursor-pointer hover:text-blue-600 transition-colors duration-200;
+  display: inline;
+}
+
 /* Notification Text */
 .notification-text {
   @apply text-gray-600 font-light;  /* Lighter font weight for notifications */

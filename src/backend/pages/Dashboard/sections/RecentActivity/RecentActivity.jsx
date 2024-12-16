@@ -42,17 +42,41 @@ const RecentActivity = () => {
   const getApplicationStatusMessage = (application) => {
     switch (application.status) {
       case 'approved':
-        return `Your application for ${application.name} was accepted`;
+        return {
+          prefix: 'Your application for ',
+          name: application.name,
+          suffix: ' was accepted'
+        };
       case 'rejected':
-        return `Your application for ${application.name} was rejected`;
+        return {
+          prefix: 'Your application for ',
+          name: application.name,
+          suffix: ' was rejected'
+        };
       case 'pending':
-        return `Your application for ${application.name} is under review`;
+        return {
+          prefix: 'Your application for ',
+          name: application.name,
+          suffix: ' is under review'
+        };
       case 'incomplete':
-        return `Complete your application for ${application.name}`;
+        return {
+          prefix: 'Complete your application for ',
+          name: application.name,
+          suffix: ''
+        };
       case 'follow-up':
-        return `Follow-up required for ${application.name}`;
+        return {
+          prefix: 'Follow-up required for ',
+          name: application.name,
+          suffix: ''
+        };
       default:
-        return `Applied to ${application.name}`;
+        return {
+          prefix: 'Applied to ',
+          name: application.name,
+          suffix: ''
+        };
     }
   };
 
@@ -87,7 +111,11 @@ const RecentActivity = () => {
         const submissionActivities = applications.length > 0 ? [{
           id: `submission-${applications[0].id}`,
           icon: FiFileText,
-          description: `Submitted application for ${applications[0].name}`,
+          description: {
+            prefix: 'Submitted application for ',
+            name: applications[0].name,
+            suffix: ''
+          },
           date: new Date(applications[0].submissionDate || applications[0].createdAt),
           color: 'text-blue-500',
           bgColor: 'bg-blue-50',
@@ -113,7 +141,11 @@ const RecentActivity = () => {
         const opportunityActivities = opportunities.slice(0, 1).map(opp => ({
           id: `opp-${opp.id}`,
           icon: FiSun,
-          description: `New opportunity: ${opp.title}`,
+          description: {
+            prefix: 'New opportunity: ',
+            name: opp.title,
+            suffix: ''
+          },
           date: new Date(opp.createdAt),
           color: 'text-yellow-500',
           bgColor: 'bg-yellow-50',
@@ -434,7 +466,28 @@ const RecentActivity = () => {
               <div className="activity-content">
                 <div className="activity-main">
                   <span className="activity-type">{activity.type}:</span>
-                  <span className="activity-description">{activity.description}</span>
+                  <span className="activity-description">
+                    {typeof activity.description === 'string' ? (
+                      activity.description
+                    ) : (
+                      <>
+                        {activity.description.prefix}
+                        <span 
+                          className="opportunity-name"
+                          onClick={() => {
+                            if (activity.type === 'Opportunity') {
+                              handleViewOpportunities(activity.opportunityId);
+                            } else if (activity.type === 'Application' || activity.type === 'Submission') {
+                              handleViewApplications(activity.applicationId);
+                            }
+                          }}
+                        >
+                          {activity.description.name}
+                        </span>
+                        {activity.description.suffix}
+                      </>
+                    )}
+                  </span>
                   {(activity.type === 'Application' || activity.type === 'Opportunity' || activity.type === 'Submission') && (
                     <span className="activity-date">{formatDate(activity.date)}</span>
                   )}
