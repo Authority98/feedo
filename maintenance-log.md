@@ -8,6 +8,9 @@
   - Toast notifications for success/error states
   - Support for multiple file attachments
   - File size validation (max 10MB)
+  - Fixed input field styling issues
+  - Improved upload area alignment
+  - Added proper form reset after submission
 
 - Made opportunity names clickable in recent activity for better UX
 - Made submission names clickable in recent activity for better UX
@@ -41,6 +44,8 @@
   - Improved tab indicators and hover states
   - Unified icon colors with Material UI theme
   - Enhanced overall visual consistency
+  - Fixed input field styling conflicts with global CSS
+  - Improved upload area visual alignment
 
 ## Code Quality
 - Created maintenance log to track platform changes
