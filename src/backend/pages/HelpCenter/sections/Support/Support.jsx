@@ -17,6 +17,7 @@ import {
 } from 'react-icons/fi';
 import { faqGirl } from '../../../../../assets';
 import AnimatedNumber from '../../../../../components/Animated/AnimatedNumber';
+import EmailDialog from '../../../../../components/EmailDialog/EmailDialog';
 import './Support.css';
 
 const Support = () => {
@@ -25,6 +26,7 @@ const Support = () => {
    */
   const [activeButton, setActiveButton] = useState(null);  // Tracks active button for hover effects
   const [responseTime] = useState(5);                      // Average response time in minutes
+  const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
 
   /**
    * Handle button hover effects
@@ -73,6 +75,7 @@ const Support = () => {
             className={`support-btn email ${activeButton === 'email' ? 'active' : ''}`}
             onMouseEnter={() => handleButtonHover('email')}
             onMouseLeave={handleButtonLeave}
+            onClick={() => setIsEmailDialogOpen(true)}
           >
             <FiMail className="btn-icon" />
             <span className="btn-text">Contact with Email</span>
@@ -100,6 +103,12 @@ const Support = () => {
           alt="Support Representative"
         />
       </div>
+
+      {/* Email Dialog */}
+      <EmailDialog 
+        open={isEmailDialogOpen}
+        onClose={() => setIsEmailDialogOpen(false)}
+      />
     </div>
   );
 };

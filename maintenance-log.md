@@ -79,6 +79,15 @@
   - Improved visual feedback during upload process
   - Fixed image upload option visibility for non-Google users
 
+- Added Modern Email Contact Dialog
+  - Clean Material UI design with proper field spacing
+  - Removed redundant borders and asterisks
+  - Added loading state during email submission
+  - Pre-filled user email in From field
+  - Direct integration with support@feedo.ai
+  - Improved form validation and error handling
+  - Success/error toast notifications
+
 ## Code Quality
 - Created maintenance log to track platform changes
 - Improved error handling across authentication flows
