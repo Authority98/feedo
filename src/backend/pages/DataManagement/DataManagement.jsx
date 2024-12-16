@@ -17,6 +17,7 @@ import SectionForm from './SectionForm/SectionForm';
 import { eventEmitter, EVENTS } from '../../../services/eventEmitter';
 import { FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 import { useProfileProgress } from '../../../hooks/useProfileProgress';
+import { Tabs, Tab, Box, useTheme } from '@mui/material';
 
 const DataManagement = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,6 +27,7 @@ const DataManagement = () => {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') || '');
   const { submissionItems } = useProfileProgress();
+  const theme = useTheme();
 
   // Fetch sections data
   const fetchSections = async () => {
@@ -93,9 +95,9 @@ const DataManagement = () => {
   }, []);
 
   // Update URL when tab changes
-  const handleTabChange = (tabId) => {
-    setActiveTab(tabId);
-    setSearchParams({ tab: tabId });
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+    setSearchParams({ tab: newValue });
   };
 
   // Listen for URL changes
@@ -214,29 +216,51 @@ const DataManagement = () => {
   return (
     <div className="data-management">
       <main className="main-content">
-        <nav className="tab-nav">
-          {sections.map(section => {
-            const submissionItem = submissionItems.find(item => item.id === section.id);
-            const isComplete = submissionItem?.status === 'complete';
-            
-            return (
-              <button
-                key={section.id}
-                className={`tab-button ${activeTab === section.id ? 'active' : ''} ${isComplete ? 'completed' : 'uncompleted'}`}
-                onClick={() => handleTabChange(section.id)}
-              >
-                <span className="tab-label">
-                  {section.label}
-                  {isComplete ? (
-                    <FiCheckCircle className="completion-icon" />
-                  ) : (
-                    <FiAlertCircle className="alert-icon" />
-                  )}
-                </span>
-              </button>
-            );
-          })}
-        </nav>
+        <Box sx={{ width: '100%', bgcolor: 'background.paper', mb: 2 }}>
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            aria-label="data management tabs"
+            sx={{
+              borderBottom: 1,
+              borderColor: 'divider',
+              '& .MuiTab-root': {
+                textTransform: 'none',
+                minHeight: '48px',
+                fontWeight: 500,
+              }
+            }}
+          >
+            {sections.map(section => {
+              const submissionItem = submissionItems.find(item => item.id === section.id);
+              const isComplete = submissionItem?.status === 'complete';
+              
+              return (
+                <Tab
+                  key={section.id}
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      {section.label}
+                      {isComplete ? (
+                        <FiCheckCircle style={{ color: theme.palette.primary.main }} />
+                      ) : (
+                        <FiAlertCircle style={{ color: theme.palette.primary.main }} />
+                      )}
+                    </Box>
+                  }
+                  value={section.id}
+                  sx={{
+                    '&.Mui-selected': {
+                      color: 'primary.main',
+                    }
+                  }}
+                />
+              );
+            })}
+          </Tabs>
+        </Box>
         {renderTabContent()}
       </main>
       <DataSubmission />
