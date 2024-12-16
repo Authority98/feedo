@@ -1,0 +1,44 @@
+/* Layout styles */
+.layout-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: rgb(249, 250, 251);
+}
+
+.layout-header {
+  position: fixed;
+  width: 100%;
+  z-index: 20;
+}
+
+.layout-sidebar {
+  position: fixed;
+  width: 16rem;
+  height: 100vh;
+  flex-shrink: 0;
+}
+
+.layout-main {
+  flex: 1;
+  margin-left: 16rem;
+}
+
+.layout-content {
+  margin-top: 4rem;
+  padding-bottom: 4rem;
+  height: calc(100vh - 4rem);
+  overflow-y: auto;
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for Firefox */
+  scrollbar-width: none;
+  /* Hide scrollbar for IE and Edge */
+  -ms-overflow-style: none;
+}
+
+.layout-content-inner {
+  position: relative;
+  padding: 0 1.5rem;
+} 

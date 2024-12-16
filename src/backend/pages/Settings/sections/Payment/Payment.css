@@ -1,0 +1,174 @@
+/**
+ * Payment Section Main Styles
+ * 
+ * Features:
+ * - Main container layout
+ * - Section header styling
+ * - Title and subtitle formatting
+ * - Upgrade button styling
+ * - Cards grid layout
+ */
+
+/* Main Container */
+.payment-section {
+  @apply flex-1 bg-white rounded-lg p-8 w-full;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.4s ease-out;
+}
+
+/* Section Header */
+.section-header {
+  @apply mb-8;
+}
+
+.header-content {
+  @apply flex items-start justify-between w-full;
+}
+
+.title-container {
+  @apply flex flex-col gap-0.5;
+}
+
+.section-title {
+  @apply text-xl font-semibold text-gray-800 mb-0 flex items-center gap-2;
+}
+
+.section-subtitle {
+  @apply text-sm text-gray-500 ml-0;
+}
+
+.section-icon {
+  @apply text-blue-500;
+}
+
+/* Subsection Header */
+.subsection-header {
+  @apply mb-4;
+}
+
+.subsection-title {
+  @apply text-lg font-medium text-gray-700;
+}
+
+/* Cards Grid */
+.payment-methods {
+  @apply mb-8;
+}
+
+.cards-list {
+  @apply mt-0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 340px));
+  gap: 1.5rem;
+  justify-content: start;
+}
+
+.cards-list:only-child {
+  grid-template-columns: minmax(280px, 340px);
+}
+
+/* Upgrade Button */
+.upgrade-plan-btn {
+  @apply flex items-center gap-2 px-4 py-2 
+         bg-blue-500 text-white rounded-lg
+         text-sm font-medium relative overflow-hidden
+         shadow-md hover:shadow-lg transition-all duration-200
+         hover:bg-blue-600 transform hover:-translate-y-0.5;
+  position: relative;
+}
+
+.upgrade-plan-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  transition: all 0.5s;
+  opacity: 0;
+}
+
+.upgrade-plan-btn:hover::after {
+  opacity: 1;
+  transform: rotate(45deg) translate(50%, -50%);
+}
+
+.upgrade-icon {
+  @apply w-4 h-4 relative z-10;
+}
+
+.upgrade-plan-btn span {
+  @apply relative z-10;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cards-list {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .header-content {
+    @apply flex-col gap-4;
+  }
+  
+  .upgrade-plan-btn {
+    @apply w-full justify-center;
+  }
+}
+
+/* Empty Payment Methods State */
+.empty-payment-methods {
+  @apply flex flex-col items-center justify-center p-8 
+         bg-gray-50 rounded-lg border border-gray-100
+         text-center w-full;
+  min-height: 200px;
+}
+
+.empty-payment-methods .empty-icon {
+  @apply w-12 h-12 text-gray-400 mb-3;
+}
+
+.empty-payment-methods .empty-text {
+  @apply text-gray-600 font-medium mb-1;
+}
+
+.empty-payment-methods .empty-subtext {
+  @apply text-sm text-gray-500;
+}
+
+/* Add these loading state styles */
+.loading-state {
+  @apply flex items-center justify-center min-h-[400px];
+}
+
+.loading-spinner {
+  @apply w-8 h-8 border-2 border-gray-200 border-t-blue-500 rounded-full;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

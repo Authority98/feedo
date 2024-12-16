@@ -1,0 +1,361 @@
+/*
+ * NewOpportunities.css
+ * ===================
+ * 
+ * Purpose:
+ * This stylesheet manages the layout and styling for the New Opportunities page, which displays
+ * a comprehensive list of available opportunities in a responsive data grid format.
+ * 
+ * Key Features:
+ * - Responsive grid layout that adapts to different screen sizes
+ * - Animated components with smooth transitions and hover effects
+ * - Custom styling for:
+ *   • Search and filtering functionality
+ *   • Status badges with different color schemes
+ *   • Interactive progress bars with animations
+ *   • Action buttons with hover effects
+ *   • Pagination controls
+ * 
+ * Component Structure:
+ * - Main container (.new-opportunities-page)
+ * - Section header with search and filters
+ * - Data grid with responsive columns
+ * - Status indicators and progress bars
+ * - Action buttons for view/edit/delete operations
+ * 
+ * Animations:
+ * - fadeIn: Smooth page load animation
+ * - slideInFromBottom: Table entrance animation
+ * - progressFill: Dynamic progress bar filling
+ * 
+ * Responsive Breakpoints:
+ * - Desktop: Full grid layout
+ * - Tablet (max-width: 1024px): Wrapped search controls
+ * - Mobile (max-width: 768px): Single column layout
+ * 
+ * Color Scheme:
+ * - Primary: Blue (#246BFD)
+ * - Status Colors: Green, Blue, Orange for different states
+ * - Neutral: Grays for text and borders
+ * 
+ * Dependencies:
+ * - Tailwind CSS for utility classes
+ * - Uses CSS Grid for table layout
+ * - Custom keyframe animations
+ */
+
+/* Main Container - Sets up the page layout with background and fade-in animation */
+.new-opportunities-page {
+  @apply p-6 bg-gray-50 min-h-screen pt-8;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Page Title - Currently commented out but preserved for future use */
+/* .page-title {
+  @apply text-2xl font-bold text-gray-700 mb-8;
+} */
+
+/* Opportunities Section - Main content container with padding */
+.opportunities-section {
+  @apply p-6;
+}
+
+/* Section Header - Contains title and search bar in a responsive layout */
+.section-header {
+  @apply flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6;
+}
+
+/* Section Title - Main heading for the opportunities list */
+.section-title {
+  @apply text-xl font-semibold text-gray-700;
+}
+
+/* Search and Filter Container - Wrapper for search functionality */
+.search-filter-container {
+  @apply flex items-center gap-4;
+}
+
+/* Search Bar - Container for search input field */
+.search-bar {
+  @apply relative w-64;
+}
+
+/* Search Icon - Positioning for the search icon within search bar */
+.search-icon {
+  @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400;
+}
+
+/* Search Input - Styling for the search text field */
+.search-input {
+  @apply w-full px-4 py-2 rounded-lg border border-gray-200 bg-white
+         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+         transition-all duration-300;
+}
+
+/* Status Filter - Dropdown for filtering opportunities by status */
+.status-filter {
+  @apply px-4 py-2 bg-white border border-gray-200 rounded-lg
+         focus:outline-none focus:ring-2 focus:ring-blue-500
+         transition-all duration-300;
+}
+
+/* Filter Button - Toggle button for additional filters */
+.filter-button {
+  @apply flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg
+         hover:bg-gray-50 transition-all duration-300;
+}
+
+/* Table Styles - Main container for opportunities data grid */
+.opportunities-table {
+  @apply w-full rounded-lg overflow-hidden bg-white border border-gray-200;
+  animation: slideInFromBottom 0.5s ease-out forwards;
+}
+
+/* Table Header - Column headers with specific grid layout */
+.table-header {
+  @apply grid border-b border-gray-200 text-sm font-medium text-gray-600 bg-gray-50;
+  grid-template-columns: 2.2fr 1.5fr 0.4fr 1.5fr 0.4fr 1.2fr 0.8fr;
+  padding: 1rem 1.5rem;
+}
+
+/* Table Row - Individual opportunity row with hover effects */
+.table-row {
+  @apply grid border-b border-gray-100 hover:bg-gray-50 transition-all duration-300;
+  grid-template-columns: 2.2fr 1.5fr 0.4fr 1.5fr 0.4fr 1.2fr 0.8fr;
+  padding: 1rem 1.5rem;
+}
+
+/* Row Hover Effect - Adds subtle animation and shadow */
+.table-row:hover {
+  @apply transform translate-x-2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Cell Styles - Individual table cell formatting */
+.cell {
+  @apply flex items-center;
+}
+
+/* Opportunity Name Button - Interactive name with chevron */
+.opportunity-name-button {
+  @apply flex items-center gap-2 text-left w-full hover:text-blue-600 
+         transition-all duration-300;
+}
+
+/* Opportunity Name - Title text styling */
+.opportunity-name {
+  @apply font-medium text-gray-900 transition-all duration-300;
+  position: relative;
+}
+
+.group:hover .opportunity-name {
+  @apply text-blue-600;
+}
+
+.opportunity-name::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 
+         transition-all duration-300;
+}
+
+.group:hover .opportunity-name::after {
+  @apply w-full;
+}
+
+/* Chevron Icon - Animated chevron for opportunity name */
+.opportunity-chevron {
+  @apply w-4 h-4 text-gray-400 transform transition-all duration-300 
+         opacity-0 -translate-x-2;
+}
+
+.group:hover .opportunity-chevron {
+  @apply opacity-100 translate-x-0 text-blue-600;
+}
+
+/* Status Badge - Visual indicators for opportunity status */
+.status-badge {
+  @apply inline-flex px-2 py-1 text-xs font-medium rounded-full;
+}
+
+/* Status Badge Variants */
+.status-badge.new {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-badge.active {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.status-badge.closing-soon {
+  @apply bg-orange-100 text-orange-800;
+}
+
+/* Progress Bars Container - Wrapper for progress indicators */
+.progress-container {
+  @apply w-full h-full flex items-center relative;
+}
+
+/* Progress Bar Base Styles */
+.progress-bar {
+  @apply relative h-2 bg-gray-200 rounded-full overflow-hidden w-[85%];
+}
+
+/* Progress Bar Fill Animation */
+.progress-bar .progress-fill {
+  @apply absolute left-0 top-0 h-full;
+  width: 0;
+  animation: progressFill 1.5s ease-out forwards;
+}
+
+/* Progress Bar Variants */
+.progress-bar.match .progress-fill {
+  background: linear-gradient(90deg, #4CAF50, #81C784);
+}
+
+.progress-bar.application .progress-fill {
+  background: linear-gradient(90deg, #2196F3, #64B5F6);
+}
+
+/* Progress Text - Displays percentage values next to progress bars */
+.progress-text {
+  @apply absolute text-sm text-gray-600 whitespace-nowrap;
+  left: calc(85% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Deadline Cell - Container for deadline information */
+.deadline-cell {
+  @apply flex items-center gap-2 text-gray-600;
+}
+
+/* Deadline Icon - Dropdown indicator for deadline cell */
+.deadline-icon {
+  @apply w-4 h-4 text-gray-400;
+}
+
+/* Action Link - Text link with permanent underline and chevron */
+.opportunity-action-link {
+  @apply text-sm font-medium text-blue-600 whitespace-nowrap 
+         flex items-center gap-1.5 transition-all duration-300;
+}
+
+.opportunity-action-link span {
+  @apply border-b border-blue-600 transition-all duration-300;
+}
+
+.opportunity-action-link:hover span {
+  @apply text-blue-700 border-blue-700;
+}
+
+/* Action Chevron - Always visible with hover animation */
+.action-chevron {
+  @apply w-3.5 h-3.5 text-blue-600 transform transition-all duration-300;
+}
+
+.opportunity-action-link:hover .action-chevron {
+  @apply text-blue-700 translate-x-0.5;
+}
+
+/* Animations - Define all animations used in the component */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes progressFill {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--target-width);
+  }
+}
+
+/* Responsive Design - Media queries for different screen sizes */
+@media (max-width: 1024px) {
+  .search-filter-container {
+    @apply flex-wrap;
+  }
+  
+  .search-bar {
+    @apply w-full;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-header, .table-row {
+    @apply grid-cols-1;
+  }
+  
+  .header-cell:not(:first-child),
+  .cell:not(:first-child) {
+    @apply hidden;
+  }
+}
+
+/* Pagination Controls - Navigation between pages */
+.pagination {
+  @apply flex items-center justify-center gap-4 mt-6;
+}
+
+/* Pagination Button Styles */
+.pagination-btn {
+  @apply px-6 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium
+         text-gray-600 transition-all duration-300 hover:bg-gray-50
+         disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white;
+}
+
+/* Pagination Button Hover Effect */
+.pagination-btn:not(:disabled):hover {
+  @apply transform -translate-y-0.5 shadow-sm;
+}
+
+/* Pagination Information Text */
+.pagination-info {
+  @apply text-sm text-gray-600 font-medium;
+}
+
+/* Search Container - Simplified search bar wrapper */
+.search-container {
+  @apply flex items-center;
+}
+
+/* Apply Now Button - New subtle border design */
+.apply-now-btn {
+  @apply px-4 py-2 text-sm font-medium text-blue-600 border border-blue-600
+         rounded-lg transition-all duration-300 hover:bg-blue-50;
+  min-width: 100px;
+}
+
+.apply-now-btn:hover {
+  @apply transform scale-105 border-blue-700 text-blue-700;
+}
+
+/* Remove old button styles */
+.apply-now-btn::before {
+  content: none;
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: none;
+  }
+}

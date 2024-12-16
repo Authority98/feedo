@@ -1,0 +1,161 @@
+/**
+ * RecentActivity Component Styles
+ * 
+ * Comprehensive styles for the recent activity interface that provides:
+ * - Activity list with status-based styling
+ * - Interactive hover states
+ * - Staggered animations
+ * - Responsive design
+ * - Loading states
+ * 
+ * Features:
+ * - Status-based colors
+ * - Hover animations
+ * - Entrance effects
+ * - Mobile responsiveness
+ * - Loading indicators
+ */
+
+/* Main Container */
+.recent-activity {
+  @apply w-full max-w-[calc(100%-288px)] bg-white rounded-2xl mt-6 mb-6 p-6 border border-gray-200;
+  animation: fadeIn 0.6s ease-out;  /* Entrance animation */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
+}
+
+/* Activity Header */
+.activity-header {
+  @apply flex items-center justify-between mb-3;
+}
+
+/* Activity Title */
+.activity-title {
+  @apply text-xl font-semibold text-gray-800;  /* Title styling */
+}
+
+/* Activity List Container */
+.activity-list {
+  @apply space-y-2;  /* Vertical spacing between items */
+}
+
+/* Individual Activity Item */
+.activity-item {
+  @apply flex items-center gap-3 py-2 px-3 rounded-xl transition-all duration-300;
+  animation: slideInFromRight 0.5s ease-out forwards;  /* Entrance animation */
+  opacity: 0;  /* Initially hidden for animation */
+}
+
+/* Activity Item Hover Effect */
+.activity-item:hover {
+  @apply bg-gray-50 transform translate-x-2;  /* Hover state with movement */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);  /* Hover shadow */
+}
+
+/* Activity Icon Container */
+.activity-icon-wrapper {
+  @apply p-2.5 rounded-full transition-all duration-300;  /* Icon background */
+}
+
+/* Activity Icon */
+.activity-icon {
+  @apply w-4 h-4;  /* Icon size */
+}
+
+/* Activity Content Container - Updated */
+.activity-content {
+  @apply flex-1 flex items-center justify-between gap-4;  /* Added gap between description and button */
+}
+
+/* Activity Main Text - Updated */
+.activity-main {
+  @apply flex gap-2 text-sm flex-1 items-center;  /* Added items-center */
+}
+
+/* Activity Type Label */
+.activity-type {
+  @apply font-medium text-gray-900;  /* Type text styling */
+}
+
+/* Activity Description */
+.activity-description {
+  @apply text-gray-600 flex-1;  /* Add flex-1 to allow date to align right */
+}
+
+/* Notification Text */
+.notification-text {
+  @apply text-gray-600 font-light;  /* Lighter font weight for notifications */
+}
+
+/* Activity Date */
+.activity-date {
+  @apply text-xs text-gray-500 ml-2;
+  display: inline-block;
+}
+
+/* View All Button */
+.view-all-button {
+  @apply flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-blue-600 
+         hover:text-blue-700 transition-all duration-300 rounded-lg
+         hover:bg-blue-50;
+}
+
+/* View All Button Hover Animation */
+.view-all-button:hover svg {
+  @apply transform translate-x-1;
+}
+
+/* Entrance Animation */
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Activity Actions Container */
+.activity-actions {
+  @apply flex items-center gap-4;  /* Space between date and button */
+}
+
+/* Activity View Button - Updated */
+.activity-view-btn {
+  @apply flex items-center gap-1 px-3 py-1.5 text-sm font-medium 
+         text-blue-600 hover:text-blue-700 transition-all duration-300 
+         rounded-lg hover:bg-blue-50 whitespace-nowrap;  /* Added whitespace-nowrap */
+}
+
+/* Button Icon Animation */
+.activity-view-btn:hover svg {
+  @apply transform translate-x-1;
+}
+
+/* Add these loading state styles */
+.loading-state {
+  @apply flex items-center justify-center min-h-[400px];
+}
+
+.loading-spinner {
+  @apply w-8 h-8 border-2 border-gray-200 border-t-blue-500 rounded-full;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

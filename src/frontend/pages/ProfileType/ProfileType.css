@@ -1,0 +1,358 @@
+/**
+ * Profile Type Selection Page Styles
+ * Features:
+ * - Responsive two-column layout
+ * - Interactive profile type cards with hover effects
+ * - Gradient backgrounds and smooth transitions
+ * - Loading states and animations
+ * - Mobile-first design approach
+ */
+
+/* Main container - Uses CSS Grid for two-column layout */
+.profile-type-container {
+  @apply flex bg-white;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Left Section Styles
+-------------------------------------------------- */
+/* Left column with gradient background and centered content */
+.profile-type-left {
+  @apply flex-1 bg-gradient-to-b from-[#FFF1F1] to-[#F3F1FF] p-8 
+         flex flex-col items-center;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Logo styling */
+.feedo-logo {
+  @apply w-[150px] h-auto mb-4;
+}
+
+/* Hero image container with flex positioning */
+.hero-image {
+  @apply flex-1 flex flex-col items-center justify-center w-[90%] mx-auto;
+  margin-top: -40px;
+  margin-bottom: -100px;
+}
+
+/* Hero image styling with negative margin for overlap effect */
+.hero-image img {
+  @apply max-w-full h-auto object-contain relative z-0;
+  transform: translateY(-60px);
+}
+
+/* Award badges container with hover effects */
+.award-badges {
+  @apply flex gap-4 justify-center p-6 
+         relative z-[1]
+         transition-transform duration-300 ease-in-out;
+  margin-top: -200px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual award badge styling */
+.award-badges img {
+  @apply w-20 h-20 object-contain transition-transform duration-300;
+}
+
+/* Award badges hover animation */
+.award-badges:hover img {
+  @apply transform scale-105;
+}
+
+/* Right Section Styles
+-------------------------------------------------- */
+/* Right column with flex layout for content */
+.profile-type-right {
+  @apply flex-1 flex flex-col p-16;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Content container with max-width for readability */
+.profile-type-content {
+  @apply max-w-[800px] mx-auto w-full flex-1 flex flex-col;
+  padding-top: 2rem;
+}
+
+/* Typography Styles
+-------------------------------------------------- */
+/* Welcome title styling */
+.welcome-title {
+  @apply text-4xl font-bold text-gray-900 mb-3 text-center mt-4;
+}
+
+/* Selection title styling */
+.selection-title {
+  @apply text-3xl font-bold text-gray-800 mb-3 text-center;
+}
+
+/* Description text styling - reduce bottom margin */
+.selection-description {
+  @apply text-gray-600 text-center mb-4 max-w-[600px] mx-auto;
+}
+
+/* Profile Type Grid Layout
+-------------------------------------------------- */
+/* Grid container for profile type cards */
+.profile-type-grid {
+  @apply grid grid-cols-1 gap-6 mb-6 max-w-[800px] mx-auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(200px, 1fr));
+  gap: 24px;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+/* Profile Type Card Styles
+-------------------------------------------------- */
+/* Base card styling */
+.profile-type-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.75rem;
+  text-align: left;
+  border: 2px solid #f0f2f5;
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* Card hover effects */
+.profile-type-card:hover {
+  border-color: #0093E9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 147, 233, 0.15);
+}
+
+/* Selected card state */
+.profile-type-card.selected {
+  border-color: transparent;
+  background: linear-gradient(135deg, #0093E9 0%, #80D0C7 100%);
+  box-shadow: 0 4px 12px rgba(0, 147, 233, 0.3);
+}
+
+/* Card icon styling */
+.profile-type-card .card-icon {
+  color: #0093E9;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+/* Card icon hover animation */
+.profile-type-card:hover .card-icon {
+  transform: scale(1.2);
+}
+
+/* Card title styling */
+.profile-type-card .card-title {
+  color: #333;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Card description styling */
+.profile-type-card .card-description {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* Card Animation Effects
+-------------------------------------------------- */
+/* Pulse glow animation for selected card */
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(0, 147, 233, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 147, 233, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 147, 233, 0); }
+}
+
+/* Apply pulse animation to selected card */
+.profile-type-card.selected {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Auth Button Styles
+-------------------------------------------------- */
+/* Auth button styling */
+.auth-button {
+  @apply mx-auto;
+  max-width: 300px;
+  margin-top: 1rem;
+  padding: 0.75rem 2rem;
+  width: 100%;
+}
+
+/* Button container styling */
+.button-container {
+  @apply text-center w-full max-w-[300px] mx-auto;
+  margin-bottom: 2rem;
+}
+
+/* Footer Styles
+-------------------------------------------------- */
+/* Footer container */
+.profile-type-footer {
+  @apply w-full p-8 bg-white border-t border-gray-100 mt-8 flex justify-between items-center;
+}
+
+/* Copyright text */
+.profile-type-footer .copyright {
+  @apply text-gray-600 text-sm;
+}
+
+/* Help button */
+.profile-type-footer .help-btn {
+  @apply text-gray-600 text-sm hover:text-blue-500 transition-colors;
+}
+
+/* Responsive Design
+-------------------------------------------------- */
+/* Tablet breakpoint */
+@media (max-width: 1024px) {
+  .profile-type-grid {
+    @apply grid-cols-1;
+  }
+  
+  .profile-type-right {
+    @apply p-8;
+  }
+}
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+  .profile-type-container {
+    @apply flex-col;
+  }
+  
+  .profile-type-left {
+    @apply hidden;
+  }
+  
+  .profile-type-right {
+    @apply p-4;
+  }
+}
+
+/* Selected Card State Styles
+-------------------------------------------------- */
+/* Update colors for elements inside selected card */
+.profile-type-card.selected .card-icon {
+  color: white;
+  transform: scale(1.2);
+}
+
+.profile-type-card.selected .card-title {
+  color: white;
+}
+
+.profile-type-card.selected .card-description {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Selected card hover effects */
+.profile-type-card.selected:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 147, 233, 0.4);
+}
+
+/* Text color transitions */
+.profile-type-card .card-icon,
+.profile-type-card .card-title,
+.profile-type-card .card-description {
+  transition: color 0.3s ease;
+}
+
+/* Loading State Styles
+-------------------------------------------------- */
+/* Loading button styles */
+.next-button.loading {
+  position: relative;
+  color: transparent;
+  height: 48px;
+}
+
+/* Loading spinner animation */
+.next-button.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: button-loading-spinner 0.8s linear infinite;
+}
+
+/* Spinner rotation animation */
+@keyframes button-loading-spinner {
+  from { transform: rotate(0turn); }
+  to { transform: rotate(1turn); }
+}
+
+/* Disabled state styles */
+.next-button:disabled {
+  background: linear-gradient(135deg, #93c5dd 0%, #b3dcd7 100%);
+  transform: none;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.next-button:disabled:not(.loading) {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.next-button:disabled::before {
+  display: none;
+}
+
+/* Card content wrapper to ensure proper spacing */
+.profile-type-card .card-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 0.5rem;
+}
+
+/* Adjust responsive design */
+@media (max-width: 768px) {
+  .profile-type-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, minmax(180px, 1fr));
+  }
+}
+
+/* Error message styles */
+.error-container {
+  @apply flex justify-center items-center p-8;
+}
+
+.error-message {
+  @apply flex flex-col items-center gap-4 text-red-500 bg-red-50 
+         rounded-lg p-6 max-w-md w-full border border-red-200;
+}
+
+.error-icon {
+  @apply w-12 h-12;
+}
+
+.error-message p {
+  @apply text-center text-lg font-medium text-red-700;
+}
