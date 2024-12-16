@@ -1,6 +1,12 @@
 # Feedo Platform Maintenance Log
 
 ## New Features
+- Enhanced Data Management Form UI/UX
+  - Improved repeater group layout with delete button below fields
+  - Added toast notifications for group actions
+  - Added success feedback when adding/removing groups
+  - Improved visual hierarchy in form layout
+
 - Integrated Crisp Chat for customer support
   - Added real-time chat functionality
   - Automatic user information sync

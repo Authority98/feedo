@@ -23,6 +23,7 @@ import {
 import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material';
 import EnhanceWithAI from '../../../../../components/EnhanceWithAI/EnhanceWithAI';
 import { useAuth } from '../../../../../auth/AuthContext';
+import { useToast } from '../../../../../components/Toast/ToastContext';
 import PhoneNumberInput from '../../../../../components/PhoneNumberInput/PhoneNumberInput';
 
 export const useFormRendering = (
@@ -43,6 +44,7 @@ export const useFormRendering = (
 ) => {
   const theme = useTheme();
   const { user } = useAuth();
+  const { showToast } = useToast();
 
   const getStyles = (option, selectedOptions, theme) => {
     return {
@@ -204,6 +206,16 @@ export const useFormRendering = (
         )}
       </Box>
     );
+  };
+
+  const handleGroupRemoval = (questionId, groupIndex) => {
+    handleRemoveGroup(questionId, groupIndex);
+    showToast('Group removed successfully', 'success');
+  };
+
+  const handleGroupAddition = (questionId, repeaterFields) => {
+    handleAddGroup(questionId, repeaterFields);
+    showToast('New group added successfully', 'success');
   };
 
   const renderQuestion = (question) => {
@@ -518,18 +530,6 @@ export const useFormRendering = (
                 <Card key={groupIndex} variant="outlined">
                   <CardContent>
                     <Stack spacing={2}>
-                      <Box display="flex" justifyContent="flex-end">
-                        {question.allowMultipleGroups && repeaterValue.length > 1 && (
-                          <IconButton
-                            size="small"
-                            onClick={() => handleRemoveGroup(question.id, groupIndex)}
-                            color="error"
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        )}
-                      </Box>
-                      
                       <Box
                         display="grid"
                         gap={2}
@@ -548,6 +548,20 @@ export const useFormRendering = (
                           </Box>
                         ))}
                       </Box>
+
+                      {question.allowMultipleGroups && repeaterValue.length > 1 && (
+                        <Box display="flex" justifyContent="flex-end" mt={1}>
+                          <Button
+                            size="small"
+                            onClick={() => handleGroupRemoval(question.id, groupIndex)}
+                            color="error"
+                            startIcon={<DeleteIcon />}
+                            variant="outlined"
+                          >
+                            Remove Group
+                          </Button>
+                        </Box>
+                      )}
                     </Stack>
                   </CardContent>
                 </Card>
@@ -556,7 +570,7 @@ export const useFormRendering = (
               {question.allowMultipleGroups && (
                 <Button
                   startIcon={<AddIcon />}
-                  onClick={() => handleAddGroup(question.id, question.repeaterFields || [])}
+                  onClick={() => handleGroupAddition(question.id, question.repeaterFields || [])}
                   disabled={repeaterValue.length >= (question.validation?.maxGroups || 10)}
                   variant="outlined"
                   fullWidth
