@@ -84,6 +84,7 @@ const Support = () => {
             className={`support-btn chat ${activeButton === 'chat' ? 'active' : ''}`}
             onMouseEnter={() => handleButtonHover('chat')}
             onMouseLeave={handleButtonLeave}
+            onClick={() => window.$crisp.push(['do', 'chat:open'])}
           >
             <FiMessageSquare className="btn-icon" />
             <span className="btn-text">Contact with Live chat</span>

@@ -30,6 +30,11 @@
 - Added hover effects and styling for clickable elements
 - Added interactive elements to improve user experience
 
+- Enhanced Help Center Support
+  - Integrated live chat button with Crisp chat
+  - Added seamless chat window opening
+  - Improved user support accessibility
+
 ## Bug Fixes
 - Fixed account deletion issue for Google users
   - Added proper error handling and state cleanup
