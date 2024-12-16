@@ -73,6 +73,12 @@
   - Added new opportunities count functionality
   - Improved visual consistency with solid colors
 
+- Enhanced Profile Photo Upload Experience
+  - Added loading spinner with "Uploading..." text during image upload
+  - Fixed hover state persistence after upload completion
+  - Improved visual feedback during upload process
+  - Fixed image upload option visibility for non-Google users
+
 ## Code Quality
 - Created maintenance log to track platform changes
 - Improved error handling across authentication flows

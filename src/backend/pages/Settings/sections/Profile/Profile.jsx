@@ -377,6 +377,8 @@ const Profile = ({ activeSection, onSectionChange }) => {
       setImageLoaded(true);
     } finally {
       setIsUploading(false);
+      setIsSelectingFile(false);
+      setIsHovered(false);
     }
   };
 
@@ -492,7 +494,13 @@ const Profile = ({ activeSection, onSectionChange }) => {
                       <FiUser className="placeholder-icon" />
                     </div>
                   )}
-                  {(isHovered || isSelectingFile) && !user?.profile?.provider === 'google.com' && (
+                  {isUploading && (
+                    <div className="photo-overlay" style={{ opacity: 1 }}>
+                      <div className="upload-spinner" style={uploadSpinnerStyles}></div>
+                      <span className="overlay-text">Uploading...</span>
+                    </div>
+                  )}
+                  {(isHovered || isSelectingFile) && !isUploading && user?.profile?.provider !== 'google.com' && (
                     <label 
                       className="photo-overlay" 
                       htmlFor="photo-upload"
@@ -506,9 +514,7 @@ const Profile = ({ activeSection, onSectionChange }) => {
                         className="hidden"
                       />
                       <FiCamera className="overlay-icon" />
-                      <span className="overlay-text">
-                        {isUploading ? 'Uploading...' : 'Change Photo'}
-                      </span>
+                      <span className="overlay-text">Change Photo</span>
                     </label>
                   )}
                   {(isHovered || isSelectingFile) && user?.profile?.provider === 'google.com' && (
