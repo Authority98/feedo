@@ -306,6 +306,7 @@ export const opportunityOperations = {
           total: 0,
           active: 0,
           perfectMatches: 0,
+          newOpportunities: 0,
           closingSoon: 0,
           closingToday: 0,
           closingThisWeek: 0,
@@ -325,6 +326,7 @@ export const opportunityOperations = {
         total: 0,
         active: 0,
         perfectMatches: 0,
+        newOpportunities: 0,
         closingSoon: 0,
         closingToday: 0,
         closingThisWeek: 0,
@@ -349,6 +351,11 @@ export const opportunityOperations = {
         // Count active opportunities
         if (data.status === 'active') {
           stats.active++;
+        }
+
+        // Count new opportunities
+        if (data.status === 'new') {
+          stats.newOpportunities++;
         }
 
         // Count perfect matches (assuming matchPercentage is 100)
@@ -391,6 +398,7 @@ export const opportunityOperations = {
         total: 0,
         active: 0,
         perfectMatches: 0,
+        newOpportunities: 0,
         closingSoon: 0,
         closingToday: 0,
         closingThisWeek: 0,

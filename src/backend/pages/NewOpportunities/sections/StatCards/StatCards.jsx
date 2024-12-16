@@ -27,6 +27,7 @@ const StatCards = ({ refreshTrigger = 0 }) => {
   const [stats, setStats] = useState({
     total: 0,
     perfectMatches: 0,
+    newOpportunities: 0,
     successRate: 0,
     closingSoon: 0
   });
@@ -59,23 +60,23 @@ const StatCards = ({ refreshTrigger = 0 }) => {
       title: "Total Opportunities",
       value: stats.total,
       trend: "+12%",
-      bgColor: "bg-gradient-to-r from-blue-500 to-blue-600"
+      bgColor: "bg-[#00b4d2]"
     },
     {
       id: 2,
       icon: FiStar,
-      title: "Perfect Matches",
-      value: stats.perfectMatches,
-      trend: `${((stats.perfectMatches / stats.total) * 100).toFixed(1)}%`,
-      bgColor: "bg-gradient-to-r from-green-500 to-green-600"
+      title: "New Opportunities",
+      value: stats.newOpportunities,
+      trend: "Last 7 days",
+      bgColor: "bg-[#527991]"
     },
     {
       id: 3,
       icon: FiTrendingUp,
-      title: "Success Rate",
+      title: "Highly Matched",
       value: stats.successRate,
       trend: "+3%",
-      bgColor: "bg-gradient-to-r from-purple-500 to-purple-600",
+      bgColor: "bg-[#34b800]",
       isPercentage: true
     },
     {
@@ -84,7 +85,7 @@ const StatCards = ({ refreshTrigger = 0 }) => {
       title: "Closing Soon",
       value: stats.closingSoon,
       trend: "Next 7 days",
-      bgColor: "bg-gradient-to-r from-orange-500 to-orange-600"
+      bgColor: "bg-[#ff7a15]"
     }
   ];
 
