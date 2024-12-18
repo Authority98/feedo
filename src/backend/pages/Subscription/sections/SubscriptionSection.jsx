@@ -4,6 +4,7 @@
  * All styles moved to SubscriptionSection.css
  */
 
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -408,137 +409,131 @@ const SubscriptionSection = () => {
 
   }, [currentPlan]);
 
-  return (/*#__PURE__*/
-    React.createElement("section", { className: "section-wrapper" }, /*#__PURE__*/
-    React.createElement("div", { className: "background-animation" }), /*#__PURE__*/
+  return (
+    <section className="section-wrapper">
+      <div className="background-animation" />
 
-    React.createElement("div", { className: "toggle-container" }, /*#__PURE__*/
-    React.createElement("div", { className: "toggle-wrapper" }, /*#__PURE__*/
-    React.createElement("span", { className: !isAnnual ? 'active' : '' }, "Monthly"), /*#__PURE__*/
-    React.createElement("button", {
-      className: `toggle-button ${isAnnual ? 'active' : ''}`,
-      onClick: () => setIsAnnual(!isAnnual),
-      "aria-checked": isAnnual,
-      role: "switch" }, /*#__PURE__*/
+      <div className="toggle-container">
+        <div className="toggle-wrapper">
+          <span className={!isAnnual ? 'active' : ''}>Monthly</span>
+          <button
+            className={`toggle-button ${isAnnual ? 'active' : ''}`}
+            onClick={() => setIsAnnual(!isAnnual)}
+            aria-checked={isAnnual}
+            role="switch"
+          >
+            <motion.div
+              className="toggle-slider"
+              initial={false}
+              animate={{
+                x: isAnnual ? 24 : 4,
+                width: '16px'
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 500,
+                damping: 30,
+                mass: 0.8
+              }}
+            />
+          </button>
+          <span className={isAnnual ? 'active' : ''}>
+            Annual <span className="save-badge">Save 20%</span>
+          </span>
+        </div>
+      </div>
 
-    React.createElement(motion.div, {
-      className: "toggle-slider",
-      initial: false,
-      animate: {
-        x: isAnnual ? 24 : 4,
-        width: '16px'
-      },
-      transition: {
-        type: "spring",
-        stiffness: 500,
-        damping: 30,
-        mass: 0.8
-      } }
-    )
-    ), /*#__PURE__*/
-    React.createElement("span", { className: isAnnual ? 'active' : '' }, "Annual ", /*#__PURE__*/
-    React.createElement("span", { className: "save-badge" }, "Save 20%")
-    )
-    )
-    ), /*#__PURE__*/
+      <div className="content-wrapper">
+        <div className="cards-container">
+          {plans.map((plan, index) => (
+            <motion.div
+              key={plan.name}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+            >
+              <div className={`plan-card ${plan.popular ? 'popular' : ''} ${plan.active ? 'active' : ''}`}>
+                {plan.popular && <div className="popular-badge">Most Popular</div>}
+                {plan.active && <div className="active-badge">Current Plan</div>}
+                <h3>{plan.name}</h3>
+                <p className="description">
+                  {plan.name === 'Basic' && 'Perfect for getting started'}
+                  {plan.name === 'Professional' && 'Best for professionals'}
+                  {plan.name === 'Enterprise' && 'For teams and businesses'}
+                </p>
+                <div className="price-tag">
+                  {plan.monthlyPrice > 0 && <span>$</span>}
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      className="amount"
+                      key={isAnnual ? 'annual' : 'monthly'}
+                      initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                      transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                    >
+                      {isAnnual ? plan.annualPrice : plan.monthlyPrice}
+                    </motion.span>
+                  </AnimatePresence>
+                  <span className="period">{isAnnual ? '/year' : '/mo'}</span>
+                </div>
+                <ul className="features-list">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="feature-item">
+                      <span className="check-icon">✓</span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  className={`select-button ${plan.popular ? 'popular' : ''} ${plan.active ? 'active' : ''}`}
+                  disabled={plan.active || isProcessing || isLoadingStatus}
+                  onClick={() => handleUpgrade(plan.name)}
+                >
+                  {isLoadingStatus ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <FiLoader className="animate-spin" />Loading...
+                    </span>
+                  ) : plan.active ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <FiCheck />Current Plan
+                    </span>
+                  ) : isProcessing ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <FiLoader className="animate-spin" />Processing...
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-2">
+                      <FiCreditCard />Subscribe
+                    </span>
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
 
-    React.createElement("div", { className: "content-wrapper" }, /*#__PURE__*/
-    React.createElement("div", { className: "cards-container" },
-    plans.map((plan, index) => /*#__PURE__*/
-    React.createElement(motion.div, {
-      key: plan.name,
-      initial: { opacity: 0, y: 30 },
-      animate: { opacity: 1, y: 0 },
-      transition: { duration: 0.6, delay: index * 0.2 } }, /*#__PURE__*/
+      <PaymentOptionsPopup
+        isOpen={showPaymentOptions}
+        onClose={() => setShowPaymentOptions(false)}
+        savedCards={savedCards}
+        onSelectCard={handleCardSelection}
+        onAddNewCard={() => {
+          setShowPaymentOptions(false);
+          setShowAddCardPopup(true);
+        }}
+      />
 
-    React.createElement("div", { className: `plan-card ${plan.popular ? 'popular' : ''} ${plan.active ? 'active' : ''}` },
-    plan.popular && /*#__PURE__*/React.createElement("div", { className: "popular-badge" }, "Most Popular"),
-    plan.active && /*#__PURE__*/React.createElement("div", { className: "active-badge" }, "Current Plan"), /*#__PURE__*/
-    React.createElement("h3", null, plan.name), /*#__PURE__*/
-    React.createElement("p", { className: "description" },
-    plan.name === 'Basic' && 'Perfect for getting started',
-    plan.name === 'Professional' && 'Best for professionals',
-    plan.name === 'Enterprise' && 'For teams and businesses'
-    ), /*#__PURE__*/
-    React.createElement("div", { className: "price-tag" },
-    plan.monthlyPrice > 0 && /*#__PURE__*/React.createElement("span", null, "$"), /*#__PURE__*/
-    React.createElement(AnimatePresence, { mode: "wait" }, /*#__PURE__*/
-    React.createElement(motion.span, {
-      className: "amount",
-      key: isAnnual ? 'annual' : 'monthly',
-      initial: { opacity: 0, y: -20, scale: 0.95 },
-      animate: { opacity: 1, y: 0, scale: 1 },
-      exit: { opacity: 0, y: 20, scale: 0.95 },
-      transition: { duration: 0.4, ease: [0.34, 1.56, 0.64, 1] } },
-
-    isAnnual ? plan.annualPrice : plan.monthlyPrice
-    )
-    ), /*#__PURE__*/
-    React.createElement("span", { className: "period" }, isAnnual ? '/year' : '/mo')
-    ), /*#__PURE__*/
-    React.createElement("ul", { className: "features-list" },
-    plan.features.map((feature) => /*#__PURE__*/
-    React.createElement("li", { key: feature, className: "feature-item" }, /*#__PURE__*/
-    React.createElement("span", { className: "check-icon" }, "\u2713"),
-    feature
-    )
-    )
-    ), /*#__PURE__*/
-    React.createElement("button", {
-      className: `select-button ${plan.popular ? 'popular' : ''} ${plan.active ? 'active' : ''}`,
-      disabled: plan.active || isProcessing || isLoadingStatus,
-      onClick: () => handleUpgrade(plan.name) },
-
-    isLoadingStatus ? /*#__PURE__*/
-    React.createElement("span", { className: "flex items-center justify-center gap-2" }, /*#__PURE__*/
-    React.createElement(FiLoader, { className: "animate-spin" }), "Loading..."
-
-    ) :
-    plan.active ? /*#__PURE__*/
-    React.createElement("span", { className: "flex items-center justify-center gap-2" }, /*#__PURE__*/
-    React.createElement(FiCheck, null), "Current Plan"
-
-    ) :
-    isProcessing ? /*#__PURE__*/
-    React.createElement("span", { className: "flex items-center justify-center gap-2" }, /*#__PURE__*/
-    React.createElement(FiLoader, { className: "animate-spin" }), "Processing..."
-
-    ) : /*#__PURE__*/
-
-    React.createElement("span", { className: "flex items-center justify-center gap-2" }, /*#__PURE__*/
-    React.createElement(FiCreditCard, null), "Subscribe"
-
-    )
-
-    )
-    )
-    )
-    )
-    )
-    ), /*#__PURE__*/
-
-
-    React.createElement(PaymentOptionsPopup, {
-      isOpen: showPaymentOptions,
-      onClose: () => setShowPaymentOptions(false),
-      savedCards: savedCards,
-      onSelectCard: handleCardSelection,
-      onAddNewCard: () => {
-        setShowPaymentOptions(false);
-        setShowAddCardPopup(true);
-      } }
-    ), /*#__PURE__*/
-
-
-    React.createElement(StripeProvider, null, /*#__PURE__*/
-    React.createElement(AddCardPopup, {
-      isOpen: showAddCardPopup,
-      onClose: handleClosePopup,
-      onAddCard: handleAddCard }
-    )
-    )
-    ));
-
+      <StripeProvider>
+        <AddCardPopup
+          isOpen={showAddCardPopup}
+          onClose={handleClosePopup}
+          onAddCard={handleAddCard}
+        />
+      </StripeProvider>
+    </section>
+  );
 };
 
 export default SubscriptionSection;
