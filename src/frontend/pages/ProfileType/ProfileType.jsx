@@ -15,16 +15,16 @@ import { FiAlertCircle } from 'react-icons/fi';
 
 // Firebase imports
 import { db, auth } from '../../../firebase/config';
-import { 
-    doc,
-    collection,
-    getDocs,
-    query,
-    where,
-    orderBy,
-    getDoc,
-    setDoc
-} from 'firebase/firestore';
+import {
+  doc,
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  getDoc,
+  setDoc } from
+'firebase/firestore';
 
 // Icon imports - now dynamic based on profile type data
 import * as ReactIcons from 'react-icons/fi';
@@ -63,25 +63,25 @@ const ProfileType = () => {
   useEffect(() => {
     const fetchProfileTypes = async () => {
       try {
-        console.log('Fetching profile types...'); // Debug log
-        
+        // Debug log
+
         // Get the admin profiles document
         const profilesDocRef = doc(db, 'admin', 'profiles');
         const profilesDoc = await getDoc(profilesDocRef);
-        
+
         if (!profilesDoc.exists()) {
-          console.log('Admin profiles document not found');
+
           setError('No profile types available. Please contact administrator.');
           return;
         }
 
         const data = profilesDoc.data();
         const profileTypesData = data.profileTypes || {};
-        
-        console.log('Profile types data:', profileTypesData); // Debug log
-        
+
+        // Debug log
+
         if (Object.keys(profileTypesData).length === 0) {
-          console.log('No profile types found');
+
           setError('No profile types available. Please contact administrator.');
           return;
         }
@@ -91,9 +91,9 @@ const ProfileType = () => {
           let IconComponent;
           try {
             // Find the icon in PROFILE_ICONS array using the stored icon id
-            const iconData = PROFILE_ICONS.find(icon => icon.id === data.icon);
+            const iconData = PROFILE_ICONS.find((icon) => icon.id === data.icon);
             IconComponent = iconData ? iconData.icon : ReactIcons.FiUser;
-            
+
             if (!IconComponent) {
               console.warn(`Icon ${data.icon} not found in PROFILE_ICONS, using default`);
               IconComponent = ReactIcons.FiUser;
@@ -111,8 +111,8 @@ const ProfileType = () => {
             sections: data.sections || {}
           };
         });
-        
-        console.log('Processed profile types:', types); // Debug log
+
+        // Debug log
         setProfileTypes(types);
       } catch (error) {
         console.error('Error fetching profile types:', error);
@@ -128,22 +128,22 @@ const ProfileType = () => {
   // Check user state and handle redirects
   useEffect(() => {
     const checkUserState = async () => {
-      console.log('Checking user state:', { user, auth: auth.currentUser, isLoading });
-      
+
+
       if (!user && !auth.currentUser && !isLoading) {
         // Only redirect to login if we're sure there's no auth in progress
         const noAuthInProgress = !location.state?.fromSignup && !location.state?.userId;
         if (noAuthInProgress) {
-          console.log('No auth in progress, redirecting to login');
+
           navigate('/', { replace: true });
           return;
         }
       } else if (user && !user.isPending && !isLoading) {
-        console.log('User exists and not pending, redirecting to dashboard');
+
         navigate('/dashboard', { replace: true });
         return;
       }
-      
+
       setIsInitializing(false);
     };
 
@@ -163,9 +163,9 @@ const ProfileType = () => {
       try {
         // Use the updateUserType function from AuthContext
         await updateUserType(selectedType);
-        
+
         // Wait for state updates to propagate
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         // Navigate to dashboard
         navigate('/dashboard', { replace: true });
@@ -180,92 +180,92 @@ const ProfileType = () => {
 
   // Show loading state
   if (isInitializing || loadingProfileTypes) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "flex items-center justify-center min-h-screen" }, /*#__PURE__*/
+      React.createElement("div", { className: "text-center" }, /*#__PURE__*/
+      React.createElement("div", { className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" }), /*#__PURE__*/
+      React.createElement("p", { className: "text-gray-600" }, "Loading...")
+      )
+      ));
+
   }
 
-  return (
-    <div className="profile-type-container">
-      {/* Left section remains the same */}
-      <div className="profile-type-left">
-        <img src={feedoLogo} alt="Feedo AI Logo" className="feedo-logo" />
-        <div className="hero-image">
-          <img src={girlImage} alt="Professional woman with laptop" />
-        </div>
-        <div className="award-badges">
-          <img src={awardBadge} alt="Award Badge" />
-          <img src={awardBadge} alt="Award Badge" />
-          <img src={awardBadge} alt="Award Badge" />
-        </div>
-      </div>
-      
-      {/* Right section with error handling */}
-      <div className="profile-type-right hide-scrollbar-y">
-        <div className="profile-type-content">
-          <div className="text-center">
-            <h1 className="welcome-title">Welcome!</h1>
-            <h2 className="selection-title">Select Your Profile to Get Started</h2>
-            <p className="selection-description">
-              Choose your profile type to receive personalized opportunities tailored to your needs.
-            </p>
-          </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "profile-type-container" }, /*#__PURE__*/
 
-          {error ? (
-            <div className="error-container">
-              <div className="error-message">
-                <FiAlertCircle className="error-icon" />
-                <p>{error}</p>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className="profile-type-grid">
-                {profileTypes.map((type) => (
-                  <button
-                    key={type.id}
-                    className={`profile-type-card ${selectedType === type.id ? 'selected' : ''}`}
-                    onClick={() => handleTypeSelect(type.id)}
-                  >
-                    <div className="card-icon">
-                      <type.icon size={28} />
-                    </div>
-                    <h3 className="card-title">{type.label}</h3>
-                    <p className="card-description">{type.subtitle}</p>
-                  </button>
-                ))}
-              </div>
+    React.createElement("div", { className: "profile-type-left" }, /*#__PURE__*/
+    React.createElement("img", { src: feedoLogo, alt: "Feedo AI Logo", className: "feedo-logo" }), /*#__PURE__*/
+    React.createElement("div", { className: "hero-image" }, /*#__PURE__*/
+    React.createElement("img", { src: girlImage, alt: "Professional woman with laptop" })
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "award-badges" }, /*#__PURE__*/
+    React.createElement("img", { src: awardBadge, alt: "Award Badge" }), /*#__PURE__*/
+    React.createElement("img", { src: awardBadge, alt: "Award Badge" }), /*#__PURE__*/
+    React.createElement("img", { src: awardBadge, alt: "Award Badge" })
+    )
+    ), /*#__PURE__*/
 
-              <div className="text-center">
-                <AuthButton 
-                  onClick={handleNext}
-                  isLoading={isLoading}
-                  disabled={!selectedType || isLoading}
-                  className="auth-button"
-                >
-                  {selectedType ? 'Continue' : 'Select a profile type'}
-                </AuthButton>
-              </div>
-            </>
-          )}
-        </div>
 
-        <footer className="profile-type-footer">
-          <div className="copyright">
-            Copyright 2021 - 2022 Feedo Inc. All rights Reserved
-          </div>
-          <button className="help-btn">
-            Need help?
-          </button>
-        </footer>
-      </div>
-    </div>
-  );
+    React.createElement("div", { className: "profile-type-right hide-scrollbar-y" }, /*#__PURE__*/
+    React.createElement("div", { className: "profile-type-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "text-center" }, /*#__PURE__*/
+    React.createElement("h1", { className: "welcome-title" }, "Welcome!"), /*#__PURE__*/
+    React.createElement("h2", { className: "selection-title" }, "Select Your Profile to Get Started"), /*#__PURE__*/
+    React.createElement("p", { className: "selection-description" }, "Choose your profile type to receive personalized opportunities tailored to your needs."
+
+    )
+    ),
+
+    error ? /*#__PURE__*/
+    React.createElement("div", { className: "error-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "error-message" }, /*#__PURE__*/
+    React.createElement(FiAlertCircle, { className: "error-icon" }), /*#__PURE__*/
+    React.createElement("p", null, error)
+    )
+    ) : /*#__PURE__*/
+
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement("div", { className: "profile-type-grid" },
+    profileTypes.map((type) => /*#__PURE__*/
+    React.createElement("button", {
+      key: type.id,
+      className: `profile-type-card ${selectedType === type.id ? 'selected' : ''}`,
+      onClick: () => handleTypeSelect(type.id) }, /*#__PURE__*/
+
+    React.createElement("div", { className: "card-icon" }, /*#__PURE__*/
+    React.createElement(type.icon, { size: 28 })
+    ), /*#__PURE__*/
+    React.createElement("h3", { className: "card-title" }, type.label), /*#__PURE__*/
+    React.createElement("p", { className: "card-description" }, type.subtitle)
+    )
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "text-center" }, /*#__PURE__*/
+    React.createElement(AuthButton, {
+      onClick: handleNext,
+      isLoading: isLoading,
+      disabled: !selectedType || isLoading,
+      className: "auth-button" },
+
+    selectedType ? 'Continue' : 'Select a profile type'
+    )
+    )
+    )
+
+    ), /*#__PURE__*/
+
+    React.createElement("footer", { className: "profile-type-footer" }, /*#__PURE__*/
+    React.createElement("div", { className: "copyright" }, "Copyright 2021 - 2022 Feedo Inc. All rights Reserved"
+
+    ), /*#__PURE__*/
+    React.createElement("button", { className: "help-btn" }, "Need help?"
+
+    )
+    )
+    )
+    ));
+
 };
 
 export default ProfileType;

@@ -17,31 +17,31 @@ export const transformUserData = (authUser, userData, isPending = false) => {
   if (!authUser || !userData) return null;
 
   // Get first name and last name with proper fallbacks
-  const firstName = userData?.profile?.firstName || 
-                   userData?.metadata?.firstName || 
-                   userData?.firstName || 
-                   authUser?.displayName?.split(' ')[0] || 
-                   '';
-  
-  const lastName = userData?.profile?.lastName || 
-                  userData?.metadata?.lastName || 
-                  userData?.lastName || 
-                  authUser?.displayName?.split(' ').slice(1).join(' ') || 
-                  '';
+  const firstName = userData?.profile?.firstName ||
+  userData?.metadata?.firstName ||
+  userData?.firstName ||
+  authUser?.displayName?.split(' ')[0] ||
+  '';
+
+  const lastName = userData?.profile?.lastName ||
+  userData?.metadata?.lastName ||
+  userData?.lastName ||
+  authUser?.displayName?.split(' ').slice(1).join(' ') ||
+  '';
 
   // Create full name from first and last name
-  const fullName = userData.profile?.fullName || 
-                  `${firstName} ${lastName}`.trim() || 
-                  authUser.displayName || 
-                  '';
+  const fullName = userData.profile?.fullName ||
+  `${firstName} ${lastName}`.trim() ||
+  authUser.displayName ||
+  '';
 
   // Get provider from auth user's provider data
   const provider = authUser.providerData?.[0]?.providerId || userData.profile?.provider || 'password';
 
   // For Google users, always use auth user's photo URL if available
-  const photoURL = provider === 'google.com' && authUser.photoURL 
-    ? authUser.photoURL 
-    : userData.profile?.photoURL || authUser.photoURL || '';
+  const photoURL = provider === 'google.com' && authUser.photoURL ?
+  authUser.photoURL :
+  userData.profile?.photoURL || authUser.photoURL || '';
 
   // Transform the data ensuring userType is properly set
   const transformedData = {
@@ -73,12 +73,12 @@ export const transformUserData = (authUser, userData, isPending = false) => {
   };
 
   // Debug log
-  console.log('Transformed User Data:', {
-    input: { authUser, userData, isPending },
-    output: transformedData,
-    provider,
-    photoURL
-  });
+
+
+
+
+
+
 
   return transformedData;
 };
@@ -112,7 +112,7 @@ export const userOperations = {
   async createUserDocument(uid, userData, isPending = true) {
     const collection = isPending ? 'pending_users' : 'users';
     const userRef = doc(db, collection, uid);
-    
+
     const timestamp = serverTimestamp();
     const userDataWithTimestamp = {
       ...userData,
@@ -128,12 +128,12 @@ export const userOperations = {
   async updateUserProfile(uid, updates) {
     const userRef = doc(db, 'users', uid);
     const timestamp = serverTimestamp();
-    
+
     // Prepare the update data
     const updateData = {
       'metadata.lastUpdatedAt': timestamp
     };
-    
+
     // Handle profile updates
     if (updates.profile) {
       Object.entries(updates.profile).forEach(([key, value]) => {
@@ -155,7 +155,7 @@ export const userOperations = {
         updateData[`profileSections.${sectionId}`] = data;
       });
     }
-    
+
     // Handle section updates
     if (updates.personal) {
       Object.entries(updates.personal).forEach(([key, value]) => {
@@ -163,7 +163,7 @@ export const userOperations = {
       });
       updateData['personal.lastUpdated'] = timestamp;
     }
-    
+
     // Handle education updates
     if (updates.education) {
       updateData.education = {
@@ -171,22 +171,22 @@ export const userOperations = {
         lastUpdated: timestamp
       };
     }
-    
+
     if (updates.workExperience) {
       updateData.workExperience = updates.workExperience;
     }
-    
+
     if (updates.settings) {
       Object.entries(updates.settings).forEach(([key, value]) => {
         updateData[`settings.${key}`] = value;
       });
     }
 
-    console.log('Updating Firestore with:', updateData); // Debug log
-    
+    // Debug log
+
     // Perform the update
     await updateDoc(userRef, updateData);
-    
+
     // Return the updated data with local timestamps for immediate UI update
     return {
       ...updates,
@@ -201,31 +201,31 @@ export const userOperations = {
   async convertPendingToUser(uid, userData) {
     try {
       const batch = writeBatch(db);
-      
+
       // Get the profile type sections from admin config
       const profilesDocRef = doc(db, 'admin', 'profiles');
       const profilesDoc = await getDoc(profilesDocRef);
-      
+
       if (!profilesDoc.exists()) {
         throw new Error('Admin profiles configuration not found');
       }
 
       const profileTypes = profilesDoc.data().profileTypes;
       const userProfileType = profileTypes[userData.userType];
-      
+
       if (!userProfileType?.sections) {
         throw new Error('No sections found for profile type');
       }
 
       // Initialize profileSections with empty data
       const profileSections = {};
-      
+
       Object.entries(userProfileType.sections).forEach(([sectionId, section]) => {
         // Initialize profileSections with section structure and empty answers
         profileSections[sectionId] = {
           id: sectionId,
           label: section.label,
-          questions: section.questions?.map(question => ({
+          questions: section.questions?.map((question) => ({
             id: question.id,
             type: question.type,
             question: question.question,
@@ -254,20 +254,20 @@ export const userOperations = {
         userType: userData.userType,
         profileSections // Add initialized sections
       };
-      
+
       // Create new user document
       const userRef = doc(db, 'users', uid);
       batch.set(userRef, updatedUserData);
-      
+
       // Delete pending document
       const pendingRef = doc(db, 'pending_users', uid);
       batch.delete(pendingRef);
-      
+
       // Commit the batch
       await batch.commit();
 
       // Wait for a moment to ensure Firestore is synchronized
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Get the fresh data after the update
       const freshUserDoc = await getDoc(userRef);
@@ -302,7 +302,7 @@ export const userOperations = {
     try {
       const pendingRef = doc(db, 'pending_users', uid);
       const timestamp = serverTimestamp();
-      
+
       // Add timestamps to userData and ensure profile data is preserved
       const userDataWithTimestamp = {
         ...userData,
@@ -319,7 +319,7 @@ export const userOperations = {
         }
       };
 
-      console.log('Creating pending user with data:', userDataWithTimestamp);
+
 
       await setDoc(pendingRef, userDataWithTimestamp);
       return userDataWithTimestamp;
@@ -334,13 +334,13 @@ export const userOperations = {
     try {
       // Get current user data
       const { data, isPending } = await this.getUserData(uid);
-      
+
       if (!data) throw new Error('No user data found');
 
       // Get the profile type sections from admin config
       const profilesDocRef = doc(db, 'admin', 'profiles');
       const profilesDoc = await getDoc(profilesDocRef);
-      
+
       if (!profilesDoc.exists()) {
         throw new Error('Admin profiles configuration not found');
       }
@@ -351,10 +351,10 @@ export const userOperations = {
       }
 
       const userProfileType = profileTypes[selectedType];
-      
+
       // Initialize profileSections with empty data
       const profileSections = {};
-      
+
       // Only process sections if they exist
       if (userProfileType.sections) {
         Object.entries(userProfileType.sections).forEach(([sectionId, section]) => {
@@ -362,7 +362,7 @@ export const userOperations = {
           profileSections[sectionId] = {
             id: sectionId,
             label: section.label,
-            questions: section.questions?.map(question => ({
+            questions: section.questions?.map((question) => ({
               id: question.id,
               type: question.type,
               question: question.question,
@@ -408,7 +408,7 @@ export const userOperations = {
 
 // Helper functions
 export const createUserDataStructure = (user, data = {}) => {
-  console.log('Creating user data structure with:', { user, data }); // Debug log
+  // Debug log
 
   // Safely extract first and last name
   const firstName = data?.firstName || user?.displayName?.split(' ')[0] || '';
@@ -456,6 +456,6 @@ export const createUserDataStructure = (user, data = {}) => {
     profileSections: {}
   };
 
-  console.log('Created user data structure:', userData); // Debug log
+  // Debug log
   return userData;
-}; 
+};

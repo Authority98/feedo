@@ -38,9 +38,12 @@ async function processFile(filePath) {
     const code = fs.readFileSync(filePath, 'utf-8');
     const result = await babel.transformAsync(code, {
       plugins: [removeConsolePlugin],
+      presets: ['@babel/preset-react'],
       filename: filePath,
       sourceMaps: false,
       retainLines: true,
+      configFile: false,
+      babelrc: false,
     });
 
     if (result && result.code) {

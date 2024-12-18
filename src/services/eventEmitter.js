@@ -8,16 +8,16 @@ class EventEmitter {
       this.events[event] = [];
     }
     this.events[event].push(callback);
-    
+
     // Return unsubscribe function
     return () => {
-      this.events[event] = this.events[event].filter(cb => cb !== callback);
+      this.events[event] = this.events[event].filter((cb) => cb !== callback);
     };
   }
 
   emit(event, data) {
     if (this.events[event]) {
-      this.events[event].forEach(callback => callback(data));
+      this.events[event].forEach((callback) => callback(data));
     }
   }
 }
@@ -28,4 +28,4 @@ export const eventEmitter = new EventEmitter();
 export const EVENTS = {
   TOKEN_USAGE_UPDATED: 'TOKEN_USAGE_UPDATED',
   SECTION_DATA_UPDATED: 'SECTION_DATA_UPDATED'
-}; 
+};

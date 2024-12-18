@@ -18,9 +18,9 @@ const EditApplicationPanel = ({ application, onClose, onUpdate }) => {
 
   useEffect(() => {
     if (application) {
-      console.log('Initial application:', application);
-      console.log('Initial deadline:', application.deadline);
-      
+
+
+
       // Convert UTC date to local date for the input
       let formattedDate = '';
       if (application.deadline) {
@@ -29,9 +29,9 @@ const EditApplicationPanel = ({ application, onClose, onUpdate }) => {
         date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
         formattedDate = date.toISOString().split('T')[0];
       }
-      
-      console.log('Formatted date for form:', formattedDate);
-      
+
+
+
       setFormData({
         name: application.name || '',
         category: application.category || '',
@@ -45,9 +45,9 @@ const EditApplicationPanel = ({ application, onClose, onUpdate }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'deadline') {
-      console.log('New deadline value:', value);
+
     }
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -73,11 +73,11 @@ const EditApplicationPanel = ({ application, onClose, onUpdate }) => {
         deadline: deadlineUTC
       };
 
-      console.log('Data being sent to server:', updatedData);
+
 
       const updatedApplication = await applicationOperations.updateApplication(application.id, updatedData);
-      console.log('Response from server:', updatedApplication);
-      
+
+
       onUpdate(updatedApplication);
       onClose();
     } catch (err) {
@@ -90,105 +90,105 @@ const EditApplicationPanel = ({ application, onClose, onUpdate }) => {
 
   if (!application) return null;
 
-  return (
-    <div className="slide-panel-overlay" onClick={onClose}>
-      <div className="slide-panel-wrapper" onClick={e => e.stopPropagation()}>
-        <CloseButton onClick={onClose} position="left" />
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "slide-panel-overlay", onClick: onClose }, /*#__PURE__*/
+    React.createElement("div", { className: "slide-panel-wrapper", onClick: (e) => e.stopPropagation() }, /*#__PURE__*/
+    React.createElement(CloseButton, { onClick: onClose, position: "left" }), /*#__PURE__*/
 
-        <div className="slide-panel-content">
-          <form onSubmit={handleSubmit} className="edit-application-form">
-            <div className="form-group">
-              <label htmlFor="name">Application Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Enter application name"
-                required
-              />
-            </div>
+    React.createElement("div", { className: "slide-panel-content" }, /*#__PURE__*/
+    React.createElement("form", { onSubmit: handleSubmit, className: "edit-application-form" }, /*#__PURE__*/
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "name" }, "Application Name"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      id: "name",
+      name: "name",
+      value: formData.name,
+      onChange: handleChange,
+      placeholder: "Enter application name",
+      required: true }
+    )
+    ), /*#__PURE__*/
 
-            <div className="form-group">
-              <label htmlFor="category">Category</label>
-              <input
-                type="text"
-                id="category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                placeholder="Enter category"
-                required
-              />
-            </div>
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "category" }, "Category"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      id: "category",
+      name: "category",
+      value: formData.category,
+      onChange: handleChange,
+      placeholder: "Enter category",
+      required: true }
+    )
+    ), /*#__PURE__*/
 
-            <div className="form-group">
-              <label htmlFor="status">Status</label>
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Status</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-                <option value="follow-up">Follow-up</option>
-                <option value="incomplete">Incomplete</option>
-              </select>
-            </div>
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "status" }, "Status"), /*#__PURE__*/
+    React.createElement("select", {
+      id: "status",
+      name: "status",
+      value: formData.status,
+      onChange: handleChange,
+      required: true }, /*#__PURE__*/
 
-            <div className="form-group">
-              <label htmlFor="deadline">Deadline</label>
-              <input
-                type="date"
-                id="deadline"
-                name="deadline"
-                value={formData.deadline}
-                onChange={handleChange}
-              />
-            </div>
+    React.createElement("option", { value: "" }, "Select Status"), /*#__PURE__*/
+    React.createElement("option", { value: "pending" }, "Pending"), /*#__PURE__*/
+    React.createElement("option", { value: "approved" }, "Approved"), /*#__PURE__*/
+    React.createElement("option", { value: "rejected" }, "Rejected"), /*#__PURE__*/
+    React.createElement("option", { value: "follow-up" }, "Follow-up"), /*#__PURE__*/
+    React.createElement("option", { value: "incomplete" }, "Incomplete")
+    )
+    ), /*#__PURE__*/
 
-            <div className="form-group">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Enter description"
-                rows={4}
-              />
-            </div>
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "deadline" }, "Deadline"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "date",
+      id: "deadline",
+      name: "deadline",
+      value: formData.deadline,
+      onChange: handleChange }
+    )
+    ), /*#__PURE__*/
 
-            {error && <div className="error-message">{error}</div>}
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "description" }, "Description"), /*#__PURE__*/
+    React.createElement("textarea", {
+      id: "description",
+      name: "description",
+      value: formData.description,
+      onChange: handleChange,
+      placeholder: "Enter description",
+      rows: 4 }
+    )
+    ),
 
-            <div className="form-actions">
-              <Button
-                variant="outline"
-                onClick={onClose}
-                disabled={loading}
-                type="button"
-                className="hover:text-inherit"
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="create"
-                type="submit"
-                isLoading={loading}
-              >
-                Save Changes
-              </Button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
+    error && /*#__PURE__*/React.createElement("div", { className: "error-message" }, error), /*#__PURE__*/
+
+    React.createElement("div", { className: "form-actions" }, /*#__PURE__*/
+    React.createElement(Button, {
+      variant: "outline",
+      onClick: onClose,
+      disabled: loading,
+      type: "button",
+      className: "hover:text-inherit" },
+    "Cancel"
+
+    ), /*#__PURE__*/
+    React.createElement(Button, {
+      variant: "create",
+      type: "submit",
+      isLoading: loading },
+    "Save Changes"
+
+    )
+    )
+    )
+    )
+    )
+    ));
+
 };
 
-export default EditApplicationPanel; 
+export default EditApplicationPanel;

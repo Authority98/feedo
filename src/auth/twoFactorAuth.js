@@ -73,4 +73,4 @@ export const disableTwoFactor = async (userId) => {
     console.error('Error disabling 2FA:', error);
     throw error;
   }
-}; 
+};

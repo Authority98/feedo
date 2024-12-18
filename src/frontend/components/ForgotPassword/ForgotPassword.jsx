@@ -52,77 +52,77 @@ const ForgotPassword = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  return (
-    <div className="forgot-password-modal">
-      <div className="modal-content">
-        <button 
-          className="close-modal" 
-          onClick={() => {
-            onClose();
-            setResetEmail('');
-            setResetEmailSent(false);
-            setErrors({});
-          }}
-        >
-          ×
-        </button>
-        
-        {!resetEmailSent ? (
-          <>
-            <h2>Reset Password</h2>
-            <p>Enter your email address and we'll send you instructions to reset your password.</p>
-            
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="resetEmail">Email</label>
-                <input
-                  type="email"
-                  id="resetEmail"
-                  value={resetEmail}
-                  onChange={(e) => setResetEmail(e.target.value)}
-                  className={errors.resetEmail ? 'error' : ''}
-                  placeholder="Enter your email"
-                />
-                {errors.resetEmail && (
-                  <span className="error-message">{errors.resetEmail}</span>
-                )}
-              </div>
-              
-              <AuthButton 
-                isLoading={isLoading}
-                loadingText="Sending..."
-              >
-                Send Reset Link
-              </AuthButton>
-            </form>
-          </>
-        ) : (
-          <div className="reset-success">
-            <h2>Email Sent!</h2>
-            <p>
-              We've sent password reset instructions to:
-              <br />
-              <strong>{resetEmail}</strong>
-            </p>
-            <p className="note">
-              Please check your email and follow the instructions to reset your password.
-              Don't forget to check your spam folder.
-            </p>
-            <button 
-              className="close-btn"
-              onClick={() => {
-                onClose();
-                setResetEmail('');
-                setResetEmailSent(false);
-              }}
-            >
-              Close
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "forgot-password-modal" }, /*#__PURE__*/
+    React.createElement("div", { className: "modal-content" }, /*#__PURE__*/
+    React.createElement("button", {
+      className: "close-modal",
+      onClick: () => {
+        onClose();
+        setResetEmail('');
+        setResetEmailSent(false);
+        setErrors({});
+      } },
+    "\xD7"
+
+    ),
+
+    !resetEmailSent ? /*#__PURE__*/
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement("h2", null, "Reset Password"), /*#__PURE__*/
+    React.createElement("p", null, "Enter your email address and we'll send you instructions to reset your password."), /*#__PURE__*/
+
+    React.createElement("form", { onSubmit: handleSubmit }, /*#__PURE__*/
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "resetEmail" }, "Email"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "email",
+      id: "resetEmail",
+      value: resetEmail,
+      onChange: (e) => setResetEmail(e.target.value),
+      className: errors.resetEmail ? 'error' : '',
+      placeholder: "Enter your email" }
+    ),
+    errors.resetEmail && /*#__PURE__*/
+    React.createElement("span", { className: "error-message" }, errors.resetEmail)
+
+    ), /*#__PURE__*/
+
+    React.createElement(AuthButton, {
+      isLoading: isLoading,
+      loadingText: "Sending..." },
+    "Send Reset Link"
+
+    )
+    )
+    ) : /*#__PURE__*/
+
+    React.createElement("div", { className: "reset-success" }, /*#__PURE__*/
+    React.createElement("h2", null, "Email Sent!"), /*#__PURE__*/
+    React.createElement("p", null, "We've sent password reset instructions to:", /*#__PURE__*/
+
+    React.createElement("br", null), /*#__PURE__*/
+    React.createElement("strong", null, resetEmail)
+    ), /*#__PURE__*/
+    React.createElement("p", { className: "note" }, "Please check your email and follow the instructions to reset your password. Don't forget to check your spam folder."
+
+
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      className: "close-btn",
+      onClick: () => {
+        onClose();
+        setResetEmail('');
+        setResetEmailSent(false);
+      } },
+    "Close"
+
+    )
+    )
+
+    )
+    ));
+
 };
 
-export default ForgotPassword; 
+export default ForgotPassword;

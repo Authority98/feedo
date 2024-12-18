@@ -37,7 +37,7 @@ const EmailDialog = ({ open, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -58,9 +58,9 @@ const EmailDialog = ({ open, onClose }) => {
 
       // Here you would send the email using your backend service
       // For now, we'll just simulate a delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      console.log('Email sent:', emailContent);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+
       showToast('Email sent successfully!', 'success');
       onClose();
       setFormData({
@@ -75,89 +75,89 @@ const EmailDialog = ({ open, onClose }) => {
     }
   };
 
-  return (
-    <Dialog 
-      open={open} 
-      onClose={onClose}
-      maxWidth="sm"
-      fullWidth
-    >
-      <DialogTitle>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box display="flex" alignItems="center" gap={1}>
-            <FiMail size={24} />
-            <Typography variant="h6">
-              Contact Support
-            </Typography>
-          </Box>
-          <IconButton onClick={onClose} size="small">
-            <FiX />
-          </IconButton>
-        </Box>
-      </DialogTitle>
+  return (/*#__PURE__*/
+    React.createElement(Dialog, {
+      open: open,
+      onClose: onClose,
+      maxWidth: "sm",
+      fullWidth: true }, /*#__PURE__*/
 
-      <form onSubmit={handleSubmit}>
-        <DialogContent>
-          <Box mb={2}>
-            <StyledTextField
-              fullWidth
-              disabled
-              label="From"
-              value={user?.profile?.email || ''}
-              margin="normal"
-              InputProps={{
-                sx: { height: '48px' }
-              }}
-            />
-          </Box>
+    React.createElement(DialogTitle, null, /*#__PURE__*/
+    React.createElement(Box, { display: "flex", alignItems: "center", justifyContent: "space-between" }, /*#__PURE__*/
+    React.createElement(Box, { display: "flex", alignItems: "center", gap: 1 }, /*#__PURE__*/
+    React.createElement(FiMail, { size: 24 }), /*#__PURE__*/
+    React.createElement(Typography, { variant: "h6" }, "Contact Support"
 
-          <Box mb={2}>
-            <StyledTextField
-              fullWidth
-              label="Subject"
-              name="subject"
-              value={formData.subject}
-              onChange={handleInputChange}
-              placeholder="How can we help you?"
-              required
-              margin="normal"
-              InputProps={{
-                sx: { height: '48px' }
-              }}
-            />
-          </Box>
+    )
+    ), /*#__PURE__*/
+    React.createElement(IconButton, { onClick: onClose, size: "small" }, /*#__PURE__*/
+    React.createElement(FiX, null)
+    )
+    )
+    ), /*#__PURE__*/
 
-          <Box mb={2}>
-            <StyledTextField
-              fullWidth
-              label="Message"
-              multiline
-              rows={4}
-              name="message"
-              value={formData.message}
-              onChange={handleInputChange}
-              placeholder="Please describe your issue or question..."
-              required
-              margin="normal"
-            />
-          </Box>
-        </DialogContent>
+    React.createElement("form", { onSubmit: handleSubmit }, /*#__PURE__*/
+    React.createElement(DialogContent, null, /*#__PURE__*/
+    React.createElement(Box, { mb: 2 }, /*#__PURE__*/
+    React.createElement(StyledTextField, {
+      fullWidth: true,
+      disabled: true,
+      label: "From",
+      value: user?.profile?.email || '',
+      margin: "normal",
+      InputProps: {
+        sx: { height: '48px' }
+      } }
+    )
+    ), /*#__PURE__*/
 
-        <DialogActions>
-          <Button onClick={onClose}>
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={loading}
-          >
-            {loading ? 'Sending...' : 'Send Email'}
-          </Button>
-        </DialogActions>
-      </form>
-    </Dialog>
-  );
+    React.createElement(Box, { mb: 2 }, /*#__PURE__*/
+    React.createElement(StyledTextField, {
+      fullWidth: true,
+      label: "Subject",
+      name: "subject",
+      value: formData.subject,
+      onChange: handleInputChange,
+      placeholder: "How can we help you?",
+      required: true,
+      margin: "normal",
+      InputProps: {
+        sx: { height: '48px' }
+      } }
+    )
+    ), /*#__PURE__*/
+
+    React.createElement(Box, { mb: 2 }, /*#__PURE__*/
+    React.createElement(StyledTextField, {
+      fullWidth: true,
+      label: "Message",
+      multiline: true,
+      rows: 4,
+      name: "message",
+      value: formData.message,
+      onChange: handleInputChange,
+      placeholder: "Please describe your issue or question...",
+      required: true,
+      margin: "normal" }
+    )
+    )
+    ), /*#__PURE__*/
+
+    React.createElement(DialogActions, null, /*#__PURE__*/
+    React.createElement(Button, { onClick: onClose }, "Cancel"
+
+    ), /*#__PURE__*/
+    React.createElement(Button, {
+      type: "submit",
+      variant: "contained",
+      disabled: loading },
+
+    loading ? 'Sending...' : 'Send Email'
+    )
+    )
+    )
+    ));
+
 };
 
-export default EmailDialog; 
+export default EmailDialog;

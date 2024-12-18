@@ -12,12 +12,12 @@ import { FiLoader } from 'react-icons/fi';
 import './PaymentProcessingSpinner.css';
 
 const PaymentProcessingSpinner = () => {
-  return (
-    <div className="payment-processing-spinner">
-      <FiLoader className="spinner-icon" />
-      <span className="spinner-text">Processing payment</span>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "payment-processing-spinner" }, /*#__PURE__*/
+    React.createElement(FiLoader, { className: "spinner-icon" }), /*#__PURE__*/
+    React.createElement("span", { className: "spinner-text" }, "Processing payment")
+    ));
+
 };
 
-export default PaymentProcessingSpinner; 
+export default PaymentProcessingSpinner;

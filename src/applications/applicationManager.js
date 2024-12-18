@@ -10,19 +10,19 @@
  */
 
 import { db } from '../firebase/config';
-import { 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
   where,
   orderBy,
-  serverTimestamp 
-} from 'firebase/firestore';
+  serverTimestamp } from
+'firebase/firestore';
 
 // Application operations
 export const applicationOperations = {
@@ -31,7 +31,7 @@ export const applicationOperations = {
     try {
       const applicationsRef = collection(db, 'applications');
       const timestamp = serverTimestamp();
-      
+
       const newApplication = {
         ...applicationData,
         createdAt: timestamp,
@@ -62,7 +62,7 @@ export const applicationOperations = {
       }
 
       const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => ({
+      return querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data()
       }));
@@ -75,8 +75,8 @@ export const applicationOperations = {
   // Update application
   async updateApplication(applicationId, updates) {
     try {
-      console.log('Updating application with data:', updates);
-      
+
+
       const applicationRef = doc(db, 'applications', applicationId);
       const updateData = {
         ...updates,
@@ -85,15 +85,15 @@ export const applicationOperations = {
       };
 
       await updateDoc(applicationRef, updateData);
-      
+
       // Get the updated document to return the complete data
       const updatedDoc = await getDoc(applicationRef);
       const updatedData = updatedDoc.data();
-      
-      console.log('Updated application data:', updatedData);
-      
-      return { 
-        id: applicationId, 
+
+
+
+      return {
+        id: applicationId,
         ...updatedData,
         // Ensure deadline is properly formatted
         deadline: updatedData.deadline || null
@@ -152,10 +152,10 @@ export const applicationOperations = {
       };
 
       // Calculate stats from actual applications
-      querySnapshot.forEach(doc => {
+      querySnapshot.forEach((doc) => {
         const data = doc.data();
         stats.total++;
-        
+
         // Convert 'follow-up' to 'followUp' for consistency
         const status = data.status || 'incomplete';
         const statusKey = status === 'follow-up' ? 'followUp' : status;
@@ -164,7 +164,7 @@ export const applicationOperations = {
         }
       });
 
-      console.log('Calculated application stats:', stats);
+
       return stats;
     } catch (error) {
       console.error('Error getting application stats:', error);
@@ -206,7 +206,7 @@ export const opportunityOperations = {
     try {
       const opportunitiesRef = collection(db, 'opportunities');
       const timestamp = serverTimestamp();
-      
+
       const newOpportunity = {
         ...opportunityData,
         createdAt: timestamp,
@@ -231,7 +231,7 @@ export const opportunityOperations = {
       }
 
       const opportunitiesRef = collection(db, 'opportunities');
-      
+
       // Base query to get only the current user's opportunities
       let q = query(
         opportunitiesRef,
@@ -247,21 +247,21 @@ export const opportunityOperations = {
       q = query(q, orderBy('lastActivity', 'desc'));
 
       const querySnapshot = await getDocs(q);
-      
+
       // Transform the data to handle timestamps and ensure all fields are present
-      const opportunities = querySnapshot.docs.map(doc => {
+      const opportunities = querySnapshot.docs.map((doc) => {
         const data = doc.data();
-        
+
         // Convert timestamps to ISO strings
         const timestamps = ['createdAt', 'updatedAt', 'lastActivity', 'deadline'];
-        timestamps.forEach(field => {
+        timestamps.forEach((field) => {
           if (data[field] && typeof data[field].toDate === 'function') {
             data[field] = data[field].toDate().toISOString();
           }
         });
 
         // Log each opportunity for debugging
-        console.log('Fetched opportunity:', { id: doc.id, ...data });
+
 
         // Ensure all required fields are present with defaults
         return {
@@ -288,7 +288,7 @@ export const opportunityOperations = {
       });
 
       // Log the final opportunities array
-      console.log('All fetched opportunities:', opportunities);
+
 
       return opportunities;
     } catch (error) {
@@ -344,7 +344,7 @@ export const opportunityOperations = {
       // Generate random success rate between 70 and 100
       stats.successRate = Math.floor(Math.random() * (100 - 70 + 1)) + 70;
 
-      querySnapshot.forEach(doc => {
+      querySnapshot.forEach((doc) => {
         const data = doc.data();
         stats.total++;
 
@@ -366,7 +366,7 @@ export const opportunityOperations = {
         // Check deadlines
         if (data.deadline) {
           const deadlineDate = new Date(data.deadline);
-          
+
           // Only count future deadlines
           if (deadlineDate > now) {
             // Closing today
@@ -374,13 +374,13 @@ export const opportunityOperations = {
               stats.closingToday++;
               stats.closingSoon++;
             }
-            
+
             // Closing this week
             if (deadlineDate <= oneWeek) {
               stats.closingThisWeek++;
               if (!stats.closingSoon) stats.closingSoon++;
             }
-            
+
             // Closing this month
             if (deadlineDate <= oneMonth) {
               stats.closingThisMonth++;
@@ -390,7 +390,7 @@ export const opportunityOperations = {
         }
       });
 
-      console.log('Calculated opportunity stats:', stats);
+
       return stats;
     } catch (error) {
       console.error('Error getting opportunity stats:', error);
@@ -413,7 +413,7 @@ export const opportunityOperations = {
 export const createOpportunityDataStructure = (data) => {
   // Generate random progress between 0-100
   const randomProgress = Math.floor(Math.random() * 100);
-  
+
   // Generate random deadline between 1-60 days from now
   const randomDays = Math.floor(Math.random() * 60) + 1; // Changed to start from 1
   const deadline = new Date();
@@ -435,7 +435,7 @@ export const createOpportunityDataStructure = (data) => {
 
   // Generate match percentage
   const matchPercentage = data.matchPercentage || generateMatchPercentage();
-  
+
   // Determine if it's a perfect match (90% or higher)
   const isPerfectMatch = matchPercentage >= 90;
 
@@ -446,7 +446,7 @@ export const createOpportunityDataStructure = (data) => {
   // Add some randomization to the status
   const statuses = ['new', 'active', 'closing-soon'];
   const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-  
+
   // If deadline is within 7 days, force status to 'closing-soon'
   const status = isClosingSoon ? 'closing-soon' : randomStatus;
 
@@ -472,8 +472,8 @@ export const createOpportunityDataStructure = (data) => {
       details: data.compensation?.details || ''
     },
     matchPercentage,
-    isPerfectMatch,          // Will be true for matches >= 90%
-    isClosingSoon,           // Will be true for deadlines within 7 days
+    isPerfectMatch, // Will be true for matches >= 90%
+    isClosingSoon, // Will be true for deadlines within 7 days
     applicationProgress: randomProgress,
     deadline: deadline.toISOString(),
     isArchived: false,
@@ -481,4 +481,4 @@ export const createOpportunityDataStructure = (data) => {
     updatedAt: new Date().toISOString(),
     lastActivity: new Date().toISOString()
   };
-}; 
+};

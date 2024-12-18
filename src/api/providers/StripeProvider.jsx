@@ -22,7 +22,7 @@ const StripeProvider = ({ children }) => {
     const initializeStripe = async () => {
       try {
         setLoading(true);
-        
+
         if (!stripeConfig.isConfigured) {
           throw new Error('Stripe configuration is missing or invalid');
         }
@@ -41,36 +41,36 @@ const StripeProvider = ({ children }) => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center p-4">
-        Loading payment system...
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "flex items-center justify-center p-4" }, "Loading payment system..."
+
+      ));
+
   }
 
   if (error) {
-    return (
-      <div className="p-4 bg-red-50 text-red-600 rounded-lg">
-        <h3 className="font-semibold">Configuration Error</h3>
-        <p>{error}</p>
-        <p className="text-sm mt-2">Please check your Stripe configuration.</p>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "p-4 bg-red-50 text-red-600 rounded-lg" }, /*#__PURE__*/
+      React.createElement("h3", { className: "font-semibold" }, "Configuration Error"), /*#__PURE__*/
+      React.createElement("p", null, error), /*#__PURE__*/
+      React.createElement("p", { className: "text-sm mt-2" }, "Please check your Stripe configuration.")
+      ));
+
   }
 
   const options = {
     fonts: [
-      {
-        cssSrc: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap',
-      },
-    ],
+    {
+      cssSrc: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap'
+    }]
+
   };
 
-  return (
-    <Elements stripe={stripePromise} options={options}>
-      {children}
-    </Elements>
-  );
+  return (/*#__PURE__*/
+    React.createElement(Elements, { stripe: stripePromise, options: options },
+    children
+    ));
+
 };
 
-export default StripeProvider; 
+export default StripeProvider;

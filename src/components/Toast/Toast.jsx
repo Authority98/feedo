@@ -22,13 +22,13 @@ const Toast = ({ message, type = 'info', duration = 4000, onClose }) => {
 
   useEffect(() => {
     let animationFrame;
-    
+
     const updateProgress = () => {
       if (!isPaused) {
         const now = Date.now();
         const elapsed = now - startTimeRef.current;
         const remaining = remainingTimeRef.current - elapsed;
-        const newProgress = (remaining / duration) * 100;
+        const newProgress = remaining / duration * 100;
 
         if (newProgress <= 0) {
           handleClose();
@@ -50,7 +50,7 @@ const Toast = ({ message, type = 'info', duration = 4000, onClose }) => {
 
   const handleMouseEnter = () => {
     setIsPaused(true);
-    remainingTimeRef.current = (progress / 100) * duration;
+    remainingTimeRef.current = progress / 100 * duration;
   };
 
   const handleMouseLeave = () => {
@@ -65,32 +65,32 @@ const Toast = ({ message, type = 'info', duration = 4000, onClose }) => {
     }, 300);
   };
 
-  return (
-    <div 
-      className={`toast ${type} ${isRemoving ? 'removing' : ''}`}
-      role="alert"
-      aria-live="polite"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div className="toast-content">
-        <p className="toast-message">{message}</p>
-      </div>
-      <button 
-        className="toast-close"
-        onClick={handleClose}
-        aria-label="Close notification"
-      >
-        <FiX />
-      </button>
-      <div className="toast-progress">
-        <div 
-          className="toast-progress-bar"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", {
+      className: `toast ${type} ${isRemoving ? 'removing' : ''}`,
+      role: "alert",
+      "aria-live": "polite",
+      onMouseEnter: handleMouseEnter,
+      onMouseLeave: handleMouseLeave }, /*#__PURE__*/
+
+    React.createElement("div", { className: "toast-content" }, /*#__PURE__*/
+    React.createElement("p", { className: "toast-message" }, message)
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      className: "toast-close",
+      onClick: handleClose,
+      "aria-label": "Close notification" }, /*#__PURE__*/
+
+    React.createElement(FiX, null)
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "toast-progress" }, /*#__PURE__*/
+    React.createElement("div", {
+      className: "toast-progress-bar",
+      style: { width: `${progress}%` } }
+    )
+    )
+    ));
+
 };
 
-export default Toast; 
+export default Toast;

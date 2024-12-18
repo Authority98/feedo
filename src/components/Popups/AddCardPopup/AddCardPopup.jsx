@@ -30,45 +30,45 @@ const AddCardPopup = ({ isOpen, onClose, onAddCard }) => {
     }
   };
 
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className="popup-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <motion.div
-            className="popup-content"
-            initial={{ scale: 0.95, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            transition={{ type: "spring", duration: 0.3 }}
-          >
-            <div className="card-form">
-              <div className="form-header">
-                <h3>Add New Card</h3>
-                <button 
-                  onClick={onClose}
-                  className="close-btn"
-                >
-                  <FiX />
-                </button>
-              </div>
-              <AddCard 
-                onAddCard={handleAddCard}
-                initialShowForm={true}
-                onCancel={onClose}
-                hideDefaultView={true}
-                hideHeader={true}
-              />
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
+  return (/*#__PURE__*/
+    React.createElement(AnimatePresence, null,
+    isOpen && /*#__PURE__*/
+    React.createElement(motion.div, {
+      className: "popup-overlay",
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 } }, /*#__PURE__*/
+
+    React.createElement(motion.div, {
+      className: "popup-content",
+      initial: { scale: 0.95, opacity: 0, y: 20 },
+      animate: { scale: 1, opacity: 1, y: 0 },
+      exit: { scale: 0.95, opacity: 0, y: 20 },
+      transition: { type: "spring", duration: 0.3 } }, /*#__PURE__*/
+
+    React.createElement("div", { className: "card-form" }, /*#__PURE__*/
+    React.createElement("div", { className: "form-header" }, /*#__PURE__*/
+    React.createElement("h3", null, "Add New Card"), /*#__PURE__*/
+    React.createElement("button", {
+      onClick: onClose,
+      className: "close-btn" }, /*#__PURE__*/
+
+    React.createElement(FiX, null)
+    )
+    ), /*#__PURE__*/
+    React.createElement(AddCard, {
+      onAddCard: handleAddCard,
+      initialShowForm: true,
+      onCancel: onClose,
+      hideDefaultView: true,
+      hideHeader: true }
+    )
+    )
+    )
+    )
+
+    ));
+
 };
 
-export default AddCardPopup; 
+export default AddCardPopup;

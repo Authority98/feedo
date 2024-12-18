@@ -18,83 +18,83 @@ const ApplicationPanel = ({ isOpen, onClose, application }) => {
     });
   };
 
-  return (
-    <div className="application-panel-overlay" onClick={onClose}>
-      <div className="application-panel" onClick={e => e.stopPropagation()}>
-        <CloseButton onClick={onClose} position="right" />
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "application-panel-overlay", onClick: onClose }, /*#__PURE__*/
+    React.createElement("div", { className: "application-panel", onClick: (e) => e.stopPropagation() }, /*#__PURE__*/
+    React.createElement(CloseButton, { onClick: onClose, position: "right" }), /*#__PURE__*/
 
-        <div className="panel-content">
-          <div className="panel-header">
-            <h2 className="panel-title">{application.name}</h2>
-            <StatusBadge 
-              status={application.status}
-              variant="application"
-            />
-          </div>
+    React.createElement("div", { className: "panel-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "panel-header" }, /*#__PURE__*/
+    React.createElement("h2", { className: "panel-title" }, application.name), /*#__PURE__*/
+    React.createElement(StatusBadge, {
+      status: application.status,
+      variant: "application" }
+    )
+    ), /*#__PURE__*/
 
-          <div className="panel-section">
-            <h3 className="section-title">Details</h3>
-            <div className="details-grid">
-              <div className="detail-item">
-                <FiCalendar className="detail-icon" />
-                <div className="detail-content">
-                  <span className="detail-label">Submission Date</span>
-                  <span className="detail-value">{formatDate(application.submissionDate)}</span>
-                </div>
-              </div>
+    React.createElement("div", { className: "panel-section" }, /*#__PURE__*/
+    React.createElement("h3", { className: "section-title" }, "Details"), /*#__PURE__*/
+    React.createElement("div", { className: "details-grid" }, /*#__PURE__*/
+    React.createElement("div", { className: "detail-item" }, /*#__PURE__*/
+    React.createElement(FiCalendar, { className: "detail-icon" }), /*#__PURE__*/
+    React.createElement("div", { className: "detail-content" }, /*#__PURE__*/
+    React.createElement("span", { className: "detail-label" }, "Submission Date"), /*#__PURE__*/
+    React.createElement("span", { className: "detail-value" }, formatDate(application.submissionDate))
+    )
+    ), /*#__PURE__*/
 
-              <div className="detail-item">
-                <FiClock className="detail-icon" />
-                <div className="detail-content">
-                  <span className="detail-label">Deadline</span>
-                  <span className="detail-value">{formatDate(application.deadline)}</span>
-                </div>
-              </div>
+    React.createElement("div", { className: "detail-item" }, /*#__PURE__*/
+    React.createElement(FiClock, { className: "detail-icon" }), /*#__PURE__*/
+    React.createElement("div", { className: "detail-content" }, /*#__PURE__*/
+    React.createElement("span", { className: "detail-label" }, "Deadline"), /*#__PURE__*/
+    React.createElement("span", { className: "detail-value" }, formatDate(application.deadline))
+    )
+    ), /*#__PURE__*/
 
-              <div className="detail-item">
-                <FiFileText className="detail-icon" />
-                <div className="detail-content">
-                  <span className="detail-label">Category</span>
-                  <span className="detail-value">{application.category}</span>
-                </div>
-              </div>
-            </div>
-          </div>
+    React.createElement("div", { className: "detail-item" }, /*#__PURE__*/
+    React.createElement(FiFileText, { className: "detail-icon" }), /*#__PURE__*/
+    React.createElement("div", { className: "detail-content" }, /*#__PURE__*/
+    React.createElement("span", { className: "detail-label" }, "Category"), /*#__PURE__*/
+    React.createElement("span", { className: "detail-value" }, application.category)
+    )
+    )
+    )
+    ),
 
-          {application.description && (
-            <div className="panel-section">
-              <h3 className="section-title">Description</h3>
-              <p className="description-text">{application.description}</p>
-            </div>
-          )}
+    application.description && /*#__PURE__*/
+    React.createElement("div", { className: "panel-section" }, /*#__PURE__*/
+    React.createElement("h3", { className: "section-title" }, "Description"), /*#__PURE__*/
+    React.createElement("p", { className: "description-text" }, application.description)
+    ),
 
-          {application.notes && (
-            <div className="panel-section">
-              <h3 className="section-title">Notes</h3>
-              <p className="notes-text">{application.notes}</p>
-            </div>
-          )}
 
-          {application.feedback && (
-            <div className="panel-section">
-              <h3 className="section-title">Feedback</h3>
-              <p className="feedback-text">{application.feedback}</p>
-            </div>
-          )}
+    application.notes && /*#__PURE__*/
+    React.createElement("div", { className: "panel-section" }, /*#__PURE__*/
+    React.createElement("h3", { className: "section-title" }, "Notes"), /*#__PURE__*/
+    React.createElement("p", { className: "notes-text" }, application.notes)
+    ),
 
-          <div className="panel-section mt-auto">
-            <button 
-              className="apply-now-btn w-full"
-              onClick={() => window.open(application.applyUrl || '#', '_blank')}
-              style={{ backgroundColor: '#246BFD', color: 'white' }}
-            >
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+
+    application.feedback && /*#__PURE__*/
+    React.createElement("div", { className: "panel-section" }, /*#__PURE__*/
+    React.createElement("h3", { className: "section-title" }, "Feedback"), /*#__PURE__*/
+    React.createElement("p", { className: "feedback-text" }, application.feedback)
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "panel-section mt-auto" }, /*#__PURE__*/
+    React.createElement("button", {
+      className: "apply-now-btn w-full",
+      onClick: () => window.open(application.applyUrl || '#', '_blank'),
+      style: { backgroundColor: '#246BFD', color: 'white' } },
+    "Apply Now"
+
+    )
+    )
+    )
+    )
+    ));
+
 };
 
-export default ApplicationPanel; 
+export default ApplicationPanel;

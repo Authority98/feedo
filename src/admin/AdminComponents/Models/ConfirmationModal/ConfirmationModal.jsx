@@ -22,35 +22,35 @@ const ConfirmationModal = ({
 }) => {
   if (!isOpen) return null;
 
-  return (
-    <div className="confirmation-overlay">
-      <div className="confirmation-modal">
-        <div className="confirmation-header">
-          <h3>{title}</h3>
-        </div>
-        <div className="confirmation-body">
-          <p className="confirmation-message">{message}</p>
-        </div>
-        <div className="confirmation-footer">
-          <AdminButton
-            variant="outline"
-            onClick={onClose}
-          >
-            {cancelText}
-          </AdminButton>
-          <AdminButton
-            variant="danger"
-            onClick={() => {
-              onConfirm();
-              onClose();
-            }}
-          >
-            {confirmText}
-          </AdminButton>
-        </div>
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "confirmation-overlay" }, /*#__PURE__*/
+    React.createElement("div", { className: "confirmation-modal" }, /*#__PURE__*/
+    React.createElement("div", { className: "confirmation-header" }, /*#__PURE__*/
+    React.createElement("h3", null, title)
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "confirmation-body" }, /*#__PURE__*/
+    React.createElement("p", { className: "confirmation-message" }, message)
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "confirmation-footer" }, /*#__PURE__*/
+    React.createElement(AdminButton, {
+      variant: "outline",
+      onClick: onClose },
+
+    cancelText
+    ), /*#__PURE__*/
+    React.createElement(AdminButton, {
+      variant: "danger",
+      onClick: () => {
+        onConfirm();
+        onClose();
+      } },
+
+    confirmText
+    )
+    )
+    )
+    ));
+
 };
 
-export default ConfirmationModal; 
+export default ConfirmationModal;

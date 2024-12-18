@@ -10,10 +10,10 @@
  */
 
 import React, { useState } from 'react';
-import { 
-  FiBookmark,      // For new request button
-  FiMail,          // For email contact button
-  FiMessageSquare   // For live chat button
+import {
+  FiBookmark, // For new request button
+  FiMail, // For email contact button
+  FiMessageSquare // For live chat button
 } from 'react-icons/fi';
 import { faqGirl } from '../../../../../assets';
 import AnimatedNumber from '../../../../../components/Animated/AnimatedNumber';
@@ -24,8 +24,8 @@ const Support = () => {
   /**
    * State Management
    */
-  const [activeButton, setActiveButton] = useState(null);  // Tracks active button for hover effects
-  const [responseTime] = useState(5);                      // Average response time in minutes
+  const [activeButton, setActiveButton] = useState(null); // Tracks active button for hover effects
+  const [responseTime] = useState(5); // Average response time in minutes
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
 
   /**
@@ -45,72 +45,72 @@ const Support = () => {
     setActiveButton(null);
   };
 
-  return (
-    <div className="support-section">
-      {/* Support content container */}
-      <div className="support-content">
-        {/* Section header */}
-        <h2 className="support-title animate-slide-in">
-          Can't Find What You're Looking For?
-        </h2>
-        <p className="support-subtitle animate-fade-in">
-          We're here to help • Average response time: <AnimatedNumber value={responseTime} /> minutes
-        </p>
-        
-        {/* Support action buttons */}
-        <div className="support-actions">
-          {/* Create new request button */}
-          <button 
-            className={`support-btn create ${activeButton === 'create' ? 'active' : ''}`}
-            onMouseEnter={() => handleButtonHover('create')}
-            onMouseLeave={handleButtonLeave}
-          >
-            <FiBookmark className="btn-icon" />
-            <span className="btn-text">Create New Request</span>
-            <div className="btn-shine"></div>
-          </button>
-          
-          {/* Email contact button */}
-          <button 
-            className={`support-btn email ${activeButton === 'email' ? 'active' : ''}`}
-            onMouseEnter={() => handleButtonHover('email')}
-            onMouseLeave={handleButtonLeave}
-            onClick={() => setIsEmailDialogOpen(true)}
-          >
-            <FiMail className="btn-icon" />
-            <span className="btn-text">Contact with Email</span>
-            <div className="btn-shine"></div>
-          </button>
-          
-          {/* Live chat button */}
-          <button 
-            className={`support-btn chat ${activeButton === 'chat' ? 'active' : ''}`}
-            onMouseEnter={() => handleButtonHover('chat')}
-            onMouseLeave={handleButtonLeave}
-            onClick={() => window.$crisp.push(['do', 'chat:open'])}
-          >
-            <FiMessageSquare className="btn-icon" />
-            <span className="btn-text">Contact with Live chat</span>
-            <div className="btn-shine"></div>
-          </button>
-        </div>
-      </div>
-      
-      {/* Support representative image */}
-      <div className="support-image">
-        <img 
-          src={faqGirl} 
-          alt="Support Representative"
-        />
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "support-section" }, /*#__PURE__*/
 
-      {/* Email Dialog */}
-      <EmailDialog 
-        open={isEmailDialogOpen}
-        onClose={() => setIsEmailDialogOpen(false)}
-      />
-    </div>
-  );
+    React.createElement("div", { className: "support-content" }, /*#__PURE__*/
+
+    React.createElement("h2", { className: "support-title animate-slide-in" }, "Can't Find What You're Looking For?"
+
+    ), /*#__PURE__*/
+    React.createElement("p", { className: "support-subtitle animate-fade-in" }, "We're here to help \u2022 Average response time: ", /*#__PURE__*/
+    React.createElement(AnimatedNumber, { value: responseTime }), " minutes"
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "support-actions" }, /*#__PURE__*/
+
+    React.createElement("button", {
+      className: `support-btn create ${activeButton === 'create' ? 'active' : ''}`,
+      onMouseEnter: () => handleButtonHover('create'),
+      onMouseLeave: handleButtonLeave }, /*#__PURE__*/
+
+    React.createElement(FiBookmark, { className: "btn-icon" }), /*#__PURE__*/
+    React.createElement("span", { className: "btn-text" }, "Create New Request"), /*#__PURE__*/
+    React.createElement("div", { className: "btn-shine" })
+    ), /*#__PURE__*/
+
+
+    React.createElement("button", {
+      className: `support-btn email ${activeButton === 'email' ? 'active' : ''}`,
+      onMouseEnter: () => handleButtonHover('email'),
+      onMouseLeave: handleButtonLeave,
+      onClick: () => setIsEmailDialogOpen(true) }, /*#__PURE__*/
+
+    React.createElement(FiMail, { className: "btn-icon" }), /*#__PURE__*/
+    React.createElement("span", { className: "btn-text" }, "Contact with Email"), /*#__PURE__*/
+    React.createElement("div", { className: "btn-shine" })
+    ), /*#__PURE__*/
+
+
+    React.createElement("button", {
+      className: `support-btn chat ${activeButton === 'chat' ? 'active' : ''}`,
+      onMouseEnter: () => handleButtonHover('chat'),
+      onMouseLeave: handleButtonLeave,
+      onClick: () => window.$crisp.push(['do', 'chat:open']) }, /*#__PURE__*/
+
+    React.createElement(FiMessageSquare, { className: "btn-icon" }), /*#__PURE__*/
+    React.createElement("span", { className: "btn-text" }, "Contact with Live chat"), /*#__PURE__*/
+    React.createElement("div", { className: "btn-shine" })
+    )
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "support-image" }, /*#__PURE__*/
+    React.createElement("img", {
+      src: faqGirl,
+      alt: "Support Representative" }
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement(EmailDialog, {
+      open: isEmailDialogOpen,
+      onClose: () => setIsEmailDialogOpen(false) }
+    )
+    ));
+
 };
 
 /**
@@ -122,4 +122,4 @@ const Support = () => {
  * - Visual feedback
  * - Responsive design
  */
-export default Support; 
+export default Support;

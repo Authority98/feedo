@@ -18,10 +18,10 @@ const AnimatedPercentage = ({ value, duration = 1500 }) => {
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = timestamp - startTime;
-      
+
       const percentage = Math.min(progress / duration, 1);
       const currentCount = Math.floor(value * percentage);
-      
+
       setCount(currentCount);
 
       if (progress < duration) {
@@ -43,4 +43,4 @@ const AnimatedPercentage = ({ value, duration = 1500 }) => {
   return `${count}%`;
 };
 
-export default AnimatedPercentage; 
+export default AnimatedPercentage;

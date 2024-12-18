@@ -12,14 +12,14 @@ import React from 'react';
 import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner';
 import './AdminButton.css';
 
-const AdminButton = ({ 
+const AdminButton = ({
   children,
   variant = 'primary',
   type = 'button',
   isLoading = false,
   disabled = false,
   onClick,
-  className = '',
+  className = ''
 }) => {
   const getButtonClass = () => {
     const baseClass = 'admin-button';
@@ -28,25 +28,25 @@ const AdminButton = ({
     return `${baseClass} ${variantClass} ${loadingClass} ${className}`.trim();
   };
 
-  return (
-    <button
-      type={type}
-      className={getButtonClass()}
-      disabled={isLoading || disabled}
-      onClick={onClick}
-    >
-      {isLoading ? (
-        <LoadingSpinner 
-          size="sm" 
-          color={variant === 'outline' ? 'text-blue-600' : 'text-white'} 
-        />
-      ) : (
-        <div className="button-content">
-          {children}
-        </div>
-      )}
-    </button>
-  );
+  return (/*#__PURE__*/
+    React.createElement("button", {
+      type: type,
+      className: getButtonClass(),
+      disabled: isLoading || disabled,
+      onClick: onClick },
+
+    isLoading ? /*#__PURE__*/
+    React.createElement(LoadingSpinner, {
+      size: "sm",
+      color: variant === 'outline' ? 'text-blue-600' : 'text-white' }
+    ) : /*#__PURE__*/
+
+    React.createElement("div", { className: "button-content" },
+    children
+    )
+
+    ));
+
 };
 
-export default AdminButton; 
+export default AdminButton;

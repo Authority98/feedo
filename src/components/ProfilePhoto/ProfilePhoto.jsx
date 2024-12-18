@@ -22,7 +22,7 @@ const ProfilePhoto = ({
   editable = false,
   onUpload = null,
   showStatus = false,
-  className = '',
+  className = ''
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,19 +43,19 @@ const ProfilePhoto = ({
 
   // Function to get the most up-to-date photo URL for Google users
   const getGooglePhotoURL = useCallback(async () => {
-    console.log('Fetching Google photo URL:', {
-      authCurrentUser: auth.currentUser ? {
-        photoURL: auth.currentUser.photoURL,
-        providerData: auth.currentUser.providerData
-      } : null,
-      userProfile: user?.profile
-    });
+
+
+
+
+
+
+
 
     // Try Firebase auth user's photo URL first (most up-to-date)
     if (auth.currentUser?.photoURL) {
       const isAccessible = await isUrlAccessible(auth.currentUser.photoURL);
       if (isAccessible) {
-        console.log('Using auth.currentUser photoURL:', auth.currentUser.photoURL);
+
         return auth.currentUser.photoURL;
       }
     }
@@ -64,19 +64,19 @@ const ProfilePhoto = ({
     if (user?.profile?.photoURL) {
       const isAccessible = await isUrlAccessible(user.profile.photoURL);
       if (isAccessible) {
-        console.log('Using profile photoURL:', user.profile.photoURL);
+
         return user.profile.photoURL;
       }
     }
 
     // If neither works, try to refresh the token
     try {
-      console.log('Attempting to refresh user token...');
+
       await refreshUser();
       if (auth.currentUser?.photoURL) {
         const isAccessible = await isUrlAccessible(auth.currentUser.photoURL);
         if (isAccessible) {
-          console.log('Using refreshed auth.currentUser photoURL:', auth.currentUser.photoURL);
+
           return auth.currentUser.photoURL;
         }
       }
@@ -89,13 +89,13 @@ const ProfilePhoto = ({
 
   const getProfileImage = useCallback(async () => {
     if (authLoading) return FALLBACK_PROFILE_IMAGE;
-    
+
     // If we have a cached URL and it's still accessible, use it
     if (cachedPhotoURL) {
       const isAccessible = await isUrlAccessible(cachedPhotoURL);
       if (isAccessible) return cachedPhotoURL;
     }
-    
+
     // For Google users
     if (user?.profile?.provider === 'google.com') {
       const googlePhotoURL = await getGooglePhotoURL();
@@ -104,7 +104,7 @@ const ProfilePhoto = ({
         return googlePhotoURL;
       }
     }
-    
+
     // For users with custom uploaded photos
     if (user?.profile?.photoURL) {
       const isAccessible = await isUrlAccessible(user.profile.photoURL);
@@ -113,14 +113,14 @@ const ProfilePhoto = ({
         return user.profile.photoURL;
       }
     }
-    
+
     // Fallback to emoji avatar if we have authUid
     if (user?.profile?.authUid) {
       const emojiAvatar = getEmojiAvatar(user.profile.authUid);
       setCachedPhotoURL(emojiAvatar);
       return emojiAvatar;
     }
-    
+
     return FALLBACK_PROFILE_IMAGE;
   }, [user, authLoading, cachedPhotoURL, getGooglePhotoURL]);
 
@@ -145,25 +145,25 @@ const ProfilePhoto = ({
   }, [user, authLoading, getProfileImage, cachedPhotoURL]);
 
   const handlePhotoError = async (e) => {
-    console.log('Photo load error. Current state:', {
-      cachedPhotoURL,
-      provider: user?.profile?.provider,
-      authCurrentUser: auth.currentUser ? {
-        photoURL: auth.currentUser.photoURL,
-        providerData: auth.currentUser.providerData
-      } : null
-    });
+
+
+
+
+
+
+
+
 
     // Clear cached URL on error
     setCachedPhotoURL('');
-    
+
     // For Google users, try to refresh the token and get new URL
     if (user?.profile?.provider === 'google.com') {
       try {
-        console.log('Attempting to refresh Google photo...');
+
         const newPhotoURL = await getGooglePhotoURL();
         if (newPhotoURL) {
-          console.log('Successfully got new Google photo URL:', newPhotoURL);
+
           e.target.src = newPhotoURL;
           setCachedPhotoURL(newPhotoURL);
           return;
@@ -172,13 +172,13 @@ const ProfilePhoto = ({
         console.error('Error refreshing Google profile photo:', error);
       }
     }
-    
+
     // Fallback for non-Google users or if refresh fails
-    const fallbackURL = user?.profile?.authUid ? 
-      getEmojiAvatar(user.profile.authUid) : 
-      FALLBACK_PROFILE_IMAGE;
-    
-    console.log('Using fallback URL:', fallbackURL);
+    const fallbackURL = user?.profile?.authUid ?
+    getEmojiAvatar(user.profile.authUid) :
+    FALLBACK_PROFILE_IMAGE;
+
+
     e.target.src = fallbackURL;
     setCachedPhotoURL(fallbackURL);
   };
@@ -196,46 +196,46 @@ const ProfilePhoto = ({
     ${isLoading ? 'loading' : ''}
   `.trim();
 
-  return (
-    <div 
-      className={containerClasses}
-      onMouseEnter={() => editable && setIsHovered(true)}
-      onMouseLeave={() => editable && setIsHovered(false)}
-    >
-      <div className={`profile-photo ${isHovered ? 'hovered' : ''}`}>
-        <div className="photo-wrapper">
-          <img 
-            src={cachedPhotoURL || FALLBACK_PROFILE_IMAGE}
-            alt={`${user?.profile?.firstName || 'User'}'s profile`}
-            className={`photo ${imageLoaded ? 'loaded' : ''}`}
-            onLoad={() => setImageLoaded(true)}
-            onError={handlePhotoError}
-          />
-          {!imageLoaded && (
-            <div className="photo-placeholder">
-              <FiUser className="placeholder-icon" />
-            </div>
-          )}
-          {editable && (isHovered || isLoading) && (
-            <div 
-              className="photo-overlay"
-              onClick={handleUploadClick}
-            >
-              <FiCamera className="overlay-icon" />
-              <span className="overlay-text">
-                {isLoading ? 'Uploading...' : 'Change Photo'}
-              </span>
-            </div>
-          )}
-        </div>
-        {showStatus && (
-          <div className="status-indicator">
-            <span className="status-dot"></span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", {
+      className: containerClasses,
+      onMouseEnter: () => editable && setIsHovered(true),
+      onMouseLeave: () => editable && setIsHovered(false) }, /*#__PURE__*/
+
+    React.createElement("div", { className: `profile-photo ${isHovered ? 'hovered' : ''}` }, /*#__PURE__*/
+    React.createElement("div", { className: "photo-wrapper" }, /*#__PURE__*/
+    React.createElement("img", {
+      src: cachedPhotoURL || FALLBACK_PROFILE_IMAGE,
+      alt: `${user?.profile?.firstName || 'User'}'s profile`,
+      className: `photo ${imageLoaded ? 'loaded' : ''}`,
+      onLoad: () => setImageLoaded(true),
+      onError: handlePhotoError }
+    ),
+    !imageLoaded && /*#__PURE__*/
+    React.createElement("div", { className: "photo-placeholder" }, /*#__PURE__*/
+    React.createElement(FiUser, { className: "placeholder-icon" })
+    ),
+
+    editable && (isHovered || isLoading) && /*#__PURE__*/
+    React.createElement("div", {
+      className: "photo-overlay",
+      onClick: handleUploadClick }, /*#__PURE__*/
+
+    React.createElement(FiCamera, { className: "overlay-icon" }), /*#__PURE__*/
+    React.createElement("span", { className: "overlay-text" },
+    isLoading ? 'Uploading...' : 'Change Photo'
+    )
+    )
+
+    ),
+    showStatus && /*#__PURE__*/
+    React.createElement("div", { className: "status-indicator" }, /*#__PURE__*/
+    React.createElement("span", { className: "status-dot" })
+    )
+
+    )
+    ));
+
 };
 
-export default ProfilePhoto; 
+export default ProfilePhoto;

@@ -18,25 +18,25 @@ import useProfileProgress from '../../../../../hooks/useProfileProgress';
 import { tokenUsageService } from '../../../../../services/tokenUsage';
 import { eventEmitter, EVENTS } from '../../../../../services/eventEmitter';
 
-const TYPE_COLORS = ['type-1', 'type-2', 'type-3', 'type-4', 'type-5', 
-                    'type-6', 'type-7', 'type-8', 'type-9', 'type-10'];
+const TYPE_COLORS = ['type-1', 'type-2', 'type-3', 'type-4', 'type-5',
+'type-6', 'type-7', 'type-8', 'type-9', 'type-10'];
 
 const getProfileImage = (user) => {
   // For Google users
   if (user?.profile?.provider === 'google' && user?.profile?.photoURL) {
     return user.profile.photoURL;
   }
-  
+
   // For users with custom uploaded photos
   if (user?.profile?.photoURL) {
     return user.profile.photoURL;
   }
-  
+
   // Fallback to emoji avatar if we have authUid
   if (user?.profile?.authUid) {
     return getEmojiAvatar(user.profile.authUid);
   }
-  
+
   return FALLBACK_PROFILE_IMAGE;
 };
 
@@ -44,37 +44,37 @@ const getProfileImage = (user) => {
 const ProgressCircle = ({ progress }) => {
   const radius = 58;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
+  const strokeDashoffset = circumference - progress / 100 * circumference;
 
-  return (
-    <div className="progress-circle-container">
-      <svg width="100%" height="100%" viewBox="0 0 120 120">
-        <defs>
-          <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#0093E9" />
-            <stop offset="100%" stopColor="#80D0C7" />
-          </linearGradient>
-        </defs>
-        <circle
-          className="progress-circle-bg"
-          cx="60"
-          cy="60"
-          r={radius}
-        />
-        <circle
-          className="progress-circle-path"
-          cx="60"
-          cy="60"
-          r={radius}
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-        />
-      </svg>
-      <div className="progress-percentage-pill">
-        {progress}%
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "progress-circle-container" }, /*#__PURE__*/
+    React.createElement("svg", { width: "100%", height: "100%", viewBox: "0 0 120 120" }, /*#__PURE__*/
+    React.createElement("defs", null, /*#__PURE__*/
+    React.createElement("linearGradient", { id: "progressGradient", x1: "0%", y1: "0%", x2: "100%", y2: "100%" }, /*#__PURE__*/
+    React.createElement("stop", { offset: "0%", stopColor: "#0093E9" }), /*#__PURE__*/
+    React.createElement("stop", { offset: "100%", stopColor: "#80D0C7" })
+    )
+    ), /*#__PURE__*/
+    React.createElement("circle", {
+      className: "progress-circle-bg",
+      cx: "60",
+      cy: "60",
+      r: radius }
+    ), /*#__PURE__*/
+    React.createElement("circle", {
+      className: "progress-circle-path",
+      cx: "60",
+      cy: "60",
+      r: radius,
+      strokeDasharray: circumference,
+      strokeDashoffset: strokeDashoffset }
+    )
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "progress-percentage-pill" },
+    progress, "%"
+    )
+    ));
+
 };
 
 // Create a custom hook for token usage
@@ -107,7 +107,7 @@ export const useTokenUsage = (userId, userTier) => {
 
     // Subscribe to token usage updates
     const unsubscribe = eventEmitter.on(EVENTS.TOKEN_USAGE_UPDATED, () => {
-      console.log('Token usage update event received');
+
       fetchTokenUsage();
     });
 
@@ -128,28 +128,28 @@ export const TokenUsageIndicator = ({ usage }) => {
     return 'text-green-500';
   };
 
-  return (
-    <div className="token-usage-section">
-      <div className="token-usage-header">
-        <FiZap className="token-icon" />
-        <span className="token-title">AI Credits</span>
-      </div>
-      <div className="token-usage-bar">
-        <div 
-          className="token-usage-progress"
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-      <div className="token-usage-stats">
-        <span className={`token-percentage ${getColorClass()}`}>
-          {percentage}% used
-        </span>
-        <span className="token-remaining">
-          {usage.remaining.toLocaleString()} left
-        </span>
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "token-usage-section" }, /*#__PURE__*/
+    React.createElement("div", { className: "token-usage-header" }, /*#__PURE__*/
+    React.createElement(FiZap, { className: "token-icon" }), /*#__PURE__*/
+    React.createElement("span", { className: "token-title" }, "AI Credits")
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "token-usage-bar" }, /*#__PURE__*/
+    React.createElement("div", {
+      className: "token-usage-progress",
+      style: { width: `${percentage}%` } }
+    )
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "token-usage-stats" }, /*#__PURE__*/
+    React.createElement("span", { className: `token-percentage ${getColorClass()}` },
+    percentage, "% used"
+    ), /*#__PURE__*/
+    React.createElement("span", { className: "token-remaining" },
+    usage.remaining.toLocaleString(), " left"
+    )
+    )
+    ));
+
 };
 
 const DataSubmission = () => {
@@ -164,31 +164,31 @@ const DataSubmission = () => {
   // Update the formatProfileType function
   const formatProfileType = (type) => {
     if (!type) return '';
-    
+
     // First, handle different delimiters (camelCase, snake_case, hyphen-case)
-    const words = type
-      .split(/(?=[A-Z])|[-_]/) // Split on capital letters, hyphens, or underscores
-      .map(word => 
-        word
-          .toLowerCase()
-          // Capitalize first letter of each word
-          .replace(/^./, str => str.toUpperCase())
-      )
-      .join(' ');
-    
+    const words = type.
+    split(/(?=[A-Z])|[-_]/) // Split on capital letters, hyphens, or underscores
+    .map((word) =>
+    word.
+    toLowerCase()
+    // Capitalize first letter of each word
+    .replace(/^./, (str) => str.toUpperCase())
+    ).
+    join(' ');
+
     // Get a consistent random color based on the type string
     const colorIndex = type.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % TYPE_COLORS.length;
     const colorClass = TYPE_COLORS[colorIndex];
-    
+
     // Use the predefined class if it exists, otherwise use the random color
-    const finalColorClass = ['jobseeker', 'entrepreneur', 'student', 'company', 'pending']
-      .includes(type.toLowerCase()) ? type.toLowerCase() : colorClass;
-    
-    return (
-      <span className={`profile-status ${finalColorClass}`}>
-        {words}
-      </span>
-    );
+    const finalColorClass = ['jobseeker', 'entrepreneur', 'student', 'company', 'pending'].
+    includes(type.toLowerCase()) ? type.toLowerCase() : colorClass;
+
+    return (/*#__PURE__*/
+      React.createElement("span", { className: `profile-status ${finalColorClass}` },
+      words
+      ));
+
   };
 
   // Add handler for section click
@@ -197,95 +197,95 @@ const DataSubmission = () => {
   };
 
   if (authLoading || isLoading || loadingTokens) {
-    return (
-      <div className="data-submission-container">
-        <div className="data-submission-header">
-          <h2 className="data-submission-title">Data Submission</h2>
-        </div>
-        <div className="company-progress-section">
-          <div className="loading-state">
-            <div className="loading-spinner"></div>
-          </div>
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "data-submission-container" }, /*#__PURE__*/
+      React.createElement("div", { className: "data-submission-header" }, /*#__PURE__*/
+      React.createElement("h2", { className: "data-submission-title" }, "Data Submission")
+      ), /*#__PURE__*/
+      React.createElement("div", { className: "company-progress-section" }, /*#__PURE__*/
+      React.createElement("div", { className: "loading-state" }, /*#__PURE__*/
+      React.createElement("div", { className: "loading-spinner" })
+      )
+      )
+      ));
+
   }
 
-  return (
-    <div className="data-submission-container">
-      <div className="data-submission-header">
-        <h2 className="data-submission-title">Data Submission</h2>
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "data-submission-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "data-submission-header" }, /*#__PURE__*/
+    React.createElement("h2", { className: "data-submission-title" }, "Data Submission")
+    ), /*#__PURE__*/
 
-      <div className="company-progress-section">
-        <div className="user-profile">
-          <div className="user-avatar-container">
-            <ProgressCircle progress={progress} />
-            <img
-              src={getProfileImage(user)}
-              alt="Profile"
-              className="user-avatar"
-              onError={(e) => {
-                if (user?.profile?.provider !== 'google') {
-                  e.target.src = user?.profile?.authUid ? 
-                    getEmojiAvatar(user.profile.authUid) : 
-                    FALLBACK_PROFILE_IMAGE;
-                } else {
-                  e.target.src = FALLBACK_PROFILE_IMAGE;
-                }
-              }}
-            />
-          </div>
-        </div>
-        <div className="company-info">
-          <h3 className="company-name">
-            {user?.profile?.firstName && user?.profile?.lastName 
-              ? `${user.profile.firstName} ${user.profile.lastName}` 
-              : 'User'}
-          </h3>
-          <p className="company-category">
-            {formatProfileType(user?.profile?.userType)}
-          </p>
-        </div>
-      </div>
+    React.createElement("div", { className: "company-progress-section" }, /*#__PURE__*/
+    React.createElement("div", { className: "user-profile" }, /*#__PURE__*/
+    React.createElement("div", { className: "user-avatar-container" }, /*#__PURE__*/
+    React.createElement(ProgressCircle, { progress: progress }), /*#__PURE__*/
+    React.createElement("img", {
+      src: getProfileImage(user),
+      alt: "Profile",
+      className: "user-avatar",
+      onError: (e) => {
+        if (user?.profile?.provider !== 'google') {
+          e.target.src = user?.profile?.authUid ?
+          getEmojiAvatar(user.profile.authUid) :
+          FALLBACK_PROFILE_IMAGE;
+        } else {
+          e.target.src = FALLBACK_PROFILE_IMAGE;
+        }
+      } }
+    )
+    )
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "company-info" }, /*#__PURE__*/
+    React.createElement("h3", { className: "company-name" },
+    user?.profile?.firstName && user?.profile?.lastName ?
+    `${user.profile.firstName} ${user.profile.lastName}` :
+    'User'
+    ), /*#__PURE__*/
+    React.createElement("p", { className: "company-category" },
+    formatProfileType(user?.profile?.userType)
+    )
+    )
+    ),
 
-      {tokenUsage && (
-        <TokenUsageIndicator usage={tokenUsage} />
-      )}
+    tokenUsage && /*#__PURE__*/
+    React.createElement(TokenUsageIndicator, { usage: tokenUsage }), /*#__PURE__*/
 
-      <div className="submission-items-list">
-        {[...submissionItems]
-          .sort((a, b) => {
-            if (a.status === 'complete' && b.status !== 'complete') return -1;
-            if (a.status !== 'complete' && b.status === 'complete') return 1;
-            return 0;
-          })
-          .map((item) => (
-            <button
-              key={item.id}
-              className="submission-item"
-              onClick={() => handleSectionClick(item.id)}
-              aria-label={`Go to ${item.type} section`}
-            >
-              <div className="item-content">
-                {item.status === 'complete' ? (
-                  <FiCheckCircle className="status-icon complete" />
-                ) : (
-                  <FiAlertCircle className="status-icon incomplete" />
-                )}
-                <div className="item-text">
-                  <p className="item-type">{item.type}</p>
-                  <span className={`item-label ${item.status}`}>
-                    {item.label}
-                  </span>
-                </div>
-              </div>
-              <FiChevronRight className="chevron-icon" />
-            </button>
-          ))}
-      </div>
-    </div>
-  );
+
+    React.createElement("div", { className: "submission-items-list" },
+    [...submissionItems].
+    sort((a, b) => {
+      if (a.status === 'complete' && b.status !== 'complete') return -1;
+      if (a.status !== 'complete' && b.status === 'complete') return 1;
+      return 0;
+    }).
+    map((item) => /*#__PURE__*/
+    React.createElement("button", {
+      key: item.id,
+      className: "submission-item",
+      onClick: () => handleSectionClick(item.id),
+      "aria-label": `Go to ${item.type} section` }, /*#__PURE__*/
+
+    React.createElement("div", { className: "item-content" },
+    item.status === 'complete' ? /*#__PURE__*/
+    React.createElement(FiCheckCircle, { className: "status-icon complete" }) : /*#__PURE__*/
+
+    React.createElement(FiAlertCircle, { className: "status-icon incomplete" }), /*#__PURE__*/
+
+    React.createElement("div", { className: "item-text" }, /*#__PURE__*/
+    React.createElement("p", { className: "item-type" }, item.type), /*#__PURE__*/
+    React.createElement("span", { className: `item-label ${item.status}` },
+    item.label
+    )
+    )
+    ), /*#__PURE__*/
+    React.createElement(FiChevronRight, { className: "chevron-icon" })
+    )
+    )
+    )
+    ));
+
 };
 
 export default DataSubmission;

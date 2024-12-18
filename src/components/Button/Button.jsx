@@ -31,39 +31,39 @@ import React from 'react';
 import './Button.css';
 
 const LoadingSpinner = ({ size = 'medium' }) => {
-  return <div className={`spinner ${size}`} />;
+  return /*#__PURE__*/React.createElement("div", { className: `spinner ${size}` });
 };
 
-export const Button = ({ 
-  isLoading, 
-  disabled, 
-  onClick, 
+export const Button = ({
+  isLoading,
+  disabled,
+  onClick,
   type = 'button',
   children,
   className = '',
   variant = 'gradient-blue'
 }) => {
   const baseClass = `custom-button button-${variant}`;
-  
-  return (
-    <button
-      type={type}
-      disabled={disabled || isLoading}
-      onClick={onClick}
-      className={`${baseClass} ${isLoading ? 'is-loading' : ''} ${className}`}
-    >
-      {isLoading ? (
-        <LoadingSpinner size="small" />
-      ) : (
-        <>
-          <span className="relative z-10">{children}</span>
-          {(variant === 'upgrade' || variant === 'create') && (
-            <div className="shine-effect" aria-hidden="true"></div>
-          )}
-        </>
-      )}
-    </button>
-  );
+
+  return (/*#__PURE__*/
+    React.createElement("button", {
+      type: type,
+      disabled: disabled || isLoading,
+      onClick: onClick,
+      className: `${baseClass} ${isLoading ? 'is-loading' : ''} ${className}` },
+
+    isLoading ? /*#__PURE__*/
+    React.createElement(LoadingSpinner, { size: "small" }) : /*#__PURE__*/
+
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement("span", { className: "relative z-10" }, children),
+    (variant === 'upgrade' || variant === 'create') && /*#__PURE__*/
+    React.createElement("div", { className: "shine-effect", "aria-hidden": "true" })
+
+    )
+
+    ));
+
 };
 
-export default Button; 
+export default Button;

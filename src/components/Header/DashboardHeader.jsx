@@ -27,18 +27,18 @@ const DashboardHeader = () => {
   const { sections, getMissingSteps, isLoading: sectionsLoading } = useProfileProgress();
 
   // Add detailed debug logging
-  console.log('Header User Data:', {
-    fullUser: JSON.parse(JSON.stringify(user)),
-    profile: JSON.parse(JSON.stringify(user?.profile)),
-    firstName: user?.profile?.firstName,
-    lastName: user?.profile?.lastName,
-    provider: user?.profile?.provider,
-    photoURL: user?.profile?.photoURL,
-    authCurrentUser: auth.currentUser ? {
-      photoURL: auth.currentUser.photoURL,
-      providerData: auth.currentUser.providerData
-    } : null
-  });
+
+
+
+
+
+
+
+
+
+
+
+
 
   // Click outside handler
   useEffect(() => {
@@ -59,11 +59,11 @@ const DashboardHeader = () => {
 
   // Suggested searches data
   const suggestedSearches = [
-    "Analytics dashboard",
-    "Project timeline",
-    "Budget overview",
-    "Team members"
-  ];
+  "Analytics dashboard",
+  "Project timeline",
+  "Budget overview",
+  "Team members"];
+
 
   const handleProfileClick = () => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
@@ -73,45 +73,45 @@ const DashboardHeader = () => {
     try {
       // Fetch applications and opportunities
       const [applications, opportunities] = await Promise.all([
-        applicationOperations.getUserApplications(user.profile.authUid),
-        opportunityOperations.getOpportunities({ userId: user.profile.authUid })
-      ]);
+      applicationOperations.getUserApplications(user.profile.authUid),
+      opportunityOperations.getOpportunities({ userId: user.profile.authUid })]
+      );
 
       // Search through applications
-      const applicationResults = applications
-        .filter(app => 
-          app.name?.toLowerCase().includes(query.toLowerCase()) ||
-          app.category?.toLowerCase().includes(query.toLowerCase()) ||
-          app.status?.toLowerCase().includes(query.toLowerCase())
-        )
-        .map(app => ({
-          id: app.id,
-          title: app.name,
-          type: 'Application',
-          status: app.status,
-          icon: 'FiFileText',
-          link: '/my-applications'
-        }));
+      const applicationResults = applications.
+      filter((app) =>
+      app.name?.toLowerCase().includes(query.toLowerCase()) ||
+      app.category?.toLowerCase().includes(query.toLowerCase()) ||
+      app.status?.toLowerCase().includes(query.toLowerCase())
+      ).
+      map((app) => ({
+        id: app.id,
+        title: app.name,
+        type: 'Application',
+        status: app.status,
+        icon: 'FiFileText',
+        link: '/my-applications'
+      }));
 
       // Search through opportunities
-      const opportunityResults = opportunities
-        .filter(opp => 
-          opp.title?.toLowerCase().includes(query.toLowerCase()) ||
-          opp.description?.toLowerCase().includes(query.toLowerCase())
-        )
-        .map(opp => ({
-          id: opp.id,
-          title: opp.title,
-          type: 'Opportunity',
-          status: opp.status,
-          icon: 'FiBriefcase',
-          link: '/new-opportunities'
-        }));
+      const opportunityResults = opportunities.
+      filter((opp) =>
+      opp.title?.toLowerCase().includes(query.toLowerCase()) ||
+      opp.description?.toLowerCase().includes(query.toLowerCase())
+      ).
+      map((opp) => ({
+        id: opp.id,
+        title: opp.title,
+        type: 'Opportunity',
+        status: opp.status,
+        icon: 'FiBriefcase',
+        link: '/new-opportunities'
+      }));
 
       // Combine and sort results
-      return [...applicationResults, ...opportunityResults]
-        .sort((a, b) => a.title.localeCompare(b.title))
-        .slice(0, 5); // Limit to 5 results
+      return [...applicationResults, ...opportunityResults].
+      sort((a, b) => a.title.localeCompare(b.title)).
+      slice(0, 5); // Limit to 5 results
     } catch (error) {
       console.error('Error searching:', error);
       return [];
@@ -119,7 +119,7 @@ const DashboardHeader = () => {
   };
 
   const handleMarkAllAsRead = () => {
-    const updatedNotifications = notifications.map(notification => ({
+    const updatedNotifications = notifications.map((notification) => ({
       ...notification,
       isUnread: false
     }));
@@ -128,7 +128,7 @@ const DashboardHeader = () => {
   };
 
   // Calculate unreadCount from notifications
-  const unreadCount = notifications.filter(notification => notification.isUnread).length;
+  const unreadCount = notifications.filter((notification) => notification.isUnread).length;
 
   const handleSettingsClick = () => {
     navigate('/settings');
@@ -138,41 +138,41 @@ const DashboardHeader = () => {
   // Use AuthContext's user data for profile display
   const getProfileImage = () => {
     if (authLoading) return FALLBACK_PROFILE_IMAGE;
-    
-    console.log('User data in getProfileImage:', {
-      provider: user?.profile?.provider,
-      photoURL: user?.profile?.photoURL,
-      authUid: user?.profile?.authUid,
-      authUser: auth.currentUser,
-      user: user
-    });
-    
+
+
+
+
+
+
+
+
+
     // For Google users, always use auth.currentUser.photoURL if available
     if (user?.profile?.provider === 'google.com' && auth.currentUser?.photoURL) {
-      console.log('Returning Google auth photo URL:', auth.currentUser.photoURL);
+
       return auth.currentUser.photoURL;
     }
-    
+
     // For users with profile photos (including Google users without current auth photo)
     if (user?.profile?.photoURL) {
-      console.log('Returning profile photo URL:', user.profile.photoURL);
+
       return user.profile.photoURL;
     }
-    
+
     // Try auth user's photo URL as fallback
     if (auth.currentUser?.photoURL) {
-      console.log('Returning auth user photo URL:', auth.currentUser.photoURL);
+
       return auth.currentUser.photoURL;
     }
-    
+
     // Fallback to emoji avatar if we have authUid
     if (user?.profile?.authUid) {
       const emojiAvatar = getEmojiAvatar(user.profile.authUid);
-      console.log('Returning emoji avatar:', emojiAvatar);
+
       return emojiAvatar;
     }
-    
-    console.log('Returning fallback image');
+
+
     return FALLBACK_PROFILE_IMAGE;
   };
 
@@ -190,37 +190,37 @@ const DashboardHeader = () => {
   const checkSectionCompletion = (sectionId, user, questions) => {
     // If no user data or no profile sections, section is incomplete
     if (!user?.profileSections || !user.profileSections[sectionId]) {
-      console.log(`Section ${sectionId} incomplete: No user data or section data`);
+
       return false;
     }
 
     const sectionData = user.profileSections[sectionId];
-    
+
     // If no questions array in section data, section is incomplete
     if (!sectionData.questions || !Array.isArray(sectionData.questions)) {
-      console.log(`Section ${sectionId} incomplete: No questions array in section data`);
+
       return false;
     }
 
     // If no questions in config, section is incomplete
     if (!questions || !Array.isArray(questions) || questions.length === 0) {
-      console.log(`Section ${sectionId} incomplete: No questions in config`);
+
       return false;
     }
 
     // Get required questions from config
-    const requiredQuestions = questions.filter(q => q.required);
-    
+    const requiredQuestions = questions.filter((q) => q.required);
+
     // For sections with no required questions, treat all questions as required
     const questionsToCheck = requiredQuestions.length > 0 ? requiredQuestions : questions;
-    
+
     // Check each question
     for (const question of questionsToCheck) {
-      const questionData = sectionData.questions.find(q => q.id === question.id);
-      
+      const questionData = sectionData.questions.find((q) => q.id === question.id);
+
       // If question data doesn't exist or has no answer, section is incomplete
       if (!questionData || !questionData.answer) {
-        console.log(`Section ${sectionId} incomplete: Missing answer for question ${question.id}`);
+
         return false;
       }
 
@@ -228,16 +228,16 @@ const DashboardHeader = () => {
       if (question.type === 'repeater' && question.repeaterFields) {
         // If answer is not an array or is empty, section is incomplete
         if (!Array.isArray(questionData.answer) || questionData.answer.length === 0) {
-          console.log(`Section ${sectionId} incomplete: Empty or invalid repeater answer for question ${question.id}`);
+
           return false;
         }
 
         // Check each repeater entry for fields
-        const fieldsToCheck = question.repeaterFields.filter(field => field.required || requiredQuestions.length === 0);
+        const fieldsToCheck = question.repeaterFields.filter((field) => field.required || requiredQuestions.length === 0);
         for (const entry of questionData.answer) {
           for (const field of fieldsToCheck) {
             if (!entry || !entry[field.id] || entry[field.id] === '') {
-              console.log(`Section ${sectionId} incomplete: Missing field ${field.id} in question ${question.id}`);
+
               return false;
             }
           }
@@ -246,24 +246,24 @@ const DashboardHeader = () => {
       // For non-repeater questions
       else {
         // Check for empty string, null, undefined, or empty array
-        const isEmpty = 
-          questionData.answer === '' || 
-          questionData.answer === null || 
-          questionData.answer === undefined ||
-          (Array.isArray(questionData.answer) && (
-            questionData.answer.length === 0 || 
-            questionData.answer.every(a => a === null || a === undefined || a === '')
-          ));
+        const isEmpty =
+        questionData.answer === '' ||
+        questionData.answer === null ||
+        questionData.answer === undefined ||
+        Array.isArray(questionData.answer) && (
+        questionData.answer.length === 0 ||
+        questionData.answer.every((a) => a === null || a === undefined || a === ''));
+
 
         if (isEmpty) {
-          console.log(`Section ${sectionId} incomplete: Empty answer for question ${question.id}`);
+
           return false;
         }
       }
     }
 
     // If we get here, all checked questions have valid answers
-    console.log(`Section ${sectionId} complete: All questions answered`);
+
     return true;
   };
 
@@ -273,15 +273,15 @@ const DashboardHeader = () => {
 
     const fetchNotifications = async () => {
       try {
-        console.log('Fetching notifications with user:', user);
-        console.log('Sections:', sections);
+
+
 
         // Get missing steps
         const missingStepsData = getMissingSteps();
-        console.log('Missing steps data:', missingStepsData);
-        
+
+
         let missingStepNotification = null;
-        
+
         if (missingStepsData?.sections?.length > 0 && missingStepsData.message) {
           missingStepNotification = {
             id: missingStepsData.sections.length > 1 ? 'missing-multiple' : `missing-${missingStepsData.sections[0].id}`,
@@ -311,12 +311,12 @@ const DashboardHeader = () => {
 
         // Fetch other notifications (applications, opportunities, etc.)
         const [applications, opportunities] = await Promise.all([
-          applicationOperations.getUserApplications(user.profile.authUid),
-          opportunityOperations.getOpportunities({ userId: user.profile.authUid })
-        ]);
+        applicationOperations.getUserApplications(user.profile.authUid),
+        opportunityOperations.getOpportunities({ userId: user.profile.authUid })]
+        );
 
         // Format application notifications
-        const applicationNotifications = applications.slice(0, 2).map(app => ({
+        const applicationNotifications = applications.slice(0, 2).map((app) => ({
           id: `app-${app.id}`,
           type: 'Application',
           icon: getStatusIcon(app.status),
@@ -327,7 +327,7 @@ const DashboardHeader = () => {
         }));
 
         // Format opportunity notifications
-        const opportunityNotifications = opportunities.slice(0, 2).map(opp => ({
+        const opportunityNotifications = opportunities.slice(0, 2).map((opp) => ({
           id: `opp-${opp.id}`,
           type: 'New Opportunity',
           icon: FiSun,
@@ -339,13 +339,13 @@ const DashboardHeader = () => {
 
         // Combine all notifications and preserve read states
         const allNotifications = [
-          ...(missingStepNotification ? [{
-            ...missingStepNotification,
-            isUnread: !readStates[missingStepNotification.id]
-          }] : []),
-          ...applicationNotifications,
-          ...opportunityNotifications
-        ].sort((a, b) => new Date(b.time) - new Date(a.time));
+        ...(missingStepNotification ? [{
+          ...missingStepNotification,
+          isUnread: !readStates[missingStepNotification.id]
+        }] : []),
+        ...applicationNotifications,
+        ...opportunityNotifications].
+        sort((a, b) => new Date(b.time) - new Date(a.time));
 
         setNotifications(allNotifications);
       } catch (error) {
@@ -509,25 +509,25 @@ const DashboardHeader = () => {
 
   // Update the getMissingStepNotification function
   const getMissingStepNotification = (user) => {
-    console.log('GetMissingStepNotification - User Data:', {
-      hasUser: !!user,
-      hasProfile: !!user?.profile,
-      userType: user?.profile?.userType,
-      provider: user?.profile?.provider,
-      profileData: user?.profileData,
-      sectionsLength: sections.length,
-      sections: sections
-    });
+
+
+
+
+
+
+
+
+
 
     // Check if we have sections and user type
     if (!sections.length || !user?.profile?.userType) {
-      console.log('No sections or user type available');
+
       return null;
     }
 
     // For new users (no profileData) or empty profileData, show missing steps
     if (!user?.profileData || Object.keys(user?.profileData || {}).length === 0) {
-      console.log('New user or empty profile data - showing missing steps');
+
       return {
         id: 'missing-multiple',
         icon: FiAlertCircle,
@@ -541,18 +541,18 @@ const DashboardHeader = () => {
 
     // Get incomplete sections
     const incompleteSections = [];
-    
-    sections.forEach(section => {
+
+    sections.forEach((section) => {
       const sectionData = user.profileData?.[section.id];
-      const isComplete = sectionData && Object.keys(sectionData).length > 0 && 
-                        checkSectionCompletion(section.id, sectionData, section);
-      
-      console.log(`Section ${section.id} completion:`, {
-        isComplete,
-        sectionData,
-        section
-      });
-      
+      const isComplete = sectionData && Object.keys(sectionData).length > 0 &&
+      checkSectionCompletion(section.id, sectionData, section);
+
+
+
+
+
+
+
       if (!isComplete) {
         incompleteSections.push({
           id: section.id,
@@ -561,7 +561,7 @@ const DashboardHeader = () => {
       }
     });
 
-    console.log('Incomplete sections:', incompleteSections);
+
 
     // If multiple sections are incomplete
     if (incompleteSections.length > 1) {
@@ -596,10 +596,10 @@ const DashboardHeader = () => {
   // Helper function to format time ago
   const formatTimeAgo = (date) => {
     if (!date) return 'Now';
-    
+
     // Convert Firestore Timestamp to Date if needed
     const past = date.seconds ? new Date(date.seconds * 1000) : new Date(date);
-    
+
     if (isNaN(past.getTime())) {
       return 'Now';
     }
@@ -633,7 +633,7 @@ const DashboardHeader = () => {
   // Update notification click handler to include tab navigation
   const handleNotificationClick = (notification) => {
     // Mark the clicked notification as read
-    const updatedNotifications = notifications.map(n => ({
+    const updatedNotifications = notifications.map((n) => ({
       ...n,
       isUnread: n.id === notification.id ? false : n.isUnread
     }));
@@ -662,157 +662,157 @@ const DashboardHeader = () => {
     navigate('/subscription');
   };
 
-  return (
-    <header className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
-      {/* Left section - Logo */}
-      <div className="flex-none transition-transform duration-300 hover:scale-105">
-        <img 
-          src={logo} 
-          alt="Feedo AI Logo" 
-          className="h-8 w-auto"
-        />
-      </div>
-      
-      {/* Right section - Actions */}
-      <div className="flex items-center gap-6">
-        <Button 
-          variant="upgrade"
-          onClick={handleUpgradePlan}
-          className="w-auto px-10"
-        >
-          Upgrade Plan
-        </Button>
-        
-        {/* Search Bar Component */}
-        <SearchBar onSearch={handleSearch} />
-        
-        {/* Notifications Section */}
-        <NotificationBell 
-          notifications={notifications} 
-          setNotifications={setNotifications} 
-        />
-        
-        {/* Profile Section */}
-        <div className="relative" ref={profileRef}>
-          <button 
-            onClick={handleProfileClick}
-            className="flex items-center gap-3 focus:outline-none transition-all duration-300 hover:scale-105 p-1 rounded-lg hover:bg-gray-50"
-          >
-            {authLoading ? (
-              <div className="header-profile-loading">
-                <div className="skeleton header-skeleton-avatar"></div>
-                <div className="skeleton header-skeleton-text"></div>
-              </div>
-            ) : (
-              <>
-                <div className="relative">
-                  <div className="relative overflow-hidden rounded-full transition-transform duration-300 hover:scale-110">
-                    <img
-                      src={getProfileImage()}
-                      alt={`${user?.profile?.firstName || 'User'}'s profile`}
-                      className="w-10 h-10 rounded-full object-cover shadow-md"
-                      onError={async (e) => {
-                        // For Google users, try to refresh the photo URL
-                        if (user?.profile?.provider === 'google') {
-                          try {
-                            await refreshUser();
-                            // If refresh successful, retry with the new URL
-                            e.target.src = getProfileImage();
-                            return;
-                          } catch (error) {
-                            console.error('Error refreshing Google profile photo:', error);
-                          }
-                        }
-                        
-                        // Fallback for non-Google users or if refresh fails
-                        e.target.src = user?.profile?.authUid ? 
-                          getEmojiAvatar(user.profile.authUid) : 
-                          FALLBACK_PROFILE_IMAGE;
-                      }}
-                    />
-                  </div>
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-md">
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
-                  </div>
-                </div>
-                <span className="font-medium text-gray-800 transition-colors duration-300 hover:text-blue-600">
-                  {user?.profile?.firstName && user?.profile?.lastName ? 
-                    `${user.profile.firstName} ${user.profile.lastName}` : 
-                    user?.metadata?.firstName && user?.metadata?.lastName ?
-                    `${user.metadata.firstName} ${user.metadata.lastName}` :
-                    'User'
-                  }
-                </span>
-              </>
-            )}
-          </button>
+  return (/*#__PURE__*/
+    React.createElement("header", { className: "flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200" }, /*#__PURE__*/
 
-          {/* Profile Dropdown */}
-          {isProfileDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg">
-              <div className="p-4 border-b border-gray-200">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={getProfileImage()}
-                    alt={`${user?.profile?.firstName || 'User'}'s profile`}
-                    className="w-12 h-12 rounded-full object-cover"
-                    onError={(e) => {
-                      if (user?.profile?.provider !== 'google') {
-                        e.target.src = user?.profile?.authUid ? 
-                          getEmojiAvatar(user.profile.authUid) : 
-                          FALLBACK_PROFILE_IMAGE;
-                      } else {
-                        e.target.src = FALLBACK_PROFILE_IMAGE;
-                      }
-                    }}
-                  />
-                  <div>
-                    <h3 className="font-semibold text-gray-900">
-                      {user?.profile?.firstName ? 
-                        `${user.profile.firstName} ${user.profile.lastName || ''}` : 
-                        'User'
-                      }
-                    </h3>
-                    <p className="text-sm text-gray-500">{user?.profile?.email}</p>
-                  </div>
-                </div>
-              </div>
-              <ul className="py-2">
-                <li>
-                  <button 
-                    onClick={handleSettingsClick}
-                    className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3"
-                  >
-                    <div className="p-2 rounded-full bg-gray-100 text-gray-500">
-                      <FiSettings className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="text-gray-800">Settings</p>
-                      <span className="text-xs text-gray-500">Manage your preferences</span>
-                    </div>
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-gray-50 flex items-center gap-3"
-                  >
-                    <div className="p-2 rounded-full bg-gray-100 text-red-500">
-                      <FiLogOut className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="text-red-600">Log Out</p>
-                      <span className="text-xs text-gray-500">Sign out of your account</span>
-                    </div>
-                  </button>
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
-    </header>
-  );
+    React.createElement("div", { className: "flex-none transition-transform duration-300 hover:scale-105" }, /*#__PURE__*/
+    React.createElement("img", {
+      src: logo,
+      alt: "Feedo AI Logo",
+      className: "h-8 w-auto" }
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "flex items-center gap-6" }, /*#__PURE__*/
+    React.createElement(Button, {
+      variant: "upgrade",
+      onClick: handleUpgradePlan,
+      className: "w-auto px-10" },
+    "Upgrade Plan"
+
+    ), /*#__PURE__*/
+
+
+    React.createElement(SearchBar, { onSearch: handleSearch }), /*#__PURE__*/
+
+
+    React.createElement(NotificationBell, {
+      notifications: notifications,
+      setNotifications: setNotifications }
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "relative", ref: profileRef }, /*#__PURE__*/
+    React.createElement("button", {
+      onClick: handleProfileClick,
+      className: "flex items-center gap-3 focus:outline-none transition-all duration-300 hover:scale-105 p-1 rounded-lg hover:bg-gray-50" },
+
+    authLoading ? /*#__PURE__*/
+    React.createElement("div", { className: "header-profile-loading" }, /*#__PURE__*/
+    React.createElement("div", { className: "skeleton header-skeleton-avatar" }), /*#__PURE__*/
+    React.createElement("div", { className: "skeleton header-skeleton-text" })
+    ) : /*#__PURE__*/
+
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement("div", { className: "relative" }, /*#__PURE__*/
+    React.createElement("div", { className: "relative overflow-hidden rounded-full transition-transform duration-300 hover:scale-110" }, /*#__PURE__*/
+    React.createElement("img", {
+      src: getProfileImage(),
+      alt: `${user?.profile?.firstName || 'User'}'s profile`,
+      className: "w-10 h-10 rounded-full object-cover shadow-md",
+      onError: async (e) => {
+        // For Google users, try to refresh the photo URL
+        if (user?.profile?.provider === 'google') {
+          try {
+            await refreshUser();
+            // If refresh successful, retry with the new URL
+            e.target.src = getProfileImage();
+            return;
+          } catch (error) {
+            console.error('Error refreshing Google profile photo:', error);
+          }
+        }
+
+        // Fallback for non-Google users or if refresh fails
+        e.target.src = user?.profile?.authUid ?
+        getEmojiAvatar(user.profile.authUid) :
+        FALLBACK_PROFILE_IMAGE;
+      } }
+    )
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "absolute -bottom-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-md" }, /*#__PURE__*/
+    React.createElement("span", { className: "w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" })
+    )
+    ), /*#__PURE__*/
+    React.createElement("span", { className: "font-medium text-gray-800 transition-colors duration-300 hover:text-blue-600" },
+    user?.profile?.firstName && user?.profile?.lastName ?
+    `${user.profile.firstName} ${user.profile.lastName}` :
+    user?.metadata?.firstName && user?.metadata?.lastName ?
+    `${user.metadata.firstName} ${user.metadata.lastName}` :
+    'User'
+
+    )
+    )
+
+    ),
+
+
+    isProfileDropdownOpen && /*#__PURE__*/
+    React.createElement("div", { className: "absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg" }, /*#__PURE__*/
+    React.createElement("div", { className: "p-4 border-b border-gray-200" }, /*#__PURE__*/
+    React.createElement("div", { className: "flex items-center gap-3" }, /*#__PURE__*/
+    React.createElement("img", {
+      src: getProfileImage(),
+      alt: `${user?.profile?.firstName || 'User'}'s profile`,
+      className: "w-12 h-12 rounded-full object-cover",
+      onError: (e) => {
+        if (user?.profile?.provider !== 'google') {
+          e.target.src = user?.profile?.authUid ?
+          getEmojiAvatar(user.profile.authUid) :
+          FALLBACK_PROFILE_IMAGE;
+        } else {
+          e.target.src = FALLBACK_PROFILE_IMAGE;
+        }
+      } }
+    ), /*#__PURE__*/
+    React.createElement("div", null, /*#__PURE__*/
+    React.createElement("h3", { className: "font-semibold text-gray-900" },
+    user?.profile?.firstName ?
+    `${user.profile.firstName} ${user.profile.lastName || ''}` :
+    'User'
+
+    ), /*#__PURE__*/
+    React.createElement("p", { className: "text-sm text-gray-500" }, user?.profile?.email)
+    )
+    )
+    ), /*#__PURE__*/
+    React.createElement("ul", { className: "py-2" }, /*#__PURE__*/
+    React.createElement("li", null, /*#__PURE__*/
+    React.createElement("button", {
+      onClick: handleSettingsClick,
+      className: "w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3" }, /*#__PURE__*/
+
+    React.createElement("div", { className: "p-2 rounded-full bg-gray-100 text-gray-500" }, /*#__PURE__*/
+    React.createElement(FiSettings, { className: "w-4 h-4" })
+    ), /*#__PURE__*/
+    React.createElement("div", null, /*#__PURE__*/
+    React.createElement("p", { className: "text-gray-800" }, "Settings"), /*#__PURE__*/
+    React.createElement("span", { className: "text-xs text-gray-500" }, "Manage your preferences")
+    )
+    )
+    ), /*#__PURE__*/
+    React.createElement("li", null, /*#__PURE__*/
+    React.createElement("button", {
+      onClick: handleLogout,
+      className: "w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-gray-50 flex items-center gap-3" }, /*#__PURE__*/
+
+    React.createElement("div", { className: "p-2 rounded-full bg-gray-100 text-red-500" }, /*#__PURE__*/
+    React.createElement(FiLogOut, { className: "w-4 h-4" })
+    ), /*#__PURE__*/
+    React.createElement("div", null, /*#__PURE__*/
+    React.createElement("p", { className: "text-red-600" }, "Log Out"), /*#__PURE__*/
+    React.createElement("span", { className: "text-xs text-gray-500" }, "Sign out of your account")
+    )
+    )
+    )
+    )
+    )
+
+    )
+    )
+    ));
+
 };
 
 export default DashboardHeader;

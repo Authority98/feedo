@@ -12,7 +12,7 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 import Toast from './Toast';
 import './Toast.css';
 
-const ToastContext = createContext();
+const ToastContext = /*#__PURE__*/createContext();
 
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
@@ -20,13 +20,13 @@ export function ToastProvider({ children }) {
   const showToast = useCallback((message, type = 'info') => {
     const id = Date.now();
     const newToast = { id, message, type };
-    
-    setToasts(currentToasts => [...currentToasts, newToast]);
+
+    setToasts((currentToasts) => [...currentToasts, newToast]);
 
     // Auto-remove toast after duration
     setTimeout(() => {
-      setToasts(currentToasts => 
-        currentToasts.filter(toast => toast.id !== id)
+      setToasts((currentToasts) =>
+      currentToasts.filter((toast) => toast.id !== id)
       );
     }, 4000); // Match duration from Toast component
   }, []);
@@ -41,26 +41,26 @@ export function ToastProvider({ children }) {
   }, [showToast]);
 
   const removeToast = useCallback((id) => {
-    setToasts(currentToasts => 
-      currentToasts.filter(toast => toast.id !== id)
+    setToasts((currentToasts) =>
+    currentToasts.filter((toast) => toast.id !== id)
     );
   }, []);
 
-  return (
-    <ToastContext.Provider value={{ showToast, showSuccess, showError }}>
-      {children}
-      <div className="toast-container">
-        {toasts.map(toast => (
-          <Toast
-            key={toast.id}
-            message={toast.message}
-            type={toast.type}
-            onClose={() => removeToast(toast.id)}
-          />
-        ))}
-      </div>
-    </ToastContext.Provider>
-  );
+  return (/*#__PURE__*/
+    React.createElement(ToastContext.Provider, { value: { showToast, showSuccess, showError } },
+    children, /*#__PURE__*/
+    React.createElement("div", { className: "toast-container" },
+    toasts.map((toast) => /*#__PURE__*/
+    React.createElement(Toast, {
+      key: toast.id,
+      message: toast.message,
+      type: toast.type,
+      onClose: () => removeToast(toast.id) }
+    )
+    )
+    )
+    ));
+
 }
 
 export const useToast = () => {
@@ -71,4 +71,4 @@ export const useToast = () => {
   return context;
 };
 
-export { ToastContext }; 
+export { ToastContext };

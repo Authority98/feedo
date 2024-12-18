@@ -35,4 +35,4 @@ linkedInProvider.addScope('r_emailaddress');
 linkedInProvider.addScope('r_liteprofile');
 
 // Export services
-export { auth, db, storage, analytics, linkedInProvider }; 
+export { auth, db, storage, analytics, linkedInProvider };

@@ -9,7 +9,7 @@ import { useToast } from '../../components/Toast/ToastContext';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 
-const AdminAuthContext = createContext();
+const AdminAuthContext = /*#__PURE__*/createContext();
 
 export const useAdminAuth = () => {
   const context = useContext(AdminAuthContext);
@@ -78,9 +78,9 @@ export const AdminAuthProvider = ({ children }) => {
     adminLogout
   };
 
-  return (
-    <AdminAuthContext.Provider value={value}>
-      {children}
-    </AdminAuthContext.Provider>
-  );
-}; 
+  return (/*#__PURE__*/
+    React.createElement(AdminAuthContext.Provider, { value: value },
+    children
+    ));
+
+};

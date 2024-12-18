@@ -16,28 +16,28 @@
 import React from 'react';
 
 // Section component imports
-import FAQ from './sections/FAQ/FAQ';           // FAQ accordion component
+import FAQ from './sections/FAQ/FAQ'; // FAQ accordion component
 import Support from './sections/Support/Support'; // Support options component
 
 // Styles import
 import './HelpCenter.css';
 
 const HelpCenter = () => {
-  return (
-    <div className="help-center-page">
-      <div className="page-content">
-        {/* Left Column - FAQ Section */}
-        <div className="left-column">
-          <FAQ />
-        </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "help-center-page" }, /*#__PURE__*/
+    React.createElement("div", { className: "page-content" }, /*#__PURE__*/
 
-        {/* Right Column - Support Options */}
-        <div className="right-column">
-          <Support />
-        </div>
-      </div>
-    </div>
-  );
+    React.createElement("div", { className: "left-column" }, /*#__PURE__*/
+    React.createElement(FAQ, null)
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "right-column" }, /*#__PURE__*/
+    React.createElement(Support, null)
+    )
+    )
+    ));
+
 };
 
 /**
@@ -49,4 +49,4 @@ const HelpCenter = () => {
  * - Smooth animations for better UX
  * - Real-time support status indicators
  */
-export default HelpCenter; 
+export default HelpCenter;

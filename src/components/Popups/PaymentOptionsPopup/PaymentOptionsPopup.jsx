@@ -37,12 +37,12 @@ const getCardImage = (type) => {
   return cardImages[cardType] || cardImages.default;
 };
 
-const PaymentOptionsPopup = ({ 
-  isOpen, 
-  onClose, 
-  savedCards = [], 
+const PaymentOptionsPopup = ({
+  isOpen,
+  onClose,
+  savedCards = [],
   onSelectCard,
-  onAddNewCard 
+  onAddNewCard
 }) => {
   const [processingCardId, setProcessingCardId] = useState(null);
 
@@ -57,74 +57,74 @@ const PaymentOptionsPopup = ({
     }
   };
 
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className="popup-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <motion.div
-            className="popup-content"
-            initial={{ scale: 0.95, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            transition={{ type: "spring", duration: 0.3 }}
-          >
-            <div className="payment-options-container">
-              <div className="popup-header">
-                <h3>Choose Payment Method</h3>
-                <button onClick={onClose} className="close-btn">
-                  <FiX />
-                </button>
-              </div>
+  return (/*#__PURE__*/
+    React.createElement(AnimatePresence, null,
+    isOpen && /*#__PURE__*/
+    React.createElement(motion.div, {
+      className: "popup-overlay",
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 } }, /*#__PURE__*/
 
-              <div className="saved-cards-list">
-                {savedCards.map((card) => (
-                  <button
-                    key={card.id}
-                    className={`saved-card-option ${processingCardId === card.id ? 'processing' : ''}`}
-                    onClick={() => handleCardSelection(card)}
-                    disabled={processingCardId !== null}
-                  >
-                    {processingCardId === card.id ? (
-                      <PaymentProcessingSpinner />
-                    ) : (
-                      <>
-                        <img 
-                          src={getCardImage(card.type)}
-                          alt={`${card.type} card`}
-                          className="card-brand-image"
-                        />
-                        <div className="card-details">
-                          <span className="card-name">{card.cardHolder}</span>
-                          <span className="card-number">•••• {card.last4}</span>
-                        </div>
-                        {card.isDefault && (
-                          <span className="default-badge">Default</span>
-                        )}
-                      </>
-                    )}
-                  </button>
-                ))}
+    React.createElement(motion.div, {
+      className: "popup-content",
+      initial: { scale: 0.95, opacity: 0, y: 20 },
+      animate: { scale: 1, opacity: 1, y: 0 },
+      exit: { scale: 0.95, opacity: 0, y: 20 },
+      transition: { type: "spring", duration: 0.3 } }, /*#__PURE__*/
 
-                <button
-                  className="add-new-card-btn"
-                  onClick={onAddNewCard}
-                  disabled={processingCardId !== null}
-                >
-                  <FiPlus className="add-icon" />
-                  <span>Add New Card</span>
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
+    React.createElement("div", { className: "payment-options-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "popup-header" }, /*#__PURE__*/
+    React.createElement("h3", null, "Choose Payment Method"), /*#__PURE__*/
+    React.createElement("button", { onClick: onClose, className: "close-btn" }, /*#__PURE__*/
+    React.createElement(FiX, null)
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "saved-cards-list" },
+    savedCards.map((card) => /*#__PURE__*/
+    React.createElement("button", {
+      key: card.id,
+      className: `saved-card-option ${processingCardId === card.id ? 'processing' : ''}`,
+      onClick: () => handleCardSelection(card),
+      disabled: processingCardId !== null },
+
+    processingCardId === card.id ? /*#__PURE__*/
+    React.createElement(PaymentProcessingSpinner, null) : /*#__PURE__*/
+
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement("img", {
+      src: getCardImage(card.type),
+      alt: `${card.type} card`,
+      className: "card-brand-image" }
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "card-details" }, /*#__PURE__*/
+    React.createElement("span", { className: "card-name" }, card.cardHolder), /*#__PURE__*/
+    React.createElement("span", { className: "card-number" }, "\u2022\u2022\u2022\u2022 ", card.last4)
+    ),
+    card.isDefault && /*#__PURE__*/
+    React.createElement("span", { className: "default-badge" }, "Default")
+
+    )
+
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("button", {
+      className: "add-new-card-btn",
+      onClick: onAddNewCard,
+      disabled: processingCardId !== null }, /*#__PURE__*/
+
+    React.createElement(FiPlus, { className: "add-icon" }), /*#__PURE__*/
+    React.createElement("span", null, "Add New Card")
+    )
+    )
+    )
+    )
+    )
+
+    ));
+
 };
 
-export default PaymentOptionsPopup; 
+export default PaymentOptionsPopup;

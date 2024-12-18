@@ -11,11 +11,11 @@ import { ToastProvider } from '../../../../../components/Toast/ToastContext';
 import TwoStep from './TwoStep';
 
 const TwoStepSection = () => {
-  return (
-    <ToastProvider>
-      <TwoStep />
-    </ToastProvider>
-  );
+  return (/*#__PURE__*/
+    React.createElement(ToastProvider, null, /*#__PURE__*/
+    React.createElement(TwoStep, null)
+    ));
+
 };
 
-export default TwoStepSection; 
+export default TwoStepSection;

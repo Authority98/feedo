@@ -1,4 +1,4 @@
-/**
+function _extends() {return _extends = Object.assign ? Object.assign.bind() : function (n) {for (var e = 1; e < arguments.length; e++) {var t = arguments[e];for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);}return n;}, _extends.apply(null, arguments);} /**
  * QuestionDialog Component
  * Features:
  * - Material UI dialog design
@@ -8,10 +8,10 @@
  */
 
 import React, { useState, useRef } from 'react';
-import { 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
   DialogActions,
   TextField,
   Button,
@@ -19,20 +19,20 @@ import {
   IconButton,
   Typography,
   LinearProgress,
-  Slide
-} from '@mui/material';
-import { 
-  FiX, 
-  FiUploadCloud, 
-  FiFile, 
-  FiTrash2, 
+  Slide } from
+'@mui/material';
+import {
+  FiX,
+  FiUploadCloud,
+  FiFile,
+  FiTrash2,
   FiPaperclip,
-  FiAlertCircle
-} from 'react-icons/fi';
+  FiAlertCircle } from
+'react-icons/fi';
 import { useToast } from '../../components/Toast/ToastContext';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+const Transition = /*#__PURE__*/React.forwardRef(function Transition(props, ref) {
+  return /*#__PURE__*/React.createElement(Slide, _extends({ direction: "up", ref: ref }, props));
 });
 
 const QuestionDialog = ({ open, onClose, currentSection }) => {
@@ -48,12 +48,12 @@ const QuestionDialog = ({ open, onClose, currentSection }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
         [name]: ''
       }));
@@ -63,21 +63,21 @@ const QuestionDialog = ({ open, onClose, currentSection }) => {
   const handleFileSelect = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const totalSize = [...files, ...selectedFiles].reduce((acc, file) => acc + file.size, 0);
-    
+
     if (totalSize > 10 * 1024 * 1024) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
         files: 'Total file size cannot exceed 10MB'
       }));
       return;
     }
 
-    setFiles(prev => [...prev, ...selectedFiles]);
-    setErrors(prev => ({ ...prev, files: '' }));
+    setFiles((prev) => [...prev, ...selectedFiles]);
+    setErrors((prev) => ({ ...prev, files: '' }));
   };
 
   const removeFile = (index) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
+    setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const validateForm = () => {
@@ -97,7 +97,7 @@ const QuestionDialog = ({ open, onClose, currentSection }) => {
       try {
         setUploading(true);
         // TODO: Implement question submission with file upload
-        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulated upload
+        await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulated upload
         showToast('Question submitted successfully', 'success');
         onClose();
         // Reset form
@@ -106,7 +106,7 @@ const QuestionDialog = ({ open, onClose, currentSection }) => {
       } catch (error) {
         console.error('Error submitting question:', error);
         showToast('Failed to submit question. Please try again.', 'error');
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
           submit: 'Failed to submit question. Please try again.'
         }));
@@ -124,187 +124,187 @@ const QuestionDialog = ({ open, onClose, currentSection }) => {
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
-  return (
-    <Dialog 
-      open={open} 
-      onClose={!uploading ? onClose : undefined}
-      maxWidth="sm"
-      fullWidth
-      TransitionComponent={Transition}
-    >
-      <DialogTitle sx={{ 
-        display: 'flex', 
+  return (/*#__PURE__*/
+    React.createElement(Dialog, {
+      open: open,
+      onClose: !uploading ? onClose : undefined,
+      maxWidth: "sm",
+      fullWidth: true,
+      TransitionComponent: Transition }, /*#__PURE__*/
+
+    React.createElement(DialogTitle, { sx: {
+        display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         pb: 1
-      }}>
-        <Box>
-          <Typography variant="h6">Ask a Question</Typography>
-          {currentSection && (
-            <Typography variant="caption" color="text.secondary">
-              Section: {currentSection.label}
-            </Typography>
-          )}
-        </Box>
-        {!uploading && (
-          <IconButton onClick={onClose} size="small">
-            <FiX />
-          </IconButton>
-        )}
-      </DialogTitle>
+      } }, /*#__PURE__*/
+    React.createElement(Box, null, /*#__PURE__*/
+    React.createElement(Typography, { variant: "h6" }, "Ask a Question"),
+    currentSection && /*#__PURE__*/
+    React.createElement(Typography, { variant: "caption", color: "text.secondary" }, "Section: ",
+    currentSection.label
+    )
 
-      <DialogContent>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
-          <TextField
-            name="title"
-            label="Question Title"
-            fullWidth
-            value={formData.title}
-            onChange={handleChange}
-            error={!!errors.title}
-            helperText={errors.title}
-            placeholder="What would you like to know?"
-            disabled={uploading}
-            sx={{
-              '& .MuiInputBase-root': {
-                height: '48px'
-              },
-              '& .MuiInputBase-input': {
-                height: '48px',
-                boxSizing: 'border-box',
-                padding: '0 14px',
-                border: 'none',
-                borderRadius: 0,
-                '&:focus': {
-                  border: 'none',
-                  outline: 'none'
-                }
-              },
-              '& .MuiOutlinedInput-notchedOutline': {
-                border: '1px solid',
-                borderColor: 'divider'
-              }
-            }}
-          />
+    ),
+    !uploading && /*#__PURE__*/
+    React.createElement(IconButton, { onClick: onClose, size: "small" }, /*#__PURE__*/
+    React.createElement(FiX, null)
+    )
 
-          <TextField
-            name="details"
-            label="Question Details"
-            multiline
-            rows={4}
-            fullWidth
-            value={formData.details}
-            onChange={handleChange}
-            error={!!errors.details}
-            helperText={errors.details}
-            placeholder="Provide more details about your question..."
-            disabled={uploading}
-          />
+    ), /*#__PURE__*/
 
-          <Box>
-            <input
-              type="file"
-              multiple
-              ref={fileInputRef}
-              onChange={handleFileSelect}
-              style={{ display: 'none' }}
-              accept="image/*,.pdf,.doc,.docx"
-              disabled={uploading}
-            />
-            
-            <Box 
-              sx={{ 
-                border: '2px dashed',
-                borderColor: errors.files ? 'error.main' : 'primary.main',
-                borderRadius: 2,
-                p: 3,
-                textAlign: 'center',
-                cursor: 'pointer',
-                bgcolor: 'background.paper',
-                '&:hover': {
-                  bgcolor: 'action.hover'
-                },
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 1
-              }}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <FiUploadCloud 
-                size={32} 
-                style={{ 
-                  color: errors.files ? '#d32f2f' : '#1976d2',
-                  marginBottom: '4px'
-                }}
-              />
-              <Typography variant="subtitle1" sx={{ mt: 1 }}>
-                Click to upload or drag and drop
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                Supports: Images, PDF, DOC (max 10MB)
-              </Typography>
-            </Box>
+    React.createElement(DialogContent, null, /*#__PURE__*/
+    React.createElement(Box, { sx: { display: 'flex', flexDirection: 'column', gap: 3, pt: 1 } }, /*#__PURE__*/
+    React.createElement(TextField, {
+      name: "title",
+      label: "Question Title",
+      fullWidth: true,
+      value: formData.title,
+      onChange: handleChange,
+      error: !!errors.title,
+      helperText: errors.title,
+      placeholder: "What would you like to know?",
+      disabled: uploading,
+      sx: {
+        '& .MuiInputBase-root': {
+          height: '48px'
+        },
+        '& .MuiInputBase-input': {
+          height: '48px',
+          boxSizing: 'border-box',
+          padding: '0 14px',
+          border: 'none',
+          borderRadius: 0,
+          '&:focus': {
+            border: 'none',
+            outline: 'none'
+          }
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+          border: '1px solid',
+          borderColor: 'divider'
+        }
+      } }
+    ), /*#__PURE__*/
 
-            {files.length > 0 && (
-              <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
-                {files.map((file, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      p: 1,
-                      borderRadius: 1,
-                      bgcolor: 'background.paper',
-                      border: '1px solid',
-                      borderColor: 'divider'
-                    }}
-                  >
-                    <FiFile />
-                    <Box sx={{ flex: 1, minWidth: 0 }}>
-                      <Typography variant="body2" noWrap>{file.name}</Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {formatFileSize(file.size)}
-                      </Typography>
-                    </Box>
-                    {!uploading && (
-                      <IconButton 
-                        size="small" 
-                        onClick={() => removeFile(index)}
-                      >
-                        <FiTrash2 size={16} />
-                      </IconButton>
-                    )}
-                  </Box>
-                ))}
-              </Box>
-            )}
-          </Box>
-        </Box>
-      </DialogContent>
+    React.createElement(TextField, {
+      name: "details",
+      label: "Question Details",
+      multiline: true,
+      rows: 4,
+      fullWidth: true,
+      value: formData.details,
+      onChange: handleChange,
+      error: !!errors.details,
+      helperText: errors.details,
+      placeholder: "Provide more details about your question...",
+      disabled: uploading }
+    ), /*#__PURE__*/
 
-      {uploading && <LinearProgress />}
+    React.createElement(Box, null, /*#__PURE__*/
+    React.createElement("input", {
+      type: "file",
+      multiple: true,
+      ref: fileInputRef,
+      onChange: handleFileSelect,
+      style: { display: 'none' },
+      accept: "image/*,.pdf,.doc,.docx",
+      disabled: uploading }
+    ), /*#__PURE__*/
 
-      <DialogActions sx={{ p: 2.5, pt: 1.5 }}>
-        <Button 
-          onClick={onClose}
-          disabled={uploading}
-        >
-          Cancel
-        </Button>
-        <Button 
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={uploading}
-          startIcon={uploading ? null : <FiPaperclip />}
-        >
-          {uploading ? 'Submitting...' : 'Submit Question'}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
+    React.createElement(Box, {
+      sx: {
+        border: '2px dashed',
+        borderColor: errors.files ? 'error.main' : 'primary.main',
+        borderRadius: 2,
+        p: 3,
+        textAlign: 'center',
+        cursor: 'pointer',
+        bgcolor: 'background.paper',
+        '&:hover': {
+          bgcolor: 'action.hover'
+        },
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 1
+      },
+      onClick: () => fileInputRef.current?.click() }, /*#__PURE__*/
+
+    React.createElement(FiUploadCloud, {
+      size: 32,
+      style: {
+        color: errors.files ? '#d32f2f' : '#1976d2',
+        marginBottom: '4px'
+      } }
+    ), /*#__PURE__*/
+    React.createElement(Typography, { variant: "subtitle1", sx: { mt: 1 } }, "Click to upload or drag and drop"
+
+    ), /*#__PURE__*/
+    React.createElement(Typography, { variant: "caption", color: "text.secondary" }, "Supports: Images, PDF, DOC (max 10MB)"
+
+    )
+    ),
+
+    files.length > 0 && /*#__PURE__*/
+    React.createElement(Box, { sx: { mt: 2, display: 'flex', flexDirection: 'column', gap: 1 } },
+    files.map((file, index) => /*#__PURE__*/
+    React.createElement(Box, {
+      key: index,
+      sx: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 1,
+        p: 1,
+        borderRadius: 1,
+        bgcolor: 'background.paper',
+        border: '1px solid',
+        borderColor: 'divider'
+      } }, /*#__PURE__*/
+
+    React.createElement(FiFile, null), /*#__PURE__*/
+    React.createElement(Box, { sx: { flex: 1, minWidth: 0 } }, /*#__PURE__*/
+    React.createElement(Typography, { variant: "body2", noWrap: true }, file.name), /*#__PURE__*/
+    React.createElement(Typography, { variant: "caption", color: "text.secondary" },
+    formatFileSize(file.size)
+    )
+    ),
+    !uploading && /*#__PURE__*/
+    React.createElement(IconButton, {
+      size: "small",
+      onClick: () => removeFile(index) }, /*#__PURE__*/
+
+    React.createElement(FiTrash2, { size: 16 })
+    )
+
+    )
+    )
+    )
+
+    )
+    )
+    ),
+
+    uploading && /*#__PURE__*/React.createElement(LinearProgress, null), /*#__PURE__*/
+
+    React.createElement(DialogActions, { sx: { p: 2.5, pt: 1.5 } }, /*#__PURE__*/
+    React.createElement(Button, {
+      onClick: onClose,
+      disabled: uploading },
+    "Cancel"
+
+    ), /*#__PURE__*/
+    React.createElement(Button, {
+      onClick: handleSubmit,
+      variant: "contained",
+      disabled: uploading,
+      startIcon: uploading ? null : /*#__PURE__*/React.createElement(FiPaperclip, null) },
+
+    uploading ? 'Submitting...' : 'Submit Question'
+    )
+    )
+    ));
+
 };
 
-export default QuestionDialog; 
+export default QuestionDialog;

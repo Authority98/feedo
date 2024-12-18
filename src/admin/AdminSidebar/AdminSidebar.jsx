@@ -27,33 +27,33 @@ const AdminSidebar = () => {
     }
   };
 
-  return (
-    <div className="admin-sidebar">
-      <div className="sidebar-header">
-        <h2>Admin Portal</h2>
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "admin-sidebar" }, /*#__PURE__*/
+    React.createElement("div", { className: "sidebar-header" }, /*#__PURE__*/
+    React.createElement("h2", null, "Admin Portal")
+    ), /*#__PURE__*/
 
-      <nav className="sidebar-nav">
-        <NavLink 
-          to="/admin/questions"
-          className={({ isActive }) => 
-            `nav-item ${isActive ? 'active' : ''}`
-          }
-        >
-          <FiDatabase className="nav-icon" />
-          <span>Questions</span>
-        </NavLink>
-      </nav>
-      
-      <button 
-        onClick={handleLogout}
-        className="sidebar-logout-button"
-      >
-        <FiLogOut className="logout-icon" />
-        <span>Logout</span>
-      </button>
-    </div>
-  );
+    React.createElement("nav", { className: "sidebar-nav" }, /*#__PURE__*/
+    React.createElement(NavLink, {
+      to: "/admin/questions",
+      className: ({ isActive }) =>
+      `nav-item ${isActive ? 'active' : ''}` }, /*#__PURE__*/
+
+
+    React.createElement(FiDatabase, { className: "nav-icon" }), /*#__PURE__*/
+    React.createElement("span", null, "Questions")
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("button", {
+      onClick: handleLogout,
+      className: "sidebar-logout-button" }, /*#__PURE__*/
+
+    React.createElement(FiLogOut, { className: "logout-icon" }), /*#__PURE__*/
+    React.createElement("span", null, "Logout")
+    )
+    ));
+
 };
 
-export default AdminSidebar; 
+export default AdminSidebar;

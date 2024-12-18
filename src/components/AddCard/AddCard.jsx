@@ -21,9 +21,9 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import './AddCard.css';
 import { cardImages } from '../../assets';
 
-const AddCard = ({ 
-  onAddCard, 
-  initialShowForm = false, 
+const AddCard = ({
+  onAddCard,
+  initialShowForm = false,
   onCancel,
   hideDefaultView = false,
   hideHeader = false
@@ -42,7 +42,7 @@ const AddCard = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     if (!stripe || !elements || !cardHolderName.trim()) {
       setError('Please enter the cardholder name');
       return;
@@ -56,8 +56,8 @@ const AddCard = ({
         type: 'card',
         card: elements.getElement(CardElement),
         billing_details: {
-          name: cardHolderName.trim(),
-        },
+          name: cardHolderName.trim()
+        }
       });
 
       if (error) {
@@ -80,86 +80,86 @@ const AddCard = ({
     return null;
   }
 
-  return (
-    <div className="add-card-container">
-      <div className="card-form">
-        {!hideHeader && (
-          <div className="form-header">
-            <h3>Add New Card</h3>
-            <button 
-              onClick={() => setShowForm(false)}
-              className="close-btn"
-            >
-              <FiX />
-            </button>
-          </div>
-        )}
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="cardHolderName" className="form-label">
-              Cardholder Name
-            </label>
-            <input
-              id="cardHolderName"
-              type="text"
-              value={cardHolderName}
-              onChange={(e) => setCardHolderName(e.target.value)}
-              className="form-input"
-              placeholder="Enter cardholder name"
-              required
-            />
-          </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "add-card-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "card-form" },
+    !hideHeader && /*#__PURE__*/
+    React.createElement("div", { className: "form-header" }, /*#__PURE__*/
+    React.createElement("h3", null, "Add New Card"), /*#__PURE__*/
+    React.createElement("button", {
+      onClick: () => setShowForm(false),
+      className: "close-btn" }, /*#__PURE__*/
 
-          <div className="stripe-element-container">
-            <CardElement 
-              options={{
-                style: {
-                  base: {
-                    fontSize: '16px',
-                    color: '#424770',
-                    '::placeholder': {
-                      color: '#aab7c4',
-                    },
-                  },
-                  invalid: {
-                    color: '#9e2146',
-                  },
-                },
-              }}
-            />
-          </div>
-          {error && <div className="error-message">{error}</div>}
-          <div className="form-actions">
-            <button 
-              type="button" 
-              onClick={() => {
-                setShowForm(false);
-                if (onCancel) onCancel();
-              }}
-              className="cancel-btn"
-              disabled={processing}
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              disabled={!stripe || processing || !cardHolderName.trim()}
-              className="submit-btn"
-            >
-              {processing ? (
-                <span className="submit-btn-content">
-                  <FiLoader className="spinner-icon" />
-                  <span>Adding...</span>
-                </span>
-              ) : (
-                'Add Card'
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+    React.createElement(FiX, null)
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("form", { onSubmit: handleSubmit }, /*#__PURE__*/
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "cardHolderName", className: "form-label" }, "Cardholder Name"
+
+    ), /*#__PURE__*/
+    React.createElement("input", {
+      id: "cardHolderName",
+      type: "text",
+      value: cardHolderName,
+      onChange: (e) => setCardHolderName(e.target.value),
+      className: "form-input",
+      placeholder: "Enter cardholder name",
+      required: true }
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "stripe-element-container" }, /*#__PURE__*/
+    React.createElement(CardElement, {
+      options: {
+        style: {
+          base: {
+            fontSize: '16px',
+            color: '#424770',
+            '::placeholder': {
+              color: '#aab7c4'
+            }
+          },
+          invalid: {
+            color: '#9e2146'
+          }
+        }
+      } }
+    )
+    ),
+    error && /*#__PURE__*/React.createElement("div", { className: "error-message" }, error), /*#__PURE__*/
+    React.createElement("div", { className: "form-actions" }, /*#__PURE__*/
+    React.createElement("button", {
+      type: "button",
+      onClick: () => {
+        setShowForm(false);
+        if (onCancel) onCancel();
+      },
+      className: "cancel-btn",
+      disabled: processing },
+    "Cancel"
+
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      type: "submit",
+      disabled: !stripe || processing || !cardHolderName.trim(),
+      className: "submit-btn" },
+
+    processing ? /*#__PURE__*/
+    React.createElement("span", { className: "submit-btn-content" }, /*#__PURE__*/
+    React.createElement(FiLoader, { className: "spinner-icon" }), /*#__PURE__*/
+    React.createElement("span", null, "Adding...")
+    ) :
+
+    'Add Card'
+
+    )
+    )
+    )
+    )
+    ));
+
 };
 
-export default AddCard; 
+export default AddCard;

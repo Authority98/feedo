@@ -33,35 +33,35 @@ const SettingsContent = () => {
   const renderSection = () => {
     switch (activeSection) {
       case 'account':
-        return <Account />;
+        return /*#__PURE__*/React.createElement(Account, null);
       case 'payment':
-        return <PaymentSection />;
+        return /*#__PURE__*/React.createElement(PaymentSection, null);
       case 'notification':
-        return <Notification />;
+        return /*#__PURE__*/React.createElement(Notification, null);
       case 'two-step':
-        return <TwoStepSection />;
+        return /*#__PURE__*/React.createElement(TwoStepSection, null);
       default:
-        return <Account />;
+        return /*#__PURE__*/React.createElement(Account, null);
     }
   };
 
-  return (
-    <div className="settings-page">
-      <div className="settings-content">
-        <div className="settings-layout">
-          <Profile 
-            activeSection={activeSection} 
-            onSectionChange={setActiveSection} 
-          />
-          {renderSection()}
-        </div>
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "settings-page" }, /*#__PURE__*/
+    React.createElement("div", { className: "settings-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "settings-layout" }, /*#__PURE__*/
+    React.createElement(Profile, {
+      activeSection: activeSection,
+      onSectionChange: setActiveSection }
+    ),
+    renderSection()
+    )
+    )
+    ));
+
 };
 
 const Settings = () => {
-  return <SettingsContent />;
+  return /*#__PURE__*/React.createElement(SettingsContent, null);
 };
 
-export default Settings; 
+export default Settings;

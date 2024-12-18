@@ -10,15 +10,15 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { 
+import {
   RiDashboardLine,
   RiAddCircleLine,
   RiDatabase2Line,
   RiSettings4Line,
   RiCustomerService2Line,
   RiLogoutBoxRLine,
-  RiVipCrownLine
-} from 'react-icons/ri';
+  RiVipCrownLine } from
+'react-icons/ri';
 import { FiFileText } from 'react-icons/fi';
 import { auth } from '../../firebase/config';
 import { signOut } from 'firebase/auth';
@@ -26,19 +26,19 @@ import { signOut } from 'firebase/auth';
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   const menuItems = [
-    { path: '/dashboard', icon: RiDashboardLine, label: 'Dashboard' },
-    { path: '/my-applications', icon: FiFileText, label: 'My Applications' },
-    { path: '/new-opportunities', icon: RiAddCircleLine, label: 'New Opportunities' },
-    { path: '/data-management', icon: RiDatabase2Line, label: 'Data Management' },
-    { path: '/subscription', icon: RiVipCrownLine, label: 'Subscription' },
-  ];
+  { path: '/dashboard', icon: RiDashboardLine, label: 'Dashboard' },
+  { path: '/my-applications', icon: FiFileText, label: 'My Applications' },
+  { path: '/new-opportunities', icon: RiAddCircleLine, label: 'New Opportunities' },
+  { path: '/data-management', icon: RiDatabase2Line, label: 'Data Management' },
+  { path: '/subscription', icon: RiVipCrownLine, label: 'Subscription' }];
+
 
   const bottomMenuItems = [
-    { path: '/settings', icon: RiSettings4Line, label: 'Settings' },
-    { path: '/help-center', icon: RiCustomerService2Line, label: 'Help Center' },
-  ];
+  { path: '/settings', icon: RiSettings4Line, label: 'Settings' },
+  { path: '/help-center', icon: RiCustomerService2Line, label: 'Help Center' }];
+
 
   const isActive = (path) => location.pathname === path;
 
@@ -56,83 +56,83 @@ const Sidebar = () => {
     }
   };
 
-  return (
-    <aside className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col pt-16 animate-slideIn">
-      <div className="flex-1 py-6">
-        <nav className="space-y-1 px-3 pt-4">
-          {menuItems.map((item, index) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${
-                isActive(item.path)
-                  ? 'bg-[#EEF5FF] text-[#246BFD] transform hover:translate-x-1'
-                  : 'text-gray-700 hover:bg-gray-50 hover:translate-x-1'
-              }`}
-              style={{
-                animationDelay: `${index * 100}ms`,
-                animation: 'slideInFromLeft 0.5s ease forwards'
-              }}
-            >
-              <item.icon className={`w-5 h-5 transition-transform duration-300 group-hover:rotate-6 ${
-                isActive(item.path) ? 'text-[#246BFD]' : 'text-gray-400'
-              }`} />
-              <span className="ml-3">{item.label}</span>
-            </Link>
-          ))}
-        </nav>
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("aside", { className: "w-64 h-screen bg-white border-r border-gray-200 flex flex-col pt-16 animate-slideIn" }, /*#__PURE__*/
+    React.createElement("div", { className: "flex-1 py-6" }, /*#__PURE__*/
+    React.createElement("nav", { className: "space-y-1 px-3 pt-4" },
+    menuItems.map((item, index) => /*#__PURE__*/
+    React.createElement(Link, {
+      key: item.path,
+      to: item.path,
+      className: `flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${
+      isActive(item.path) ?
+      'bg-[#EEF5FF] text-[#246BFD] transform hover:translate-x-1' :
+      'text-gray-700 hover:bg-gray-50 hover:translate-x-1'}`,
 
-      {/* Bottom Section */}
-      <div className="p-3 border-t border-gray-200">
-        <nav className="space-y-1">
-          {bottomMenuItems.map((item, index) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className="flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-300 hover:translate-x-1 hover:shadow-sm"
-              style={{
-                animationDelay: `${(menuItems.length + index) * 100}ms`,
-                animation: 'slideInFromLeft 0.5s ease forwards'
-              }}
-            >
-              <item.icon className="w-5 h-5 text-gray-400 transition-transform duration-300 group-hover:rotate-6" />
-              <span className="ml-3">{item.label}</span>
-            </Link>
-          ))}
-          
-          {/* Logout Button */}
-          <button
-            className={`w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-all duration-300 hover:translate-x-1 hover:shadow-sm relative ${
-              isLoading ? 'loading text-transparent' : ''
-            }`}
-            onClick={handleLogout}
-            disabled={isLoading}
-            style={{
-              animationDelay: `${(menuItems.length + bottomMenuItems.length) * 100}ms`,
-              animation: 'slideInFromLeft 0.5s ease forwards'
-            }}
-          >
-            <RiLogoutBoxRLine className="w-5 h-5 transition-transform duration-300 group-hover:rotate-6" />
-            <span className="ml-3">{isLoading ? '' : 'Logout'}</span>
-            {isLoading && (
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-              </div>
-            )}
-          </button>
-        </nav>
+      style: {
+        animationDelay: `${index * 100}ms`,
+        animation: 'slideInFromLeft 0.5s ease forwards'
+      } }, /*#__PURE__*/
 
-        {/* Version Number with fade-in animation */}
-        <div 
-          className="px-4 mt-6 text-xs text-gray-400 animate-fadeIn"
-          style={{ animationDelay: '800ms' }}
-        >
-          Version 1.2.0
-        </div>
-      </div>
-    </aside>
-  );
+    React.createElement(item.icon, { className: `w-5 h-5 transition-transform duration-300 group-hover:rotate-6 ${
+      isActive(item.path) ? 'text-[#246BFD]' : 'text-gray-400'}` }
+    ), /*#__PURE__*/
+    React.createElement("span", { className: "ml-3" }, item.label)
+    )
+    )
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "p-3 border-t border-gray-200" }, /*#__PURE__*/
+    React.createElement("nav", { className: "space-y-1" },
+    bottomMenuItems.map((item, index) => /*#__PURE__*/
+    React.createElement(Link, {
+      key: item.path,
+      to: item.path,
+      className: "flex items-center px-4 py-3 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-300 hover:translate-x-1 hover:shadow-sm",
+      style: {
+        animationDelay: `${(menuItems.length + index) * 100}ms`,
+        animation: 'slideInFromLeft 0.5s ease forwards'
+      } }, /*#__PURE__*/
+
+    React.createElement(item.icon, { className: "w-5 h-5 text-gray-400 transition-transform duration-300 group-hover:rotate-6" }), /*#__PURE__*/
+    React.createElement("span", { className: "ml-3" }, item.label)
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("button", {
+      className: `w-full flex items-center px-4 py-3 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-all duration-300 hover:translate-x-1 hover:shadow-sm relative ${
+      isLoading ? 'loading text-transparent' : ''}`,
+
+      onClick: handleLogout,
+      disabled: isLoading,
+      style: {
+        animationDelay: `${(menuItems.length + bottomMenuItems.length) * 100}ms`,
+        animation: 'slideInFromLeft 0.5s ease forwards'
+      } }, /*#__PURE__*/
+
+    React.createElement(RiLogoutBoxRLine, { className: "w-5 h-5 transition-transform duration-300 group-hover:rotate-6" }), /*#__PURE__*/
+    React.createElement("span", { className: "ml-3" }, isLoading ? '' : 'Logout'),
+    isLoading && /*#__PURE__*/
+    React.createElement("div", { className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" }, /*#__PURE__*/
+    React.createElement("div", { className: "w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin" })
+    )
+
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", {
+      className: "px-4 mt-6 text-xs text-gray-400 animate-fadeIn",
+      style: { animationDelay: '800ms' } },
+    "Version 1.2.0"
+
+    )
+    )
+    ));
+
 };
 
 // Add these styles to your global CSS or create a new Sidebar.css file
@@ -171,4 +171,4 @@ const styleSheet = document.createElement("style");
 styleSheet.innerText = styles;
 document.head.appendChild(styleSheet);
 
-export default Sidebar; 
+export default Sidebar;

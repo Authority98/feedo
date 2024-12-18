@@ -5,12 +5,12 @@
 
 // Password requirements with regex patterns
 export const PASSWORD_REQUIREMENTS = [
-  { id: 'length', label: 'At least 8 characters', regex: /.{8,}/ },
-  { id: 'uppercase', label: 'One uppercase letter', regex: /[A-Z]/ },
-  { id: 'lowercase', label: 'One lowercase letter', regex: /[a-z]/ },
-  { id: 'number', label: 'One number', regex: /[0-9]/ },
-  { id: 'special', label: 'One special character', regex: /[!@#$%^&*]/ }
-];
+{ id: 'length', label: 'At least 8 characters', regex: /.{8,}/ },
+{ id: 'uppercase', label: 'One uppercase letter', regex: /[A-Z]/ },
+{ id: 'lowercase', label: 'One lowercase letter', regex: /[a-z]/ },
+{ id: 'number', label: 'One number', regex: /[0-9]/ },
+{ id: 'special', label: 'One special character', regex: /[!@#$%^&*]/ }];
+
 
 /**
  * Validates a password against all requirements
@@ -18,7 +18,7 @@ export const PASSWORD_REQUIREMENTS = [
  * @returns {Object[]} Array of requirement objects with met status
  */
 export const validatePassword = (password) => {
-  return PASSWORD_REQUIREMENTS.map(req => ({
+  return PASSWORD_REQUIREMENTS.map((req) => ({
     ...req,
     met: req.regex.test(password)
   }));
@@ -35,7 +35,7 @@ export const calculatePasswordStrength = (password) => {
   }
 
   const requirements = validatePassword(password);
-  const metCount = requirements.filter(req => req.met).length;
+  const metCount = requirements.filter((req) => req.met).length;
 
   // Calculate score based on met requirements
   let score = metCount;
@@ -74,5 +74,5 @@ export const calculatePasswordStrength = (password) => {
  */
 export const isPasswordValid = (password) => {
   const requirements = validatePassword(password);
-  return requirements.every(req => req.met);
-}; 
+  return requirements.every((req) => req.met);
+};

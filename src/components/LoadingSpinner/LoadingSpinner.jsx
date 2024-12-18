@@ -24,9 +24,9 @@ import React from 'react';
 import { FiLoader } from 'react-icons/fi';
 import './LoadingSpinner.css';
 
-const LoadingSpinner = ({ 
-  size = 'md', 
-  color = 'text-blue-500', 
+const LoadingSpinner = ({
+  size = 'md',
+  color = 'text-blue-500',
   text,
   className = '',
   isDelete = false,
@@ -42,51 +42,51 @@ const LoadingSpinner = ({
   };
 
   if (isDelete) {
-    return (
-      <div className="delete-icon-spinner-container">
-        <FiLoader 
-          className={`delete-icon-spinner ${color}`}
-          data-testid="delete-spinner"
-        />
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "delete-icon-spinner-container" }, /*#__PURE__*/
+      React.createElement(FiLoader, {
+        className: `delete-icon-spinner ${color}`,
+        "data-testid": "delete-spinner" }
+      )
+      ));
+
   }
 
   if (isSetDefault) {
-    return (
-      <div className="set-default-spinner-container">
-        <FiLoader 
-          className={`set-default-spinner-icon ${color}`}
-          data-testid="set-default-spinner"
-        />
-        <span className="set-default-spinner-text">Setting as default...</span>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "set-default-spinner-container" }, /*#__PURE__*/
+      React.createElement(FiLoader, {
+        className: `set-default-spinner-icon ${color}`,
+        "data-testid": "set-default-spinner" }
+      ), /*#__PURE__*/
+      React.createElement("span", { className: "set-default-spinner-text" }, "Setting as default...")
+      ));
+
   }
 
   if (is2FA) {
-    return (
-      <div className="two-factor-spinner-container">
-        <FiLoader 
-          className={`two-factor-spinner-icon ${color}`}
-          data-testid="two-factor-spinner"
-        />
-        <span className="two-factor-spinner-text">Verifying code...</span>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "two-factor-spinner-container" }, /*#__PURE__*/
+      React.createElement(FiLoader, {
+        className: `two-factor-spinner-icon ${color}`,
+        "data-testid": "two-factor-spinner" }
+      ), /*#__PURE__*/
+      React.createElement("span", { className: "two-factor-spinner-text" }, "Verifying code...")
+      ));
+
   }
 
   const containerClass = isBackend ? 'loading-spinner-container-backend' : 'loading-spinner-container';
 
-  return (
-    <div className={`${containerClass} ${className}`}>
-      <FiLoader 
-        className={`loading-spinner ${sizeClasses[size]} ${color}`}
-        data-testid="loading-spinner"
-      />
-      {text && <span className={`loading-text ${isBackend ? 'loading-text-backend' : ''}`}>{text}</span>}
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: `${containerClass} ${className}` }, /*#__PURE__*/
+    React.createElement(FiLoader, {
+      className: `loading-spinner ${sizeClasses[size]} ${color}`,
+      "data-testid": "loading-spinner" }
+    ),
+    text && /*#__PURE__*/React.createElement("span", { className: `loading-text ${isBackend ? 'loading-text-backend' : ''}` }, text)
+    ));
+
 };
 
-export default LoadingSpinner; 
+export default LoadingSpinner;

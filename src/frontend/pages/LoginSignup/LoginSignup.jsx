@@ -18,33 +18,33 @@ import React, { useState, useEffect } from 'react';
 import './LoginSignup.css';
 
 // SVG icons as React components
-import { ReactComponent as GoogleIcon } from '../../../assets/icons/google.svg';  // Google icon for OAuth button
-import { ReactComponent as EyeIcon } from '../../../assets/icons/eye.svg';       // Eye icon for password visibility toggle
+import { ReactComponent as GoogleIcon } from '../../../assets/icons/google.svg'; // Google icon for OAuth button
+import { ReactComponent as EyeIcon } from '../../../assets/icons/eye.svg'; // Eye icon for password visibility toggle
 
 // Static assets
-import feedoLogo from '../../../assets/images/feedo-logo.png';    // Feedo company logo
-import awardBadge from '../../../assets/images/award-badge.png';  // Award badge image for testimonials
+import feedoLogo from '../../../assets/images/feedo-logo.png'; // Feedo company logo
+import awardBadge from '../../../assets/images/award-badge.png'; // Award badge image for testimonials
 
 // Routing
-import { Link, useNavigate } from 'react-router-dom';  // React Router components for navigation
+import { Link, useNavigate } from 'react-router-dom'; // React Router components for navigation
 
 // Firebase imports
-import { auth, db } from '../../../firebase/config';  // Firebase authentication and database instances
+import { auth, db } from '../../../firebase/config'; // Firebase authentication and database instances
 
 // Firebase authentication methods
-import { 
-    createUserWithEmailAndPassword,  // Email/password signup
-    signInWithPopup,                 // OAuth popup handler
-    GoogleAuthProvider,              // Google authentication provider
-    updateProfile,                    // User profile updater
-    sendPasswordResetEmail           // Password reset email sender
+import {
+  createUserWithEmailAndPassword, // Email/password signup
+  signInWithPopup, // OAuth popup handler
+  GoogleAuthProvider, // Google authentication provider
+  updateProfile, // User profile updater
+  sendPasswordResetEmail // Password reset email sender
 } from 'firebase/auth';
 
 // Firestore database methods
-import { 
-    doc,      // Document reference creator
-    setDoc,   // Document setter
-    getDoc    // Document getter
+import {
+  doc, // Document reference creator
+  setDoc, // Document setter
+  getDoc // Document getter
 } from 'firebase/firestore';
 
 // Add AuthContext import
@@ -63,17 +63,17 @@ const createCustomUserId = (firstName, lastName, randomSuffix = true) => {
   // Convert to lowercase and remove special characters
   const cleanFirst = firstName.toLowerCase().replace(/[^a-z0-9]/g, '');
   const cleanLast = lastName.toLowerCase().replace(/[^a-z0-9]/g, '');
-  
+
   // Create base ID
   let customId = `${cleanFirst}-${cleanLast}`;
-  
+
   // Add random suffix for uniqueness if requested
   if (randomSuffix) {
     const timestamp = Date.now().toString().slice(-4); // Last 4 digits of timestamp
     const random = Math.random().toString(36).substring(2, 6); // 4 random alphanumeric characters
     customId += `-${timestamp}${random}`;
   }
-  
+
   return customId;
 };
 
@@ -103,16 +103,16 @@ const LoginSignup = () => {
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
+    password: ''
   });
 
   // UI state management
-  const [showPassword, setShowPassword] = useState(false);  // Toggle password visibility
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);  // Current testimonial index
-  const [isSliding, setIsSliding] = useState(false);       // Testimonial slide animation state
-  const [errors, setErrors] = useState({});                // Form validation errors
-  const [isLoading, setIsLoading] = useState(false);       // Loading state for async operations
-  const [isSignupActive, setIsSignupActive] = useState(false);  // Toggle between signup/login views
+  const [showPassword, setShowPassword] = useState(false); // Toggle password visibility
+  const [currentTestimonial, setCurrentTestimonial] = useState(0); // Current testimonial index
+  const [isSliding, setIsSliding] = useState(false); // Testimonial slide animation state
+  const [errors, setErrors] = useState({}); // Form validation errors
+  const [isLoading, setIsLoading] = useState(false); // Loading state for async operations
+  const [isSignupActive, setIsSignupActive] = useState(false); // Toggle between signup/login views
 
   // Add login-specific state
   const [loginData, setLoginData] = useState({
@@ -133,7 +133,7 @@ const LoginSignup = () => {
   useEffect(() => {
     const rememberedEmail = localStorage.getItem('rememberedEmail');
     if (rememberedEmail) {
-      setLoginData(prev => ({
+      setLoginData((prev) => ({
         ...prev,
         email: rememberedEmail
       }));
@@ -144,13 +144,13 @@ const LoginSignup = () => {
   // Handle login form changes
   const handleLoginChange = (e) => {
     const { name, value } = e.target;
-    setLoginData(prev => ({
+    setLoginData((prev) => ({
       ...prev,
       [name]: value
     }));
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
         [name]: ''
       }));
@@ -162,37 +162,37 @@ const LoginSignup = () => {
     e.preventDefault();
     setIsLoading(true);
     setErrors({});
-    
+
     try {
-        const result = await login(loginData.email, loginData.password);
-        
-        if (rememberMe) {
-            localStorage.setItem('rememberedEmail', loginData.email);
+      const result = await login(loginData.email, loginData.password);
+
+      if (rememberMe) {
+        localStorage.setItem('rememberedEmail', loginData.email);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
+
+      if (result?.requiresTwoFactor) {
+        setShowTwoFactorInput(true);
+        return;
+      }
+
+      // Add a small delay to ensure smooth transition
+      setTimeout(() => {
+        if (result?.user?.isPending) {
+          navigate('/profile-type', { replace: true });
         } else {
-            localStorage.removeItem('rememberedEmail');
+          navigate('/dashboard', { replace: true });
         }
-        
-        if (result?.requiresTwoFactor) {
-            setShowTwoFactorInput(true);
-            return;
-        }
-        
-        // Add a small delay to ensure smooth transition
-        setTimeout(() => {
-            if (result?.user?.isPending) {
-                navigate('/profile-type', { replace: true });
-            } else {
-                navigate('/dashboard', { replace: true });
-            }
-        }, 500);
+      }, 500);
 
     } catch (error) {
-        console.error('Login error:', error);
-        const errorMessage = handleAuthError(error);
-        // Only set the form error, remove the toast
-        setErrors({ submit: errorMessage });
+      console.error('Login error:', error);
+      const errorMessage = handleAuthError(error);
+      // Only set the form error, remove the toast
+      setErrors({ submit: errorMessage });
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -201,19 +201,19 @@ const LoginSignup = () => {
     e.preventDefault();
     setIsLoading(true);
     setErrors({}); // Clear any previous errors
-    
+
     try {
-        const result = await verifyTwoFactor(twoFactorCode);
-        
-        // Navigate immediately on success
-        if (result?.user?.isPending) {
-            navigate('/profile-type', { replace: true });
-        } else {
-            navigate('/dashboard', { replace: true });
-        }
+      const result = await verifyTwoFactor(twoFactorCode);
+
+      // Navigate immediately on success
+      if (result?.user?.isPending) {
+        navigate('/profile-type', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     } catch (error) {
-        console.error('2FA error:', error);
-        setErrors({ twoFactor: AUTH_NOTIFICATIONS.LOGIN.INVALID_2FA });
+      console.error('2FA error:', error);
+      setErrors({ twoFactor: AUTH_NOTIFICATIONS.LOGIN.INVALID_2FA });
     }
     // Always set loading to false after try/catch
     setIsLoading(false);
@@ -224,15 +224,15 @@ const LoginSignup = () => {
     setIsLoading(true);
     try {
       const result = await googleSignIn();
-      
+
       // Add debug logging
-      console.log('Google Sign In Result:', result);
-      
+
+
       // Show success message for new users
       if (result?.isNewUser) {
         showToast('Account created successfully!', 'success');
       }
-      
+
       // Navigate based on user state
       setTimeout(() => {
         if (result?.user?.isPending) {
@@ -241,7 +241,7 @@ const LoginSignup = () => {
           navigate('/dashboard', { replace: true });
         }
       }, 500);
-      
+
     } catch (error) {
       console.error('Google sign in error:', error);
       const errorMessage = handleAuthError(error);
@@ -254,38 +254,38 @@ const LoginSignup = () => {
   // Testimonials data array
   // Each testimonial contains quote, author details, and profile image
   const testimonials = [
-    {
-      quote: "You made it so simple. My new site is so much faster and easier to work with than my old site. I just choose the page, make the change.",
-      author: "Leslie Alexander",
-      role: "Freelance React Developer",
-      image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=200&h=200&auto=format&fit=crop"
-    },
-    {
-      quote: "The platform is incredibly easy to use. I can now manage my website content without any technical knowledge.",
-      author: "Sarah Johnson",
-      role: "Digital Marketing Manager",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop"
-    },
-    {
-      quote: "Outstanding platform! It has streamlined our entire content management process.",
-      author: "Michael Chen",
-      role: "Product Manager",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop"
-    },
-    // Add more testimonials as needed
+  {
+    quote: "You made it so simple. My new site is so much faster and easier to work with than my old site. I just choose the page, make the change.",
+    author: "Leslie Alexander",
+    role: "Freelance React Developer",
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=200&h=200&auto=format&fit=crop"
+  },
+  {
+    quote: "The platform is incredibly easy to use. I can now manage my website content without any technical knowledge.",
+    author: "Sarah Johnson",
+    role: "Digital Marketing Manager",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&h=200&auto=format&fit=crop"
+  },
+  {
+    quote: "Outstanding platform! It has streamlined our entire content management process.",
+    author: "Michael Chen",
+    role: "Product Manager",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop"
+  }
+  // Add more testimonials as needed
   ];
 
   // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
         [name]: ''
       }));
@@ -339,9 +339,9 @@ const LoginSignup = () => {
       console.error('Signup error:', error);
       const errorMessage = handleAuthError(error);
       // Only show validation errors under the button, not auth errors
-      if (error.code === 'auth/email-already-in-use' || 
-          error.code === 'auth/invalid-email' || 
-          error.code === 'auth/wrong-password') {
+      if (error.code === 'auth/email-already-in-use' ||
+      error.code === 'auth/invalid-email' ||
+      error.code === 'auth/wrong-password') {
         // Don't set the error state for auth errors as they're shown in toast
         return;
       }
@@ -384,19 +384,19 @@ const LoginSignup = () => {
   const validateForm = () => {
     const newErrors = {};
     const errorMessages = [];
-    
+
     // Email validation
     if (!validateUserData.email(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
       errorMessages.push('Invalid email address');
     }
-    
+
     // Password validation
     if (!validateUserData.password(formData.password)) {
       newErrors.password = 'Password must be at least 8 characters long';
       errorMessages.push('Password must be at least 8 characters');
     }
-    
+
     // Name validation
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
@@ -405,7 +405,7 @@ const LoginSignup = () => {
       newErrors.firstName = 'Please enter a valid first name (2-30 characters)';
       errorMessages.push('Invalid first name');
     }
-    
+
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Last name is required';
       errorMessages.push('Last name is required');
@@ -413,15 +413,15 @@ const LoginSignup = () => {
       newErrors.lastName = 'Please enter a valid last name (2-30 characters)';
       errorMessages.push('Invalid last name');
     }
-    
+
     setErrors(newErrors);
-    
+
     // If there are errors, show them in a single toast
     if (errorMessages.length > 0) {
       showToast(`Please fix the following: ${errorMessages.join(', ')}`, 'error');
       return false;
     }
-    
+
     return true;
   };
 
@@ -429,29 +429,29 @@ const LoginSignup = () => {
   // Returns object with score (0-5) and strength label
   const calculatePasswordStrength = (password) => {
     let strength = 0;
-    
+
     // Length check
     if (password.length >= 8) strength += 1;
-    
+
     // Contains number
     if (/\d/.test(password)) strength += 1;
-    
+
     // Contains lowercase
     if (/[a-z]/.test(password)) strength += 1;
-    
+
     // Contains uppercase
     if (/[A-Z]/.test(password)) strength += 1;
-    
+
     // Contains special character
     if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 1;
-    
+
     return {
       score: strength,
       label: strength === 0 ? 'Very Weak' :
-             strength === 1 ? 'Weak' :
-             strength === 2 ? 'Fair' :
-             strength === 3 ? 'Good' :
-             strength === 4 ? 'Strong' : 'Very Strong'
+      strength === 1 ? 'Weak' :
+      strength === 2 ? 'Fair' :
+      strength === 3 ? 'Good' :
+      strength === 4 ? 'Strong' : 'Very Strong'
     };
   };
 
@@ -471,7 +471,7 @@ const LoginSignup = () => {
   const handleLinkedInSignUp = async () => {
     setIsLoading('linkedin');
     setErrors({});
-    
+
     try {
       await loginWithPopup({
         connection: 'linkedin',
@@ -494,7 +494,7 @@ const LoginSignup = () => {
   const handleLinkedInSignIn = async () => {
     setIsLoading('linkedin');
     setErrors({});
-    
+
     try {
       await loginWithPopup({
         connection: 'linkedin',
@@ -533,270 +533,270 @@ const LoginSignup = () => {
     }
   };
 
-  return (
-    <div className="signup-container">
-      <div className="signup-left">
-        <img src={feedoLogo} alt="Feedo AI Logo" className="feedo-logo" />
-        <div className="testimonial">
-          <div className={`testimonial-content ${isSliding ? 'sliding-out' : ''}`}>
-            <p className="quote">{testimonials[currentTestimonial].quote}</p>
-            <div className="author">
-              <img 
-                src={testimonials[currentTestimonial].image}
-                alt={testimonials[currentTestimonial].author}
-                className="author-photo" 
-              />
-              <div className="author-info">
-                <h4>{testimonials[currentTestimonial].author}</h4>
-                <p>{testimonials[currentTestimonial].role}</p>
-              </div>
-            </div>
-          </div>
-          <div className="testimonial-dots">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                className={`dot ${index === currentTestimonial ? 'active' : ''}`}
-                onClick={() => handleDotClick(index)}
-                aria-label={`View testimonial ${index + 1}`}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="award-badges">
-          <img src={awardBadge} alt="Award Badge" />
-          <img src={awardBadge} alt="Award Badge" />
-          <img src={awardBadge} alt="Award Badge" />
-        </div>
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "signup-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "signup-left" }, /*#__PURE__*/
+    React.createElement("img", { src: feedoLogo, alt: "Feedo AI Logo", className: "feedo-logo" }), /*#__PURE__*/
+    React.createElement("div", { className: "testimonial" }, /*#__PURE__*/
+    React.createElement("div", { className: `testimonial-content ${isSliding ? 'sliding-out' : ''}` }, /*#__PURE__*/
+    React.createElement("p", { className: "quote" }, testimonials[currentTestimonial].quote), /*#__PURE__*/
+    React.createElement("div", { className: "author" }, /*#__PURE__*/
+    React.createElement("img", {
+      src: testimonials[currentTestimonial].image,
+      alt: testimonials[currentTestimonial].author,
+      className: "author-photo" }
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "author-info" }, /*#__PURE__*/
+    React.createElement("h4", null, testimonials[currentTestimonial].author), /*#__PURE__*/
+    React.createElement("p", null, testimonials[currentTestimonial].role)
+    )
+    )
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "testimonial-dots" },
+    testimonials.map((_, index) => /*#__PURE__*/
+    React.createElement("button", {
+      key: index,
+      className: `dot ${index === currentTestimonial ? 'active' : ''}`,
+      onClick: () => handleDotClick(index),
+      "aria-label": `View testimonial ${index + 1}` }
+    )
+    )
+    )
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "award-badges" }, /*#__PURE__*/
+    React.createElement("img", { src: awardBadge, alt: "Award Badge" }), /*#__PURE__*/
+    React.createElement("img", { src: awardBadge, alt: "Award Badge" }), /*#__PURE__*/
+    React.createElement("img", { src: awardBadge, alt: "Award Badge" })
+    )
+    ), /*#__PURE__*/
 
-      <div className="signup-right">
-        <div className="signup-form-container">
-          <AuthToggle 
-            isSignupActive={isSignupActive} 
-            onToggle={setIsSignupActive} 
-          />
+    React.createElement("div", { className: "signup-right" }, /*#__PURE__*/
+    React.createElement("div", { className: "signup-form-container" }, /*#__PURE__*/
+    React.createElement(AuthToggle, {
+      isSignupActive: isSignupActive,
+      onToggle: setIsSignupActive }
+    ),
 
-          {isSignupActive ? (
-            <>
-              <SocialLogin 
-                onGoogleClick={handleGoogleSignIn}
-                onLinkedInClick={handleLinkedInSignUp}
-                isLoading={isLoading}
-                isSignUp={true}
-              />
+    isSignupActive ? /*#__PURE__*/
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement(SocialLogin, {
+      onGoogleClick: handleGoogleSignIn,
+      onLinkedInClick: handleLinkedInSignUp,
+      isLoading: isLoading,
+      isSignUp: true }
+    ), /*#__PURE__*/
 
-              {/* Signup Form */}
-              <form onSubmit={handleSignup}>
-                <div className="name-fields">
-                  <div className="form-group">
-                    <label htmlFor="firstName">First name</label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      className={errors.firstName ? 'error' : ''}
-                    />
-                    {errors.firstName && <span className="error-message">{errors.firstName}</span>}
-                  </div>
 
-                  <div className="form-group">
-                    <label htmlFor="lastName">Last name</label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      className={errors.lastName ? 'error' : ''}
-                    />
-                    {errors.lastName && <span className="error-message">{errors.lastName}</span>}
-                  </div>
-                </div>
+    React.createElement("form", { onSubmit: handleSignup }, /*#__PURE__*/
+    React.createElement("div", { className: "name-fields" }, /*#__PURE__*/
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "firstName" }, "First name"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      id: "firstName",
+      name: "firstName",
+      value: formData.firstName,
+      onChange: handleChange,
+      className: errors.firstName ? 'error' : '' }
+    ),
+    errors.firstName && /*#__PURE__*/React.createElement("span", { className: "error-message" }, errors.firstName)
+    ), /*#__PURE__*/
 
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className={errors.email ? 'error' : ''}
-                  />
-                  {errors.email && <span className="error-message">{errors.email}</span>}
-                </div>
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "lastName" }, "Last name"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      id: "lastName",
+      name: "lastName",
+      value: formData.lastName,
+      onChange: handleChange,
+      className: errors.lastName ? 'error' : '' }
+    ),
+    errors.lastName && /*#__PURE__*/React.createElement("span", { className: "error-message" }, errors.lastName)
+    )
+    ), /*#__PURE__*/
 
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <div className="password-input">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      id="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      className={errors.password ? 'error' : ''}
-                    />
-                    <button
-                      type="button"
-                      className="toggle-password"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      <EyeIcon />
-                    </button>
-                  </div>
-                  {formData.password && (
-                    <div className="password-strength">
-                      <div className="strength-bars">
-                        {[...Array(5)].map((_, index) => (
-                          <div
-                            key={index}
-                            className={`strength-bar ${
-                              index < calculatePasswordStrength(formData.password).score
-                                ? calculatePasswordStrength(formData.password).label.toLowerCase().replace(' ', '-')
-                                : ''
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <span className={`strength-label ${calculatePasswordStrength(formData.password).label.toLowerCase().replace(' ', '-')}`}>
-                        {calculatePasswordStrength(formData.password).label}
-                      </span>
-                    </div>
-                  )}
-                  {errors.password && <span className="error-message">{errors.password}</span>}
-                </div>
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "email" }, "Email"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "email",
+      id: "email",
+      name: "email",
+      value: formData.email,
+      onChange: handleChange,
+      className: errors.email ? 'error' : '' }
+    ),
+    errors.email && /*#__PURE__*/React.createElement("span", { className: "error-message" }, errors.email)
+    ), /*#__PURE__*/
 
-                <AuthButton 
-                  isLoading={isLoading}
-                  loadingText="Creating Account..."
-                >
-                  Create Account
-                </AuthButton>
-                
-                {errors.submit && (
-                  <div className="error-message submit-error">
-                    {errors.submit}
-                  </div>
-                )}
-              </form>
-            </>
-          ) : (
-            <>
-              <SocialLogin 
-                onGoogleClick={handleGoogleSignIn}
-                onLinkedInClick={handleLinkedInSignIn}
-                isLoading={isLoading}
-                isSignUp={false}
-              />
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "password" }, "Password"), /*#__PURE__*/
+    React.createElement("div", { className: "password-input" }, /*#__PURE__*/
+    React.createElement("input", {
+      type: showPassword ? "text" : "password",
+      id: "password",
+      name: "password",
+      value: formData.password,
+      onChange: handleChange,
+      className: errors.password ? 'error' : '' }
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      type: "button",
+      className: "toggle-password",
+      onClick: () => setShowPassword(!showPassword) }, /*#__PURE__*/
 
-              {/* Login Form */}
-              <form onSubmit={handleLogin}>
-                <div className="form-group">
-                  <label htmlFor="loginEmail">Email</label>
-                  <input
-                    type="email"
-                    id="loginEmail"
-                    name="email"
-                    value={loginData.email}
-                    onChange={handleLoginChange}
-                    className={errors.loginEmail ? 'error' : ''}
-                    disabled={isLoading}
-                  />
-                  {errors.loginEmail && <span className="error-message">{errors.loginEmail}</span>}
-                </div>
+    React.createElement(EyeIcon, null)
+    )
+    ),
+    formData.password && /*#__PURE__*/
+    React.createElement("div", { className: "password-strength" }, /*#__PURE__*/
+    React.createElement("div", { className: "strength-bars" },
+    [...Array(5)].map((_, index) => /*#__PURE__*/
+    React.createElement("div", {
+      key: index,
+      className: `strength-bar ${
+      index < calculatePasswordStrength(formData.password).score ?
+      calculatePasswordStrength(formData.password).label.toLowerCase().replace(' ', '-') :
+      ''}` }
 
-                <div className="form-group">
-                  <label htmlFor="loginPassword">Password</label>
-                  <div className="password-input">
-                    <input
-                      type={showLoginPassword ? "text" : "password"}
-                      id="loginPassword"
-                      name="password"
-                      value={loginData.password}
-                      onChange={handleLoginChange}
-                      className={errors.loginPassword ? 'error' : ''}
-                      disabled={isLoading}
-                    />
-                    <button
-                      type="button"
-                      className="toggle-password"
-                      onClick={() => setShowLoginPassword(!showLoginPassword)}
-                      disabled={isLoading}
-                    >
-                      <EyeIcon />
-                    </button>
-                  </div>
-                  {errors.loginPassword && <span className="error-message">{errors.loginPassword}</span>}
-                </div>
+    )
+    )
+    ), /*#__PURE__*/
+    React.createElement("span", { className: `strength-label ${calculatePasswordStrength(formData.password).label.toLowerCase().replace(' ', '-')}` },
+    calculatePasswordStrength(formData.password).label
+    )
+    ),
 
-                <div className="remember-me">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                      disabled={isLoading}
-                    />
-                    Remember Me
-                  </label>
-                </div>
+    errors.password && /*#__PURE__*/React.createElement("span", { className: "error-message" }, errors.password)
+    ), /*#__PURE__*/
 
-                <AuthButton 
-                  isLoading={isLoading}
-                  loadingText="Logging in..."
-                >
-                  Login
-                </AuthButton>
+    React.createElement(AuthButton, {
+      isLoading: isLoading,
+      loadingText: "Creating Account..." },
+    "Create Account"
 
-                {/* Add this forgot password link */}
-                <div className="forgot-password-wrapper">
-                  <button 
-                    type="button" 
-                    onClick={() => setShowForgotPassword(true)}
-                    className="forgot-password-btn"
-                  >
-                    Forgot your password?
-                  </button>
-                </div>
-              </form>
+    ),
 
-              {/* 2FA Verification Modal */}
-              {showTwoFactorInput && (
-                <TwoFactorVerification
-                  twoFactorCode={twoFactorCode}
-                  setTwoFactorCode={setTwoFactorCode}
-                  onSubmit={handleTwoFactorSubmit}
-                  isLoading={isLoading}
-                  error={errors.twoFactor}
-                  setErrors={setErrors}
-                />
-              )}
-            </>
-          )}
-        </div>
+    errors.submit && /*#__PURE__*/
+    React.createElement("div", { className: "error-message submit-error" },
+    errors.submit
+    )
 
-        <footer className="signup-footer">
-          <div className="footer-content">
-            <span className="copyright">
-              Copyright 2021 - 2022 Feedo Inc. All rights Reserved
-            </span>
-            <Link to="/admin/login" className="admin-login-link">
-              Admin Login
-            </Link>
-          </div>
-        </footer>
-      </div>
+    )
+    ) : /*#__PURE__*/
 
-      <ForgotPassword 
-        isOpen={showForgotPassword}
-        onClose={() => setShowForgotPassword(false)}
-      />
-    </div>
-  );
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement(SocialLogin, {
+      onGoogleClick: handleGoogleSignIn,
+      onLinkedInClick: handleLinkedInSignIn,
+      isLoading: isLoading,
+      isSignUp: false }
+    ), /*#__PURE__*/
+
+
+    React.createElement("form", { onSubmit: handleLogin }, /*#__PURE__*/
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "loginEmail" }, "Email"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "email",
+      id: "loginEmail",
+      name: "email",
+      value: loginData.email,
+      onChange: handleLoginChange,
+      className: errors.loginEmail ? 'error' : '',
+      disabled: isLoading }
+    ),
+    errors.loginEmail && /*#__PURE__*/React.createElement("span", { className: "error-message" }, errors.loginEmail)
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { htmlFor: "loginPassword" }, "Password"), /*#__PURE__*/
+    React.createElement("div", { className: "password-input" }, /*#__PURE__*/
+    React.createElement("input", {
+      type: showLoginPassword ? "text" : "password",
+      id: "loginPassword",
+      name: "password",
+      value: loginData.password,
+      onChange: handleLoginChange,
+      className: errors.loginPassword ? 'error' : '',
+      disabled: isLoading }
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      type: "button",
+      className: "toggle-password",
+      onClick: () => setShowLoginPassword(!showLoginPassword),
+      disabled: isLoading }, /*#__PURE__*/
+
+    React.createElement(EyeIcon, null)
+    )
+    ),
+    errors.loginPassword && /*#__PURE__*/React.createElement("span", { className: "error-message" }, errors.loginPassword)
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "remember-me" }, /*#__PURE__*/
+    React.createElement("label", null, /*#__PURE__*/
+    React.createElement("input", {
+      type: "checkbox",
+      checked: rememberMe,
+      onChange: (e) => setRememberMe(e.target.checked),
+      disabled: isLoading }
+    ), "Remember Me"
+
+    )
+    ), /*#__PURE__*/
+
+    React.createElement(AuthButton, {
+      isLoading: isLoading,
+      loadingText: "Logging in..." },
+    "Login"
+
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "forgot-password-wrapper" }, /*#__PURE__*/
+    React.createElement("button", {
+      type: "button",
+      onClick: () => setShowForgotPassword(true),
+      className: "forgot-password-btn" },
+    "Forgot your password?"
+
+    )
+    )
+    ),
+
+
+    showTwoFactorInput && /*#__PURE__*/
+    React.createElement(TwoFactorVerification, {
+      twoFactorCode: twoFactorCode,
+      setTwoFactorCode: setTwoFactorCode,
+      onSubmit: handleTwoFactorSubmit,
+      isLoading: isLoading,
+      error: errors.twoFactor,
+      setErrors: setErrors }
+    )
+
+    )
+
+    ), /*#__PURE__*/
+
+    React.createElement("footer", { className: "signup-footer" }, /*#__PURE__*/
+    React.createElement("div", { className: "footer-content" }, /*#__PURE__*/
+    React.createElement("span", { className: "copyright" }, "Copyright 2021 - 2022 Feedo Inc. All rights Reserved"
+
+    ), /*#__PURE__*/
+    React.createElement(Link, { to: "/admin/login", className: "admin-login-link" }, "Admin Login"
+
+    )
+    )
+    )
+    ), /*#__PURE__*/
+
+    React.createElement(ForgotPassword, {
+      isOpen: showForgotPassword,
+      onClose: () => setShowForgotPassword(false) }
+    )
+    ));
+
 };
 
 export default LoginSignup;

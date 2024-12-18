@@ -36,22 +36,22 @@ const TwoStep = () => {
 
   // If Google user, show message instead of 2FA options
   if (isGoogleUser) {
-    return (
-      <div className="two-step-section">
-        <h2 className="section-title">Two-Step Authentication</h2>
-        <div className="two-step-content">
-          <div className="security-status">
-            <FiShield className="status-icon disabled" />
-            <div className="status-info">
-              <h3 className="status-title">Not Available for Google Sign-In</h3>
-              <p className="status-description">
-                Two-step authentication is not available for accounts using Google Sign-In as Google already provides its own security features.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "two-step-section" }, /*#__PURE__*/
+      React.createElement("h2", { className: "section-title" }, "Two-Step Authentication"), /*#__PURE__*/
+      React.createElement("div", { className: "two-step-content" }, /*#__PURE__*/
+      React.createElement("div", { className: "security-status" }, /*#__PURE__*/
+      React.createElement(FiShield, { className: "status-icon disabled" }), /*#__PURE__*/
+      React.createElement("div", { className: "status-info" }, /*#__PURE__*/
+      React.createElement("h3", { className: "status-title" }, "Not Available for Google Sign-In"), /*#__PURE__*/
+      React.createElement("p", { className: "status-description" }, "Two-step authentication is not available for accounts using Google Sign-In as Google already provides its own security features."
+
+      )
+      )
+      )
+      )
+      ));
+
   }
 
   // Fetch 2FA status on component mount
@@ -77,7 +77,7 @@ const TwoStep = () => {
   }, [user?.profile?.authUid]);
 
   if (loading) {
-    return <SkeletonLoading />;
+    return /*#__PURE__*/React.createElement(SkeletonLoading, null);
   }
 
   const generateSecretKey = () => {
@@ -95,7 +95,7 @@ const TwoStep = () => {
     try {
       setIsVerifying(true);
       setError('');
-      
+
       if (!user?.profile?.authUid) {
         throw new Error('User not found');
       }
@@ -159,114 +159,114 @@ const TwoStep = () => {
 
   const qrCodeUrl = `otpauth://totp/Feedo:${user?.profile?.email}?secret=${secretKey}&issuer=Feedo`;
 
-  const NotificationToggle = ({ enabled, onClick }) => (
-    <button 
-      onClick={onClick}
-      className={`toggle-button ${enabled ? 'active' : ''}`}
-      aria-checked={enabled}
-      role="switch"
-    />
+  const NotificationToggle = ({ enabled, onClick }) => /*#__PURE__*/
+  React.createElement("button", {
+    onClick: onClick,
+    className: `toggle-button ${enabled ? 'active' : ''}`,
+    "aria-checked": enabled,
+    role: "switch" }
   );
 
-  return (
-    <div className="two-step-section">
-      <h2 className="section-title">Two-Step Authentication</h2>
-      
-      <div className="two-step-content">
-        <div className="security-status">
-          <FiShield className={`status-icon ${isEnabled ? 'enabled' : 'disabled'}`} />
-          <div className="status-info">
-            <h3 className="status-title">Two-Step Authentication is {isEnabled ? 'Enabled' : 'Disabled'}</h3>
-            <p className="status-description">
-              Add an extra layer of security to your account by requiring a verification code in addition to your password.
-            </p>
-          </div>
-          <NotificationToggle 
-            enabled={isEnabled}
-            onClick={() => isEnabled ? handleDisable2FA() : handleSetupAuthenticator()}
-          />
-        </div>
 
-        {!isEnabled && (
-          <div className="authentication-options">
-            <div className="auth-option">
-              <FiSmartphone className="option-icon" />
-              <div className="option-info">
-                <h4>Authenticator App</h4>
-                <p>Use an authenticator app to generate verification codes</p>
-                <button 
-                  className="setup-button"
-                  onClick={handleSetupAuthenticator}
-                >
-                  Set up authenticator
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "two-step-section" }, /*#__PURE__*/
+    React.createElement("h2", { className: "section-title" }, "Two-Step Authentication"), /*#__PURE__*/
 
-        {/* QR Code Modal */}
-        <AnimatePresence>
-          {showQRCode && (
-            <motion.div
-              className="qr-code-modal"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="qr-code-content"
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-              >
-                <button 
-                  className="close-modal-btn"
-                  onClick={() => setShowQRCode(false)}
-                >
-                  <FiX />
-                </button>
+    React.createElement("div", { className: "two-step-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "security-status" }, /*#__PURE__*/
+    React.createElement(FiShield, { className: `status-icon ${isEnabled ? 'enabled' : 'disabled'}` }), /*#__PURE__*/
+    React.createElement("div", { className: "status-info" }, /*#__PURE__*/
+    React.createElement("h3", { className: "status-title" }, "Two-Step Authentication is ", isEnabled ? 'Enabled' : 'Disabled'), /*#__PURE__*/
+    React.createElement("p", { className: "status-description" }, "Add an extra layer of security to your account by requiring a verification code in addition to your password."
 
-                <h3>Set Up Authenticator</h3>
-                <div className="qr-code-steps">
-                  <p>1. Install an authenticator app like Google Authenticator or Authy</p>
-                  <p>2. Scan this QR code with your authenticator app</p>
-                  <div className="qr-code-container">
-                    <QRCodeSVG value={qrCodeUrl} size={200} level="H" />
-                  </div>
-                  <p>3. Enter the 6-digit code from your authenticator app</p>
-                  <div className="verification-input">
-                    <input
-                      type="text"
-                      maxLength="6"
-                      placeholder="Enter 6-digit code"
-                      value={verificationCode}
-                      onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
-                    />
-                    {error && <span className="error-message">{error}</span>}
-                  </div>
-                  <button 
-                    className="verify-btn"
-                    onClick={handleVerifyCode}
-                    disabled={verificationCode.length !== 6 || isVerifying}
-                  >
-                    {isVerifying ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <LoadingSpinner size="xs" color="text-white" isBackend={true} />
-                        <span>Verifying...</span>
-                      </span>
-                    ) : (
-                      'Verify and Enable'
-                    )}
-                  </button>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </div>
-  );
+    )
+    ), /*#__PURE__*/
+    React.createElement(NotificationToggle, {
+      enabled: isEnabled,
+      onClick: () => isEnabled ? handleDisable2FA() : handleSetupAuthenticator() }
+    )
+    ),
+
+    !isEnabled && /*#__PURE__*/
+    React.createElement("div", { className: "authentication-options" }, /*#__PURE__*/
+    React.createElement("div", { className: "auth-option" }, /*#__PURE__*/
+    React.createElement(FiSmartphone, { className: "option-icon" }), /*#__PURE__*/
+    React.createElement("div", { className: "option-info" }, /*#__PURE__*/
+    React.createElement("h4", null, "Authenticator App"), /*#__PURE__*/
+    React.createElement("p", null, "Use an authenticator app to generate verification codes"), /*#__PURE__*/
+    React.createElement("button", {
+      className: "setup-button",
+      onClick: handleSetupAuthenticator },
+    "Set up authenticator"
+
+    )
+    )
+    )
+    ), /*#__PURE__*/
+
+
+
+    React.createElement(AnimatePresence, null,
+    showQRCode && /*#__PURE__*/
+    React.createElement(motion.div, {
+      className: "qr-code-modal",
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 } }, /*#__PURE__*/
+
+    React.createElement(motion.div, {
+      className: "qr-code-content",
+      initial: { scale: 0.95, opacity: 0 },
+      animate: { scale: 1, opacity: 1 },
+      exit: { scale: 0.95, opacity: 0 } }, /*#__PURE__*/
+
+    React.createElement("button", {
+      className: "close-modal-btn",
+      onClick: () => setShowQRCode(false) }, /*#__PURE__*/
+
+    React.createElement(FiX, null)
+    ), /*#__PURE__*/
+
+    React.createElement("h3", null, "Set Up Authenticator"), /*#__PURE__*/
+    React.createElement("div", { className: "qr-code-steps" }, /*#__PURE__*/
+    React.createElement("p", null, "1. Install an authenticator app like Google Authenticator or Authy"), /*#__PURE__*/
+    React.createElement("p", null, "2. Scan this QR code with your authenticator app"), /*#__PURE__*/
+    React.createElement("div", { className: "qr-code-container" }, /*#__PURE__*/
+    React.createElement(QRCodeSVG, { value: qrCodeUrl, size: 200, level: "H" })
+    ), /*#__PURE__*/
+    React.createElement("p", null, "3. Enter the 6-digit code from your authenticator app"), /*#__PURE__*/
+    React.createElement("div", { className: "verification-input" }, /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      maxLength: "6",
+      placeholder: "Enter 6-digit code",
+      value: verificationCode,
+      onChange: (e) => setVerificationCode(e.target.value.replace(/\D/g, '')) }
+    ),
+    error && /*#__PURE__*/React.createElement("span", { className: "error-message" }, error)
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      className: "verify-btn",
+      onClick: handleVerifyCode,
+      disabled: verificationCode.length !== 6 || isVerifying },
+
+    isVerifying ? /*#__PURE__*/
+    React.createElement("span", { className: "flex items-center justify-center gap-2" }, /*#__PURE__*/
+    React.createElement(LoadingSpinner, { size: "xs", color: "text-white", isBackend: true }), /*#__PURE__*/
+    React.createElement("span", null, "Verifying...")
+    ) :
+
+    'Verify and Enable'
+
+    )
+    )
+    )
+    )
+
+    )
+    )
+    ));
+
 };
 
-export default TwoStep; 
+export default TwoStep;

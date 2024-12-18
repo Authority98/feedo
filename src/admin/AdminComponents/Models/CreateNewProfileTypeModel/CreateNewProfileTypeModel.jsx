@@ -31,13 +31,13 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
     if (isOpen) {
       if (initialData) {
         // Convert sections object to array if needed
-        const sectionsArray = initialData.sections 
-          ? Object.entries(initialData.sections).map(([id, section]) => ({
-              id,
-              label: section.label,
-              originalId: id // Keep track of original ID
-            }))
-          : [{ label: '' }];
+        const sectionsArray = initialData.sections ?
+        Object.entries(initialData.sections).map(([id, section]) => ({
+          id,
+          label: section.label,
+          originalId: id // Keep track of original ID
+        })) :
+        [{ label: '' }];
 
         setFormData({
           label: initialData.label,
@@ -48,7 +48,7 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
 
         // Initialize mappings for existing sections
         const initialMappings = new Map();
-        sectionsArray.forEach(section => {
+        sectionsArray.forEach((section) => {
           if (section.originalId) {
             initialMappings.set(section.originalId, section.originalId);
           }
@@ -68,17 +68,17 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
 
   // Function to generate ID from label
   const generateId = (label) => {
-    return label
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
+    return label.
+    toLowerCase().
+    replace(/[^a-z0-9\s-]/g, '').
+    replace(/\s+/g, '-').
+    replace(/-+/g, '-').
+    trim();
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.label.trim()) {
       newErrors.label = 'Profile type label is required';
     }
@@ -86,23 +86,23 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
     // Validate sections
     const sectionErrors = [];
     const sectionLabels = new Set();
-    
+
     formData.sections.forEach((section, index) => {
       const sectionError = {};
-      
+
       if (!section.label.trim()) {
         sectionError.label = 'Section label is required';
       } else if (sectionLabels.has(section.label.toLowerCase())) {
         sectionError.label = 'Section labels must be unique';
       }
-      
+
       if (Object.keys(sectionError).length > 0) {
         sectionErrors[index] = sectionError;
       }
-      
+
       sectionLabels.add(section.label.toLowerCase());
     });
-    
+
     if (sectionErrors.length > 0) {
       newErrors.sections = sectionErrors;
     }
@@ -115,10 +115,10 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
     e.preventDefault();
     if (validateForm()) {
       const profileTypeId = initialData?.id || generateId(formData.label);
-      
+
       // Convert sections array to object with proper mappings
       const sectionsObject = {};
-      formData.sections.forEach(section => {
+      formData.sections.forEach((section) => {
         const sectionId = section.id || generateId(section.label);
         sectionsObject[sectionId] = {
           id: sectionId,
@@ -131,7 +131,7 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
       // Create the section mappings object
       const mappingsObject = {};
       sectionMappings.forEach((newId, oldId) => {
-        if (oldId !== newId) { // Only include changed mappings
+        if (oldId !== newId) {// Only include changed mappings
           mappingsObject[oldId] = newId;
         }
       });
@@ -150,7 +150,7 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
         }
       };
 
-      console.log('Submitting profile type:', profileTypeData);
+
       onSave(profileTypeData);
     }
   };
@@ -174,8 +174,8 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
     const section = newSections[index];
     const oldId = section.id || generateId(section.label);
     const newId = generateId(value);
-    
-    newSections[index] = { 
+
+    newSections[index] = {
       ...section,
       label: value,
       id: newId
@@ -183,7 +183,7 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
 
     // Update mappings if this was an existing section
     if (section.originalId) {
-      setSectionMappings(prevMappings => {
+      setSectionMappings((prevMappings) => {
         const newMappings = new Map(prevMappings);
         newMappings.set(section.originalId, newId);
         return newMappings;
@@ -191,7 +191,7 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
     }
 
     setFormData({ ...formData, sections: newSections });
-    
+
     // Clear errors for the changed field
     if (errors.sections?.[index]?.label) {
       const newErrors = { ...errors };
@@ -209,224 +209,224 @@ const SectionModal = ({ isOpen, onClose, onSave, initialData = null }) => {
     setFormData({ ...formData, icon: iconId });
   };
 
-  const filteredIcons = iconSearch.trim() 
-    ? PROFILE_ICONS.filter(icon => 
-        icon.label.toLowerCase().includes(iconSearch.toLowerCase())
-      )
-    : [];
+  const filteredIcons = iconSearch.trim() ?
+  PROFILE_ICONS.filter((icon) =>
+  icon.label.toLowerCase().includes(iconSearch.toLowerCase())
+  ) :
+  [];
 
   if (!isOpen) return null;
 
-  return (
-    <div className="modal-overlay">
-      <div className="section-modal">
-        <div className="modal-header">
-          <h2>{initialData ? 'Edit Profile Type' : 'Create New Profile Type'}</h2>
-          <button className="close-button" onClick={onClose}>
-            <FiX />
-          </button>
-        </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "modal-overlay" }, /*#__PURE__*/
+    React.createElement("div", { className: "section-modal" }, /*#__PURE__*/
+    React.createElement("div", { className: "modal-header" }, /*#__PURE__*/
+    React.createElement("h2", null, initialData ? 'Edit Profile Type' : 'Create New Profile Type'), /*#__PURE__*/
+    React.createElement("button", { className: "close-button", onClick: onClose }, /*#__PURE__*/
+    React.createElement(FiX, null)
+    )
+    ), /*#__PURE__*/
 
-        <form onSubmit={handleSubmit} className="section-modal-form">
-          <div className="form-section">
-            <div className="form-group">
-              <label>Profile Type Name</label>
-              <input
-                type="text"
-                value={formData.label}
-                onChange={(e) => {
-                  setFormData({ ...formData, label: e.target.value });
-                  if (errors.label) {
-                    setErrors({ ...errors, label: null });
-                  }
-                }}
-                placeholder="e.g., Student, Entrepreneur, Company"
-                className={errors.label ? 'error' : ''}
-              />
-              {errors.label && (
-                <span className="error-message">
-                  <FiAlertCircle />
-                  {errors.label}
-                </span>
-              )}
-              <p className="helper-text">
-                Choose a name that identifies this type of profile (e.g., Student Profile, Company Profile).
-              </p>
-            </div>
+    React.createElement("form", { onSubmit: handleSubmit, className: "section-modal-form" }, /*#__PURE__*/
+    React.createElement("div", { className: "form-section" }, /*#__PURE__*/
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", null, "Profile Type Name"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      value: formData.label,
+      onChange: (e) => {
+        setFormData({ ...formData, label: e.target.value });
+        if (errors.label) {
+          setErrors({ ...errors, label: null });
+        }
+      },
+      placeholder: "e.g., Student, Entrepreneur, Company",
+      className: errors.label ? 'error' : '' }
+    ),
+    errors.label && /*#__PURE__*/
+    React.createElement("span", { className: "error-message" }, /*#__PURE__*/
+    React.createElement(FiAlertCircle, null),
+    errors.label
+    ), /*#__PURE__*/
 
-            <div className="form-group">
-              <label>Profile Type Subtitle <span className="optional-text">(Optional)</span></label>
-              <input
-                type="text"
-                value={formData.subtitle}
-                onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                placeholder="e.g., Create a profile for students and graduates"
-                className="form-input"
-              />
-              <p className="helper-text">
-                Add a brief description to explain the purpose of this profile type.
-              </p>
-            </div>
+    React.createElement("p", { className: "helper-text" }, "Choose a name that identifies this type of profile (e.g., Student Profile, Company Profile)."
 
-            <div className="form-group mt-4">
-              <label>Profile Type Icon</label>
-              <div className="icon-search-container">
-                <div className="search-input-wrapper">
-                  <FiSearch className="search-icon" />
-                  <input
-                    type="text"
-                    placeholder="Search icons (e.g., user, business, education)..."
-                    value={iconSearch}
-                    onChange={(e) => {
-                      setIconSearch(e.target.value);
-                      setIsSearching(true);
-                    }}
-                    className="icon-search-input"
-                  />
-                  {iconSearch && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIconSearch('');
-                        setIsSearching(false);
-                      }}
-                      className="clear-search"
-                    >
-                      <FiX />
-                    </button>
-                  )}
-                </div>
-                
-                {!isSearching && formData.icon && (
-                  <div className="selected-icon-display">
-                    {(() => {
-                      const IconComponent = PROFILE_ICONS.find(i => i.id === formData.icon)?.icon;
-                      return IconComponent && (
-                        <>
-                          <IconComponent className="current-icon" />
-                          <span className="icon-label">
-                            {PROFILE_ICONS.find(i => i.id === formData.icon)?.label}
-                          </span>
-                        </>
-                      );
-                    })()}
-                  </div>
-                )}
+    )
+    ), /*#__PURE__*/
 
-                {isSearching && (
-                  <div className="icon-search-results">
-                    {filteredIcons.length > 0 ? (
-                      <div className="icon-grid">
-                        {filteredIcons.map((iconOption) => {
-                          const IconComponent = iconOption.icon;
-                          return (
-                            <button
-                              key={iconOption.id}
-                              type="button"
-                              className={`icon-option ${formData.icon === iconOption.id ? 'selected' : ''}`}
-                              onClick={() => {
-                                handleIconSelect(iconOption.id);
-                                setIconSearch('');
-                                setIsSearching(false);
-                              }}
-                              title={iconOption.label}
-                            >
-                              <IconComponent className="icon" />
-                              <span className="icon-label">{iconOption.label}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className="no-results">
-                        No icons found matching "{iconSearch}"
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", null, "Profile Type Subtitle ", /*#__PURE__*/React.createElement("span", { className: "optional-text" }, "(Optional)")), /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      value: formData.subtitle,
+      onChange: (e) => setFormData({ ...formData, subtitle: e.target.value }),
+      placeholder: "e.g., Create a profile for students and graduates",
+      className: "form-input" }
+    ), /*#__PURE__*/
+    React.createElement("p", { className: "helper-text" }, "Add a brief description to explain the purpose of this profile type."
 
-          <div className="form-section">
-            <div className="section-header">
-              <h3>
-                <FiList className="text-xl" />
-                Profile Sections
-                <span className="section-counter">
-                  ({formData.sections.length} {formData.sections.length === 1 ? 'section' : 'sections'})
-                </span>
-              </h3>
-              <AdminButton
-                type="button"
-                variant="outline"
-                onClick={handleAddSection}
-                className="add-section-button"
-              >
-                <FiPlus /> Add Profile Section
-              </AdminButton>
-            </div>
+    )
+    ), /*#__PURE__*/
 
-            <p className="helper-text mb-4">
-              Divide your profile into sections to organize related information (e.g., Personal Details, Education History, Work Experience).
-            </p>
+    React.createElement("div", { className: "form-group mt-4" }, /*#__PURE__*/
+    React.createElement("label", null, "Profile Type Icon"), /*#__PURE__*/
+    React.createElement("div", { className: "icon-search-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "search-input-wrapper" }, /*#__PURE__*/
+    React.createElement(FiSearch, { className: "search-icon" }), /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      placeholder: "Search icons (e.g., user, business, education)...",
+      value: iconSearch,
+      onChange: (e) => {
+        setIconSearch(e.target.value);
+        setIsSearching(true);
+      },
+      className: "icon-search-input" }
+    ),
+    iconSearch && /*#__PURE__*/
+    React.createElement("button", {
+      type: "button",
+      onClick: () => {
+        setIconSearch('');
+        setIsSearching(false);
+      },
+      className: "clear-search" }, /*#__PURE__*/
 
-            <div className="sections-list">
-              {formData.sections.map((section, index) => (
-                <div key={index} className="section-item">
-                  <div className="section-inputs">
-                    <div className="form-group">
-                      <label>Profile Section Name</label>
-                      <input
-                        type="text"
-                        value={section.label}
-                        onChange={(e) => handleSectionChange(index, e.target.value)}
-                        placeholder="e.g., Personal Information, Education History, Work Experience"
-                        className={errors.sections?.[index]?.label ? 'error' : ''}
-                      />
-                      {errors.sections?.[index]?.label && (
-                        <span className="error-message">
-                          <FiAlertCircle />
-                          {errors.sections[index].label}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+    React.createElement(FiX, null)
+    )
 
-                  {formData.sections.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveSection(index)}
-                      className="remove-section-button"
-                      title="Remove profile section"
-                    >
-                      <FiTrash2 />
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+    ),
 
-          <div className="modal-footer">
-            <AdminButton
-              type="button"
-              variant="outline"
-              onClick={onClose}
-            >
-              Cancel
-            </AdminButton>
-            <AdminButton
-              type="submit"
-              variant="primary"
-            >
-              {initialData ? 'Save Profile Type' : 'Create Profile Type'}
-            </AdminButton>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+    !isSearching && formData.icon && /*#__PURE__*/
+    React.createElement("div", { className: "selected-icon-display" },
+    (() => {
+      const IconComponent = PROFILE_ICONS.find((i) => i.id === formData.icon)?.icon;
+      return IconComponent && /*#__PURE__*/
+      React.createElement(React.Fragment, null, /*#__PURE__*/
+      React.createElement(IconComponent, { className: "current-icon" }), /*#__PURE__*/
+      React.createElement("span", { className: "icon-label" },
+      PROFILE_ICONS.find((i) => i.id === formData.icon)?.label
+      )
+      );
+
+    })()
+    ),
+
+
+    isSearching && /*#__PURE__*/
+    React.createElement("div", { className: "icon-search-results" },
+    filteredIcons.length > 0 ? /*#__PURE__*/
+    React.createElement("div", { className: "icon-grid" },
+    filteredIcons.map((iconOption) => {
+      const IconComponent = iconOption.icon;
+      return (/*#__PURE__*/
+        React.createElement("button", {
+          key: iconOption.id,
+          type: "button",
+          className: `icon-option ${formData.icon === iconOption.id ? 'selected' : ''}`,
+          onClick: () => {
+            handleIconSelect(iconOption.id);
+            setIconSearch('');
+            setIsSearching(false);
+          },
+          title: iconOption.label }, /*#__PURE__*/
+
+        React.createElement(IconComponent, { className: "icon" }), /*#__PURE__*/
+        React.createElement("span", { className: "icon-label" }, iconOption.label)
+        ));
+
+    })
+    ) : /*#__PURE__*/
+
+    React.createElement("div", { className: "no-results" }, "No icons found matching \"",
+    iconSearch, "\""
+    )
+
+    )
+
+    )
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "form-section" }, /*#__PURE__*/
+    React.createElement("div", { className: "section-header" }, /*#__PURE__*/
+    React.createElement("h3", null, /*#__PURE__*/
+    React.createElement(FiList, { className: "text-xl" }), "Profile Sections", /*#__PURE__*/
+
+    React.createElement("span", { className: "section-counter" }, "(",
+    formData.sections.length, " ", formData.sections.length === 1 ? 'section' : 'sections', ")"
+    )
+    ), /*#__PURE__*/
+    React.createElement(AdminButton, {
+      type: "button",
+      variant: "outline",
+      onClick: handleAddSection,
+      className: "add-section-button" }, /*#__PURE__*/
+
+    React.createElement(FiPlus, null), " Add Profile Section"
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("p", { className: "helper-text mb-4" }, "Divide your profile into sections to organize related information (e.g., Personal Details, Education History, Work Experience)."
+
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "sections-list" },
+    formData.sections.map((section, index) => /*#__PURE__*/
+    React.createElement("div", { key: index, className: "section-item" }, /*#__PURE__*/
+    React.createElement("div", { className: "section-inputs" }, /*#__PURE__*/
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", null, "Profile Section Name"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      value: section.label,
+      onChange: (e) => handleSectionChange(index, e.target.value),
+      placeholder: "e.g., Personal Information, Education History, Work Experience",
+      className: errors.sections?.[index]?.label ? 'error' : '' }
+    ),
+    errors.sections?.[index]?.label && /*#__PURE__*/
+    React.createElement("span", { className: "error-message" }, /*#__PURE__*/
+    React.createElement(FiAlertCircle, null),
+    errors.sections[index].label
+    )
+
+    )
+    ),
+
+    formData.sections.length > 1 && /*#__PURE__*/
+    React.createElement("button", {
+      type: "button",
+      onClick: () => handleRemoveSection(index),
+      className: "remove-section-button",
+      title: "Remove profile section" }, /*#__PURE__*/
+
+    React.createElement(FiTrash2, null)
+    )
+
+    )
+    )
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "modal-footer" }, /*#__PURE__*/
+    React.createElement(AdminButton, {
+      type: "button",
+      variant: "outline",
+      onClick: onClose },
+    "Cancel"
+
+    ), /*#__PURE__*/
+    React.createElement(AdminButton, {
+      type: "submit",
+      variant: "primary" },
+
+    initialData ? 'Save Profile Type' : 'Create Profile Type'
+    )
+    )
+    )
+    )
+    ));
+
 };
 
-export default SectionModal; 
+export default SectionModal;

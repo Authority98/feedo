@@ -16,52 +16,52 @@ const SkeletonLoading = ({ variant = 'payment' }) => {
   // Return appropriate skeleton based on variant
   switch (variant) {
     case 'data-submission':
-      return <DataSubmissionSkeleton />;
+      return /*#__PURE__*/React.createElement(DataSubmissionSkeleton, null);
     case 'recent-activity':
-      return <RecentActivitySkeleton />;
+      return /*#__PURE__*/React.createElement(RecentActivitySkeleton, null);
     default:
-      return (
-        <div className="skeleton-container">
-          {/* Default payment skeleton content */}
-          <div className="skeleton-header">
-            <div className="skeleton-title-group">
-              <div className="skeleton-title"></div>
-              <div className="skeleton-subtitle"></div>
-            </div>
-            <div className="skeleton-button"></div>
-          </div>
+      return (/*#__PURE__*/
+        React.createElement("div", { className: "skeleton-container" }, /*#__PURE__*/
 
-          <div className="skeleton-cards">
-            {[1, 2].map((item) => (
-              <div key={item} className="skeleton-card">
-                <div className="skeleton-card-logo"></div>
-                <div className="skeleton-card-number"></div>
-                <div className="skeleton-card-details">
-                  <div className="skeleton-text-short"></div>
-                  <div className="skeleton-text-short"></div>
-                </div>
-                <div className="skeleton-card-actions">
-                  <div className="skeleton-button-small"></div>
-                  <div className="skeleton-button-icon"></div>
-                </div>
-              </div>
-            ))}
-          </div>
+        React.createElement("div", { className: "skeleton-header" }, /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-title-group" }, /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-title" }), /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-subtitle" })
+        ), /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-button" })
+        ), /*#__PURE__*/
 
-          <div className="skeleton-billing">
-            <div className="skeleton-billing-title"></div>
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="skeleton-billing-item">
-                <div className="skeleton-text-medium"></div>
-                <div className="skeleton-text-short"></div>
-                <div className="skeleton-text-short"></div>
-                <div className="skeleton-button-small"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
+        React.createElement("div", { className: "skeleton-cards" },
+        [1, 2].map((item) => /*#__PURE__*/
+        React.createElement("div", { key: item, className: "skeleton-card" }, /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-card-logo" }), /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-card-number" }), /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-card-details" }, /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-text-short" }), /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-text-short" })
+        ), /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-card-actions" }, /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-button-small" }), /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-button-icon" })
+        )
+        )
+        )
+        ), /*#__PURE__*/
+
+        React.createElement("div", { className: "skeleton-billing" }, /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-billing-title" }),
+        [1, 2, 3].map((item) => /*#__PURE__*/
+        React.createElement("div", { key: item, className: "skeleton-billing-item" }, /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-text-medium" }), /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-text-short" }), /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-text-short" }), /*#__PURE__*/
+        React.createElement("div", { className: "skeleton-button-small" })
+        )
+        )
+        )
+        ));
+
   }
 };
 
-export default SkeletonLoading; 
+export default SkeletonLoading;

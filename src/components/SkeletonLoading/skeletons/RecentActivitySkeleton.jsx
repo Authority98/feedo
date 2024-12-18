@@ -11,40 +11,40 @@
 import React from 'react';
 
 const RecentActivitySkeleton = () => {
-  return (
-    <div className="skeleton-container recent-activity">
-      {/* Header with title */}
-      <div className="skeleton-activity-header">
-        <div className="skeleton-activity-title"></div>
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "skeleton-container recent-activity" }, /*#__PURE__*/
 
-      {/* Activity items with staggered animation */}
-      <div className="skeleton-activity-list">
-        {[1, 2, 3].map((item) => (
-          <div 
-            key={item} 
-            className="skeleton-activity-item"
-            style={{ animationDelay: `${item * 150}ms` }}
-          >
-            {/* Icon and status indicator */}
-            <div className="skeleton-activity-icon-wrapper">
-              <div className="skeleton-activity-icon"></div>
-              <div className="skeleton-activity-status"></div>
-            </div>
+    React.createElement("div", { className: "skeleton-activity-header" }, /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-activity-title" })
+    ), /*#__PURE__*/
 
-            {/* Content area */}
-            <div className="skeleton-activity-content">
-              <div className="skeleton-activity-text">
-                <div className="skeleton-activity-type"></div>
-                <div className="skeleton-activity-description"></div>
-              </div>
-              <div className="skeleton-activity-button"></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+
+    React.createElement("div", { className: "skeleton-activity-list" },
+    [1, 2, 3].map((item) => /*#__PURE__*/
+    React.createElement("div", {
+      key: item,
+      className: "skeleton-activity-item",
+      style: { animationDelay: `${item * 150}ms` } }, /*#__PURE__*/
+
+
+    React.createElement("div", { className: "skeleton-activity-icon-wrapper" }, /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-activity-icon" }), /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-activity-status" })
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "skeleton-activity-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-activity-text" }, /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-activity-type" }), /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-activity-description" })
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-activity-button" })
+    )
+    )
+    )
+    )
+    ));
+
 };
 
-export default RecentActivitySkeleton; 
+export default RecentActivitySkeleton;

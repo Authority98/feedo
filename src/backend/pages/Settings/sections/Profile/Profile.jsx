@@ -14,15 +14,15 @@ import './Profile.css';
 import { FALLBACK_PROFILE_IMAGE, getEmojiAvatar } from '../../../../../auth/profileData';
 import { storage, auth } from '../../../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useAuth } from '../../../../../auth/AuthContext';  // Import useAuth
+import { useAuth } from '../../../../../auth/AuthContext'; // Import useAuth
 import { applicationOperations } from '../../../../../applications/applicationManager';
 import { useToast } from '../../../../../components/Toast/ToastContext';
 import Button from '../../../../../components/Button/Button';
 import EnhanceWithAI from '../../../../../components/EnhanceWithAI/EnhanceWithAI';
 import { useProfileProgress } from '../../../../../hooks/useProfileProgress';
 
-const TYPE_COLORS = ['type-1', 'type-2', 'type-3', 'type-4', 'type-5', 
-                    'type-6', 'type-7', 'type-8', 'type-9', 'type-10'];
+const TYPE_COLORS = ['type-1', 'type-2', 'type-3', 'type-4', 'type-5',
+'type-6', 'type-7', 'type-8', 'type-9', 'type-10'];
 
 const uploadSpinnerStyles = {
   width: '24px',
@@ -31,7 +31,7 @@ const uploadSpinnerStyles = {
   borderTop: '2px solid white',
   borderRadius: '50%',
   animation: 'uploadSpin 1s linear infinite',
-  marginBottom: '8px',
+  marginBottom: '8px'
 };
 
 // Add keyframes style
@@ -249,55 +249,55 @@ const Profile = ({ activeSection, onSectionChange }) => {
   const { progress, isLoading: progressLoading } = useProfileProgress();
 
   const menuItems = [
-    { id: 'account', icon: FiUser, label: 'Account' },
-    { id: 'payment', icon: FiCreditCard, label: 'Payment' },
-    { id: 'notification', icon: FiBell, label: 'Notification' },
-    { id: 'two-step', icon: FiShield, label: 'Two-Step Authentication' }
-  ];
+  { id: 'account', icon: FiUser, label: 'Account' },
+  { id: 'payment', icon: FiCreditCard, label: 'Payment' },
+  { id: 'notification', icon: FiBell, label: 'Notification' },
+  { id: 'two-step', icon: FiShield, label: 'Two-Step Authentication' }];
+
 
   const getProfileImage = () => {
     if (authLoading) return FALLBACK_PROFILE_IMAGE;
-    
-    console.log('User data in getProfileImage:', {
-      provider: user?.profile?.provider,
-      photoURL: user?.profile?.photoURL,
-      authUid: user?.profile?.authUid,
-      authUser: auth.currentUser,
-      user: user
-    });
-    
+
+
+
+
+
+
+
+
+
     // For Google users, try profile photoURL first, then auth photoURL
     if (user?.profile?.provider === 'google.com') {
       if (user.profile?.photoURL) {
-        console.log('Returning Google profile photo URL:', user.profile.photoURL);
+
         return user.profile.photoURL;
       }
       if (auth.currentUser?.photoURL) {
-        console.log('Returning Google auth photo URL:', auth.currentUser.photoURL);
+
         return auth.currentUser.photoURL;
       }
     }
-    
+
     // For users with custom uploaded photos
     if (user?.profile?.photoURL) {
-      console.log('Returning custom photo URL:', user.profile.photoURL);
+
       return user.profile.photoURL;
     }
-    
+
     // Try auth user's photo URL as fallback
     if (auth.currentUser?.photoURL) {
-      console.log('Returning auth user photo URL:', auth.currentUser.photoURL);
+
       return auth.currentUser.photoURL;
     }
-    
+
     // Fallback to emoji avatar if we have authUid
     if (user?.profile?.authUid) {
       const emojiAvatar = getEmojiAvatar(user.profile.authUid);
-      console.log('Returning emoji avatar:', emojiAvatar);
+
       return emojiAvatar;
     }
-    
-    console.log('Returning fallback image');
+
+
     return FALLBACK_PROFILE_IMAGE;
   };
 
@@ -322,14 +322,14 @@ const Profile = ({ activeSection, onSectionChange }) => {
     try {
       setIsUploading(true);
       setImageLoaded(false);
-      
+
       // Create a unique filename
       const fileExtension = file.name.split('.').pop();
       const uniqueFileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExtension}`;
-      
+
       // Create storage reference with unique filename
       const storageRef = ref(storage, `profile-photos/${user.profile.authUid}/${uniqueFileName}`);
-      
+
       // Upload with metadata
       const metadata = {
         contentType: file.type,
@@ -338,11 +338,11 @@ const Profile = ({ activeSection, onSectionChange }) => {
           originalName: file.name
         }
       };
-      
+
       // Upload the file
       await uploadBytes(storageRef, file, metadata);
       const photoURL = await getDownloadURL(storageRef);
-      
+
       // Update user profile
       await updateProfile({
         profile: {
@@ -353,7 +353,7 @@ const Profile = ({ activeSection, onSectionChange }) => {
 
       // Force a refresh of the user data to get the new photo URL
       await refreshUser();
-      
+
       // Create a promise that resolves when the new image loads
       const imageLoadPromise = new Promise((resolve, reject) => {
         const img = new Image();
@@ -364,11 +364,11 @@ const Profile = ({ activeSection, onSectionChange }) => {
 
       // Wait for the image to load before showing success message
       await imageLoadPromise;
-      
+
       // Reset states and show success message
       setImageLoaded(true);
       showToast('Profile photo updated successfully!', 'success');
-      
+
     } catch (error) {
       console.error('Error uploading photo:', error);
       showToast('Failed to update profile photo. Please try again.', 'error');
@@ -385,35 +385,35 @@ const Profile = ({ activeSection, onSectionChange }) => {
   // Helper function to format profile type
   const formatProfileType = (type) => {
     if (!type) return '';
-    
+
     // First, handle different delimiters (camelCase, snake_case, hyphen-case)
-    const words = type
-      .split(/(?=[A-Z])|[-_]/) // Split on capital letters, hyphens, or underscores
-      .map(word => 
-        word
-          .toLowerCase()
-          // Capitalize first letter of each word
-          .replace(/^./, str => str.toUpperCase())
-      )
-      .join(' ');
-    
+    const words = type.
+    split(/(?=[A-Z])|[-_]/) // Split on capital letters, hyphens, or underscores
+    .map((word) =>
+    word.
+    toLowerCase()
+    // Capitalize first letter of each word
+    .replace(/^./, (str) => str.toUpperCase())
+    ).
+    join(' ');
+
     // Get a consistent random color based on the type string
     const colorIndex = type.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % TYPE_COLORS.length;
     const colorClass = TYPE_COLORS[colorIndex];
-    
+
     // Use the predefined class if it exists, otherwise use the random color
-    const finalColorClass = ['jobseeker', 'entrepreneur', 'student', 'company', 'pending']
-      .includes(type.toLowerCase()) ? type.toLowerCase() : colorClass;
-    
-    return (
-      <span className={`profile-status ${finalColorClass}`}>
-        {words}
-      </span>
-    );
+    const finalColorClass = ['jobseeker', 'entrepreneur', 'student', 'company', 'pending'].
+    includes(type.toLowerCase()) ? type.toLowerCase() : colorClass;
+
+    return (/*#__PURE__*/
+      React.createElement("span", { className: `profile-status ${finalColorClass}` },
+      words
+      ));
+
   };
 
   // Add this console.log to debug
-  console.log('User data in Profile:', user);
+
 
   // Add useEffect to fetch real stats
   useEffect(() => {
@@ -438,147 +438,147 @@ const Profile = ({ activeSection, onSectionChange }) => {
     }
   }, [user, progress, progressLoading]);
 
-  return (
-    <div className="profile-section">
-      <h2 className="section-title">Profile</h2>
-      
-      <div className="profile-content">
-        {authLoading ? (
-          <div className="profile-loading">
-            <div className="skeleton skeleton-photo"></div>
-            <div className="skeleton skeleton-text name"></div>
-            <div className="skeleton skeleton-text email"></div>
-            <div className="skeleton skeleton-text type"></div>
-          </div>
-        ) : (
-          <>
-            <div 
-              className="profile-photo-container"
-              onMouseEnter={() => !isSelectingFile && setIsHovered(true)}
-              onMouseLeave={() => !isSelectingFile && setIsHovered(false)}
-              title={user?.profile?.provider === 'google.com' ? "Profile photo cannot be changed for Google users" : ""}
-            >
-              <div className={`profile-photo ${isHovered || isSelectingFile ? 'hovered' : ''}`}>
-                <div className="photo-wrapper">
-                  <img 
-                    src={getProfileImage()}
-                    alt="Profile"
-                    className={`photo ${isUploading ? 'uploading' : ''} ${imageLoaded ? 'loaded' : ''}`}
-                    onLoad={() => setImageLoaded(true)}
-                    onError={(e) => {
-                      console.log('Image load error. Trying fallbacks...', {
-                        provider: user?.profile?.provider,
-                        photoURL: user?.profile?.photoURL,
-                        authUser: auth.currentUser
-                      });
-                      
-                      // Try auth user's photo URL first
-                      if (auth.currentUser?.photoURL) {
-                        e.target.src = auth.currentUser.photoURL;
-                        return;
-                      }
-                      
-                      // Then try emoji avatar
-                      if (user?.profile?.authUid) {
-                        e.target.src = getEmojiAvatar(user.profile.authUid);
-                        return;
-                      }
-                      
-                      // Finally fallback to default image
-                      e.target.src = FALLBACK_PROFILE_IMAGE;
-                      setImageLoaded(true);
-                    }}
-                  />
-                  {!imageLoaded && (
-                    <div className="photo-placeholder">
-                      <FiUser className="placeholder-icon" />
-                    </div>
-                  )}
-                  {isUploading && (
-                    <div className="photo-overlay" style={{ opacity: 1 }}>
-                      <div className="upload-spinner" style={uploadSpinnerStyles}></div>
-                      <span className="overlay-text">Uploading...</span>
-                    </div>
-                  )}
-                  {(isHovered || isSelectingFile) && !isUploading && user?.profile?.provider !== 'google.com' && (
-                    <label 
-                      className="photo-overlay" 
-                      htmlFor="photo-upload"
-                      onClick={() => setIsSelectingFile(true)}
-                    >
-                      <input
-                        type="file"
-                        id="photo-upload"
-                        accept="image/*"
-                        onChange={handlePhotoUpload}
-                        className="hidden"
-                      />
-                      <FiCamera className="overlay-icon" />
-                      <span className="overlay-text">Change Photo</span>
-                    </label>
-                  )}
-                  {(isHovered || isSelectingFile) && user?.profile?.provider === 'google.com' && (
-                    <div className="photo-overlay google-user">
-                      <span className="overlay-text">
-                        Cannot change Google profile photo
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="status-indicator">
-                  <span className="status-dot"></span>
-                </div>
-              </div>
-            </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "profile-section" }, /*#__PURE__*/
+    React.createElement("h2", { className: "section-title" }, "Profile"), /*#__PURE__*/
 
-            <div className="profile-info">
-              <h3 className="profile-name">
-                {user?.profile?.firstName && user?.profile?.lastName ? 
-                  `${user.profile.firstName} ${user.profile.lastName}` : 
-                  user?.metadata?.firstName && user?.metadata?.lastName ?
-                  `${user.metadata.firstName} ${user.metadata.lastName}` :
-                  'User'
-                }
-                {user?.profile?.userType && (
-                  formatProfileType(user.profile.userType)
-                )}
-              </h3>
-              <p className="profile-email">{user?.profile?.email}</p>
-              
-              <div className="profile-stats">
-                <div className="stat-item">
-                  <span className="stat-value">
-                    <AnimatedNumber value={stats.applications} />
-                  </span>
-                  <span className="stat-label">Applications</span>
-                </div>
-                <div className="stat-divider"></div>
-                <div className="stat-item">
-                  <span className="stat-value">
-                    <AnimatedNumber value={stats.profileCompletion} />%
-                  </span>
-                  <span className="stat-label">Profile</span>
-                </div>
-              </div>
-            </div>
+    React.createElement("div", { className: "profile-content" },
+    authLoading ? /*#__PURE__*/
+    React.createElement("div", { className: "profile-loading" }, /*#__PURE__*/
+    React.createElement("div", { className: "skeleton skeleton-photo" }), /*#__PURE__*/
+    React.createElement("div", { className: "skeleton skeleton-text name" }), /*#__PURE__*/
+    React.createElement("div", { className: "skeleton skeleton-text email" }), /*#__PURE__*/
+    React.createElement("div", { className: "skeleton skeleton-text type" })
+    ) : /*#__PURE__*/
 
-            <nav className="profile-nav">
-              {menuItems.map(item => (
-                <button
-                  key={item.id}
-                  className={`nav-item ${activeSection === item.id ? 'active' : ''}`}
-                  onClick={() => onSectionChange(item.id)}
-                >
-                  <item.icon className="nav-icon" />
-                  <span>{item.label}</span>
-                </button>
-              ))}
-            </nav>
-          </>
-        )}
-      </div>
-    </div>
-  );
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement("div", {
+      className: "profile-photo-container",
+      onMouseEnter: () => !isSelectingFile && setIsHovered(true),
+      onMouseLeave: () => !isSelectingFile && setIsHovered(false),
+      title: user?.profile?.provider === 'google.com' ? "Profile photo cannot be changed for Google users" : "" }, /*#__PURE__*/
+
+    React.createElement("div", { className: `profile-photo ${isHovered || isSelectingFile ? 'hovered' : ''}` }, /*#__PURE__*/
+    React.createElement("div", { className: "photo-wrapper" }, /*#__PURE__*/
+    React.createElement("img", {
+      src: getProfileImage(),
+      alt: "Profile",
+      className: `photo ${isUploading ? 'uploading' : ''} ${imageLoaded ? 'loaded' : ''}`,
+      onLoad: () => setImageLoaded(true),
+      onError: (e) => {
+
+
+
+
+
+
+        // Try auth user's photo URL first
+        if (auth.currentUser?.photoURL) {
+          e.target.src = auth.currentUser.photoURL;
+          return;
+        }
+
+        // Then try emoji avatar
+        if (user?.profile?.authUid) {
+          e.target.src = getEmojiAvatar(user.profile.authUid);
+          return;
+        }
+
+        // Finally fallback to default image
+        e.target.src = FALLBACK_PROFILE_IMAGE;
+        setImageLoaded(true);
+      } }
+    ),
+    !imageLoaded && /*#__PURE__*/
+    React.createElement("div", { className: "photo-placeholder" }, /*#__PURE__*/
+    React.createElement(FiUser, { className: "placeholder-icon" })
+    ),
+
+    isUploading && /*#__PURE__*/
+    React.createElement("div", { className: "photo-overlay", style: { opacity: 1 } }, /*#__PURE__*/
+    React.createElement("div", { className: "upload-spinner", style: uploadSpinnerStyles }), /*#__PURE__*/
+    React.createElement("span", { className: "overlay-text" }, "Uploading...")
+    ),
+
+    (isHovered || isSelectingFile) && !isUploading && user?.profile?.provider !== 'google.com' && /*#__PURE__*/
+    React.createElement("label", {
+      className: "photo-overlay",
+      htmlFor: "photo-upload",
+      onClick: () => setIsSelectingFile(true) }, /*#__PURE__*/
+
+    React.createElement("input", {
+      type: "file",
+      id: "photo-upload",
+      accept: "image/*",
+      onChange: handlePhotoUpload,
+      className: "hidden" }
+    ), /*#__PURE__*/
+    React.createElement(FiCamera, { className: "overlay-icon" }), /*#__PURE__*/
+    React.createElement("span", { className: "overlay-text" }, "Change Photo")
+    ),
+
+    (isHovered || isSelectingFile) && user?.profile?.provider === 'google.com' && /*#__PURE__*/
+    React.createElement("div", { className: "photo-overlay google-user" }, /*#__PURE__*/
+    React.createElement("span", { className: "overlay-text" }, "Cannot change Google profile photo"
+
+    )
+    )
+
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "status-indicator" }, /*#__PURE__*/
+    React.createElement("span", { className: "status-dot" })
+    )
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "profile-info" }, /*#__PURE__*/
+    React.createElement("h3", { className: "profile-name" },
+    user?.profile?.firstName && user?.profile?.lastName ?
+    `${user.profile.firstName} ${user.profile.lastName}` :
+    user?.metadata?.firstName && user?.metadata?.lastName ?
+    `${user.metadata.firstName} ${user.metadata.lastName}` :
+    'User',
+
+    user?.profile?.userType &&
+    formatProfileType(user.profile.userType)
+
+    ), /*#__PURE__*/
+    React.createElement("p", { className: "profile-email" }, user?.profile?.email), /*#__PURE__*/
+
+    React.createElement("div", { className: "profile-stats" }, /*#__PURE__*/
+    React.createElement("div", { className: "stat-item" }, /*#__PURE__*/
+    React.createElement("span", { className: "stat-value" }, /*#__PURE__*/
+    React.createElement(AnimatedNumber, { value: stats.applications })
+    ), /*#__PURE__*/
+    React.createElement("span", { className: "stat-label" }, "Applications")
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "stat-divider" }), /*#__PURE__*/
+    React.createElement("div", { className: "stat-item" }, /*#__PURE__*/
+    React.createElement("span", { className: "stat-value" }, /*#__PURE__*/
+    React.createElement(AnimatedNumber, { value: stats.profileCompletion }), "%"
+    ), /*#__PURE__*/
+    React.createElement("span", { className: "stat-label" }, "Profile")
+    )
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("nav", { className: "profile-nav" },
+    menuItems.map((item) => /*#__PURE__*/
+    React.createElement("button", {
+      key: item.id,
+      className: `nav-item ${activeSection === item.id ? 'active' : ''}`,
+      onClick: () => onSectionChange(item.id) }, /*#__PURE__*/
+
+    React.createElement(item.icon, { className: "nav-icon" }), /*#__PURE__*/
+    React.createElement("span", null, item.label)
+    )
+    )
+    )
+    )
+
+    )
+    ));
+
 };
 
 export default Profile;

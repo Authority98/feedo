@@ -67,7 +67,7 @@ const Account = () => {
       await updateDoc(userRef, {
         'metadata.passwordLastChanged': serverTimestamp()
       });
-      
+
       await refreshUser();
       setShowChangePassword(false);
     } catch (error) {
@@ -76,22 +76,22 @@ const Account = () => {
   };
 
   if (authLoading) {
-    return (
-      <div className="account-section">
-        <div className="loading-skeleton">
-          <div className="skeleton skeleton-title"></div>
-          <div className="skeleton skeleton-form"></div>
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "account-section" }, /*#__PURE__*/
+      React.createElement("div", { className: "loading-skeleton" }, /*#__PURE__*/
+      React.createElement("div", { className: "skeleton skeleton-title" }), /*#__PURE__*/
+      React.createElement("div", { className: "skeleton skeleton-form" })
+      )
+      ));
+
   }
 
   // Format the last changed date with time
   const formatLastChanged = (timestamp) => {
     if (!timestamp) return 'Never';
-    
+
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    
+
     const dateOptions = {
       year: 'numeric',
       month: 'long',
@@ -101,86 +101,86 @@ const Account = () => {
       hour12: true
     };
 
-    return date.toLocaleString(undefined, dateOptions)
-      .replace(/\b(am|pm)\b/i, match => match.toUpperCase());
+    return date.toLocaleString(undefined, dateOptions).
+    replace(/\b(am|pm)\b/i, (match) => match.toUpperCase());
   };
 
-  return (
-    <div className="account-section">
-      <h2 className="section-title">Account Settings</h2>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "account-section" }, /*#__PURE__*/
+    React.createElement("h2", { className: "section-title" }, "Account Settings"), /*#__PURE__*/
 
-      <div className="account-form">
-        {/* Personal Information Section */}
-        <div className="personal-info-section mb-8">
-          <h3 className="text-lg font-medium text-gray-800 mb-4">Personal Information</h3>
-          <PersonalInfoForm 
-            user={user}
-            onSave={handlePersonalInfoUpdate}
-            isGoogleUser={isGoogleUser}
-          />
-        </div>
+    React.createElement("div", { className: "account-form" }, /*#__PURE__*/
 
-        {/* Error Message */}
-        {error && (
-          <div className="text-red-500 mt-4">
-            {error}
-          </div>
-        )}
+    React.createElement("div", { className: "personal-info-section mb-8" }, /*#__PURE__*/
+    React.createElement("h3", { className: "text-lg font-medium text-gray-800 mb-4" }, "Personal Information"), /*#__PURE__*/
+    React.createElement(PersonalInfoForm, {
+      user: user,
+      onSave: handlePersonalInfoUpdate,
+      isGoogleUser: isGoogleUser }
+    )
+    ),
 
-        {/* Password Section - Only show for email users */}
-        {!isGoogleUser && (
-          <div className="password-section">
-            <h3>Password</h3>
-            <p className="last-changed">
-              Last changed {formatLastChanged(user?.metadata?.passwordLastChanged)}
-            </p>
-            <button 
-              type="button" 
-              className="change-password-btn"
-              onClick={() => setShowChangePassword(true)}
-            >
-              Change Password
-            </button>
-          </div>
-        )}
 
-        {/* Delete Account Section */}
-        <div className="delete-account-section">
-          <div className="warning-tag">
-            <FiAlertTriangle />
-            <span>Caution</span>
-          </div>
-          <h3>Delete Account</h3>
-          <p className="delete-description">
-            Once you delete your account, there is no going back. Please be certain.
-          </p>
-          <button 
-            type="button" 
-            className="delete-btn"
-            onClick={() => setShowDeleteAccount(true)}
-          >
-            Delete My Account
-          </button>
-        </div>
-      </div>
+    error && /*#__PURE__*/
+    React.createElement("div", { className: "text-red-500 mt-4" },
+    error
+    ),
 
-      {/* Change Password Modal - Only show for non-Google users */}
-      {showChangePassword && !isGoogleUser && (
-        <ChangePassword 
-          isOpen={showChangePassword}
-          onClose={() => setShowChangePassword(false)}
-          onPasswordChanged={handlePasswordChanged}
-        />
-      )}
 
-      {/* Delete Account Modal */}
-      <DeleteAccount 
-        isOpen={showDeleteAccount}
-        onClose={() => setShowDeleteAccount(false)}
-        onConfirmDelete={handleDeleteAccount}
-      />
-    </div>
-  );
+
+    !isGoogleUser && /*#__PURE__*/
+    React.createElement("div", { className: "password-section" }, /*#__PURE__*/
+    React.createElement("h3", null, "Password"), /*#__PURE__*/
+    React.createElement("p", { className: "last-changed" }, "Last changed ",
+    formatLastChanged(user?.metadata?.passwordLastChanged)
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      type: "button",
+      className: "change-password-btn",
+      onClick: () => setShowChangePassword(true) },
+    "Change Password"
+
+    )
+    ), /*#__PURE__*/
+
+
+
+    React.createElement("div", { className: "delete-account-section" }, /*#__PURE__*/
+    React.createElement("div", { className: "warning-tag" }, /*#__PURE__*/
+    React.createElement(FiAlertTriangle, null), /*#__PURE__*/
+    React.createElement("span", null, "Caution")
+    ), /*#__PURE__*/
+    React.createElement("h3", null, "Delete Account"), /*#__PURE__*/
+    React.createElement("p", { className: "delete-description" }, "Once you delete your account, there is no going back. Please be certain."
+
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      type: "button",
+      className: "delete-btn",
+      onClick: () => setShowDeleteAccount(true) },
+    "Delete My Account"
+
+    )
+    )
+    ),
+
+
+    showChangePassword && !isGoogleUser && /*#__PURE__*/
+    React.createElement(ChangePassword, {
+      isOpen: showChangePassword,
+      onClose: () => setShowChangePassword(false),
+      onPasswordChanged: handlePasswordChanged }
+    ), /*#__PURE__*/
+
+
+
+    React.createElement(DeleteAccount, {
+      isOpen: showDeleteAccount,
+      onClose: () => setShowDeleteAccount(false),
+      onConfirmDelete: handleDeleteAccount }
+    )
+    ));
+
 };
 
 export default Account;

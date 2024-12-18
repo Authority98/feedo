@@ -9,7 +9,7 @@ export const tokenUsageService = {
     try {
       const userTokensRef = doc(db, 'tokenUsage', userId);
       const snapshot = await getDoc(userTokensRef);
-      
+
       if (!snapshot.exists()) {
         // Initialize token usage if it doesn't exist
         const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
@@ -23,7 +23,7 @@ export const tokenUsageService = {
         await setDoc(userTokensRef, initialData);
         return initialData;
       }
-      
+
       return snapshot.data();
     } catch (error) {
       console.error('Error getting token usage:', error);
@@ -35,7 +35,7 @@ export const tokenUsageService = {
     try {
       const currentMonth = new Date().toISOString().slice(0, 7);
       const userTokensRef = doc(db, 'tokenUsage', userId);
-      
+
       // Update the token usage
       await updateDoc(userTokensRef, {
         totalTokensUsed: increment(tokensUsed),
@@ -53,20 +53,20 @@ export const tokenUsageService = {
       const currentMonth = new Date().toISOString().slice(0, 7);
       const usage = await this.getUserTokenUsage(userId);
       const monthlyUsage = usage.monthlyUsage?.[currentMonth] || 0;
-      
+
       const limit = userTier === 'pro' ? PRO_TIER_LIMIT : FREE_TIER_LIMIT;
       const remaining = limit - monthlyUsage;
-      
+
       return {
         isAvailable: remaining > 0,
         remaining,
         limit,
         monthlyUsage,
-        percentageUsed: Math.round((monthlyUsage / limit) * 100)
+        percentageUsed: Math.round(monthlyUsage / limit * 100)
       };
     } catch (error) {
       console.error('Error checking token availability:', error);
       throw error;
     }
   }
-}; 
+};

@@ -15,16 +15,16 @@ export const createCustomUserId = (firstName, lastName, randomSuffix = true) => 
   // Convert to lowercase and remove special characters
   const cleanFirst = firstName.toLowerCase().replace(/[^a-z0-9]/g, '');
   const cleanLast = lastName.toLowerCase().replace(/[^a-z0-9]/g, '');
-  
+
   // Create base ID
   let customId = `${cleanFirst}-${cleanLast}`;
-  
+
   // Add random suffix for uniqueness if requested
   if (randomSuffix) {
     const timestamp = Date.now().toString().slice(-4); // Last 4 digits of timestamp
     const random = Math.random().toString(36).substring(2, 6); // 4 random alphanumeric characters
     customId += `-${timestamp}${random}`;
   }
-  
+
   return customId;
 };

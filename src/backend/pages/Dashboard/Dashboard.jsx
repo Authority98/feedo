@@ -21,18 +21,18 @@ import DataOverview from './sections/DataOverview/DataOverview';
 import RecentActivity from './sections/RecentActivity/RecentActivity';
 
 const Dashboard = () => {
-  return (
-    <div className="dashboard-page">
-      {/* Data overview section - Shows key metrics and statistics */}
-      <DataOverview />
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "dashboard-page" }, /*#__PURE__*/
 
-      {/* Recent activity section - Shows user's latest actions */}
-      <RecentActivity />
+    React.createElement(DataOverview, null), /*#__PURE__*/
 
-      {/* Data submission section - Handles user data input */}
-      <DataSubmission />
-    </div>
-  );
+
+    React.createElement(RecentActivity, null), /*#__PURE__*/
+
+
+    React.createElement(DataSubmission, null)
+    ));
+
 };
 
 export default Dashboard;

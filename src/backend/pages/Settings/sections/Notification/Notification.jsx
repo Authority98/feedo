@@ -6,10 +6,10 @@
  */
 
 import React, { useState } from 'react';
-import { 
-  FiBell, 
-  FiMail
-} from 'react-icons/fi';
+import {
+  FiBell,
+  FiMail } from
+'react-icons/fi';
 import './Notification.css';
 
 const Notification = () => {
@@ -19,68 +19,68 @@ const Notification = () => {
   });
 
   const handleToggle = (category) => {
-    setNotifications(prev => ({
+    setNotifications((prev) => ({
       ...prev,
       [category]: !prev[category]
     }));
   };
 
-  const NotificationToggle = ({ enabled, onClick }) => (
-    <button 
-      onClick={onClick}
-      className={`toggle-button ${enabled ? 'active' : ''}`}
-      aria-checked={enabled}
-      role="switch"
-    />
+  const NotificationToggle = ({ enabled, onClick }) => /*#__PURE__*/
+  React.createElement("button", {
+    onClick: onClick,
+    className: `toggle-button ${enabled ? 'active' : ''}`,
+    "aria-checked": enabled,
+    role: "switch" }
   );
 
-  return (
-    <div className="notification-section">
-      <h2 className="section-title">
-        <FiBell className="section-icon" />
-        Notification Settings
-      </h2>
 
-      {/* General Notification Settings */}
-      <div className="notification-group">
-        <h3 className="subsection-title">General Settings</h3>
-        
-        <div className="settings-list">
-          <div className="setting-item">
-            <div className="setting-info">
-              <div className="setting-icon">
-                <FiMail />
-              </div>
-              <div className="setting-details">
-                <h4>Email Notifications</h4>
-                <p>Receive notifications via email</p>
-              </div>
-            </div>
-            <NotificationToggle 
-              enabled={notifications.emailNotifications}
-              onClick={() => handleToggle('emailNotifications')}
-            />
-          </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "notification-section" }, /*#__PURE__*/
+    React.createElement("h2", { className: "section-title" }, /*#__PURE__*/
+    React.createElement(FiBell, { className: "section-icon" }), "Notification Settings"
 
-          <div className="setting-item">
-            <div className="setting-info">
-              <div className="setting-icon">
-                <FiBell />
-              </div>
-              <div className="setting-details">
-                <h4>Push Notifications</h4>
-                <p>Receive notifications in your browser</p>
-              </div>
-            </div>
-            <NotificationToggle 
-              enabled={notifications.pushNotifications}
-              onClick={() => handleToggle('pushNotifications')}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "notification-group" }, /*#__PURE__*/
+    React.createElement("h3", { className: "subsection-title" }, "General Settings"), /*#__PURE__*/
+
+    React.createElement("div", { className: "settings-list" }, /*#__PURE__*/
+    React.createElement("div", { className: "setting-item" }, /*#__PURE__*/
+    React.createElement("div", { className: "setting-info" }, /*#__PURE__*/
+    React.createElement("div", { className: "setting-icon" }, /*#__PURE__*/
+    React.createElement(FiMail, null)
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "setting-details" }, /*#__PURE__*/
+    React.createElement("h4", null, "Email Notifications"), /*#__PURE__*/
+    React.createElement("p", null, "Receive notifications via email")
+    )
+    ), /*#__PURE__*/
+    React.createElement(NotificationToggle, {
+      enabled: notifications.emailNotifications,
+      onClick: () => handleToggle('emailNotifications') }
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "setting-item" }, /*#__PURE__*/
+    React.createElement("div", { className: "setting-info" }, /*#__PURE__*/
+    React.createElement("div", { className: "setting-icon" }, /*#__PURE__*/
+    React.createElement(FiBell, null)
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "setting-details" }, /*#__PURE__*/
+    React.createElement("h4", null, "Push Notifications"), /*#__PURE__*/
+    React.createElement("p", null, "Receive notifications in your browser")
+    )
+    ), /*#__PURE__*/
+    React.createElement(NotificationToggle, {
+      enabled: notifications.pushNotifications,
+      onClick: () => handleToggle('pushNotifications') }
+    )
+    )
+    )
+    )
+    ));
+
 };
 
-export default Notification; 
+export default Notification;

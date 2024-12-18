@@ -17,4 +17,4 @@ export const stripeConfig = {
   secretKey: STRIPE_SECRET_KEY,
   apiVersion: STRIPE_API_VERSION,
   isConfigured: Boolean(STRIPE_PUBLIC_KEY && STRIPE_SECRET_KEY)
-}; 
+};

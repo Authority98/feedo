@@ -8,10 +8,10 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { 
-  FiCreditCard, FiDollarSign, FiClock, FiDownload, 
-  FiPlus, FiTrash2, FiCheck
-} from 'react-icons/fi';
+import {
+  FiCreditCard, FiDollarSign, FiClock, FiDownload,
+  FiPlus, FiTrash2, FiCheck } from
+'react-icons/fi';
 import './Payment.css';
 import SavedCard from '../../../../../components/SavedCard/SavedCard';
 import BillingHistory from '../../../../../components/BillingHistory/BillingHistory';
@@ -46,22 +46,22 @@ const acceptedCardImages = {
 };
 
 // Add this new component at the top level of the file
-const EmptyPaymentMethods = () => (
-  <div className="empty-payment-methods">
-    <FiCreditCard className="empty-icon" />
-    <p className="empty-text">No payment methods added</p>
-    <p className="empty-subtext">Add a payment method to get started</p>
-  </div>
+const EmptyPaymentMethods = () => /*#__PURE__*/
+React.createElement("div", { className: "empty-payment-methods" }, /*#__PURE__*/
+React.createElement(FiCreditCard, { className: "empty-icon" }), /*#__PURE__*/
+React.createElement("p", { className: "empty-text" }, "No payment methods added"), /*#__PURE__*/
+React.createElement("p", { className: "empty-subtext" }, "Add a payment method to get started")
 );
 
+
 const getCardImage = (type) => {
-  console.log('Card type:', type);
-  
+
+
   const cardType = type?.toLowerCase() || 'default';
-  
-  console.log('Processed card type:', cardType);
-  console.log('Image URL:', cardImages[cardType] || cardImages.default);
-  
+
+
+
+
   return cardImages[cardType] || cardImages.default;
 };
 
@@ -118,10 +118,10 @@ const Payment = () => {
       }
 
       const customer = await stripeApi.getOrCreateCustomer(
-        userId, 
+        userId,
         userEmail
       );
-      
+
       if (!customer || !customer.id) {
         throw new Error('Failed to create payment profile');
       }
@@ -136,18 +136,18 @@ const Payment = () => {
   // Fetch payment methods
   const fetchPaymentMethods = async (custId) => {
     try {
-      console.log('Fetching payment methods for customer:', custId);
+
       const paymentMethods = await stripeApi.listPaymentMethods(custId);
-      console.log('Raw payment methods:', paymentMethods);
-      
+
+
       // Get the default payment method from Stripe
       const customer = await stripeApi.getCustomer(custId);
       const defaultPaymentMethodId = customer.invoice_settings?.default_payment_method?.id;
-      
+
       // Format cards and mark the default one
-      const formattedCards = paymentMethods.map(pm => {
+      const formattedCards = paymentMethods.map((pm) => {
         const formattedCard = formatPaymentMethod(pm, defaultPaymentMethodId);
-        console.log('Formatted card:', formattedCard);
+
         return formattedCard;
       });
 
@@ -162,12 +162,12 @@ const Payment = () => {
   const fetchBillingHistory = async (custId) => {
     try {
       setLoading(true);
-      console.log('Fetching billing history for customer:', custId); // Debug log
+      // Debug log
 
       // Get fresh billing history from Stripe
       const invoices = await stripeApi.getBillingHistory(custId);
-      console.log('Received billing history:', invoices); // Debug log
-      
+      // Debug log
+
       // Update local state with new data
       setBillingHistory(invoices);
     } catch (error) {
@@ -187,7 +187,7 @@ const Payment = () => {
 
         // Wait for user data to be available
         if (!user) {
-          console.log('Waiting for user authentication...');
+
           return;
         }
 
@@ -197,7 +197,7 @@ const Payment = () => {
 
         // Then fetch payment methods
         await fetchPaymentMethods(custId);
-        
+
         // Fetch billing history
         await fetchBillingHistory(custId);
       } catch (err) {
@@ -226,7 +226,7 @@ const Payment = () => {
   const handleDeleteCard = async (cardId) => {
     try {
       await stripeApi.deletePaymentMethod(cardId);
-      setCards(cards.filter(card => card.id !== cardId));
+      setCards(cards.filter((card) => card.id !== cardId));
       toast.showToast(PAYMENT_NOTIFICATIONS.CARD.DELETE.SUCCESS, 'success');
     } catch (err) {
       console.error('Error deleting card:', err);
@@ -254,17 +254,17 @@ const Payment = () => {
   const handleClearHistory = async () => {
     try {
       if (!user) return;
-      
+
       // Show confirmation dialog
       if (window.confirm('Are you sure you want to clear your billing history? This cannot be undone.')) {
         setLoading(true); // Add loading state while clearing
-        
+
         // Clear billing history in Stripe
         await stripeApi.clearBillingHistory(customerId);
-        
+
         // Refresh billing history from Stripe
         await fetchBillingHistory(customerId);
-        
+
         // Show success message
         toast.showSuccess('Billing history cleared successfully');
       }
@@ -277,92 +277,92 @@ const Payment = () => {
   };
 
   if (error) {
-    return (
-      <div className="p-4 bg-red-50 text-red-600 rounded-lg">
-        <h3 className="font-semibold">Error</h3>
-        <p>{error}</p>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "p-4 bg-red-50 text-red-600 rounded-lg" }, /*#__PURE__*/
+      React.createElement("h3", { className: "font-semibold" }, "Error"), /*#__PURE__*/
+      React.createElement("p", null, error)
+      ));
+
   }
 
   if (loading) {
-    return (
-      <div className="payment-section">
-        <div className="loading-state">
-          <div className="loading-spinner"></div>
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "payment-section" }, /*#__PURE__*/
+      React.createElement("div", { className: "loading-state" }, /*#__PURE__*/
+      React.createElement("div", { className: "loading-spinner" })
+      )
+      ));
+
   }
 
-  return (
-    <div className="payment-section">
-      <div className="section-header">
-        <div className="header-content">
-          <div className="title-container">
-            <h2 className="section-title">
-              <FiCreditCard className="section-icon" />
-              Payment Methods & Billing
-            </h2>
-            <p className="section-subtitle">
-              Manage your payment methods and view billing history
-            </p>
-          </div>
-          <button 
-            className="upgrade-plan-btn"
-            onClick={() => setShowAddCardPopup(true)}
-          >
-            <FiPlus className="upgrade-icon" />
-            <span>Add New Card</span>
-          </button>
-        </div>
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "payment-section" }, /*#__PURE__*/
+    React.createElement("div", { className: "section-header" }, /*#__PURE__*/
+    React.createElement("div", { className: "header-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "title-container" }, /*#__PURE__*/
+    React.createElement("h2", { className: "section-title" }, /*#__PURE__*/
+    React.createElement(FiCreditCard, { className: "section-icon" }), "Payment Methods & Billing"
 
-      <StripeProvider>
-        {/* Payment Methods */}
-        <div className="payment-methods">
-          <div className="subsection-header">
-            <h3 className="subsection-title">Payment Methods</h3>
-          </div>
-          
-          {loading ? (
-            <div className="cards-list">
-              <CardSkeleton />
-              <CardSkeleton />
-            </div>
-          ) : cards.length === 0 ? (
-            <EmptyPaymentMethods />
-          ) : (
-            <div className="cards-list">
-              {cards.map((card) => (
-                <SavedCard
-                  key={card.id}
-                  card={card}
-                  onSetDefault={handleSetDefault}
-                  onDelete={handleDeleteCard}
-                  cardImages={cardImages}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+    ), /*#__PURE__*/
+    React.createElement("p", { className: "section-subtitle" }, "Manage your payment methods and view billing history"
 
-        {/* Billing History */}
-        <BillingHistory 
-          invoices={billingHistory} 
-          onClearHistory={handleClearHistory}
-          loading={loading}
-        />
+    )
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      className: "upgrade-plan-btn",
+      onClick: () => setShowAddCardPopup(true) }, /*#__PURE__*/
 
-        {/* Add Card Popup */}
-        <AddCardPopup 
-          isOpen={showAddCardPopup}
-          onClose={() => setShowAddCardPopup(false)}
-          onAddCard={handleAddCard}
-        />
-      </StripeProvider>
-    </div>
-  );
+    React.createElement(FiPlus, { className: "upgrade-icon" }), /*#__PURE__*/
+    React.createElement("span", null, "Add New Card")
+    )
+    )
+    ), /*#__PURE__*/
+
+    React.createElement(StripeProvider, null, /*#__PURE__*/
+
+    React.createElement("div", { className: "payment-methods" }, /*#__PURE__*/
+    React.createElement("div", { className: "subsection-header" }, /*#__PURE__*/
+    React.createElement("h3", { className: "subsection-title" }, "Payment Methods")
+    ),
+
+    loading ? /*#__PURE__*/
+    React.createElement("div", { className: "cards-list" }, /*#__PURE__*/
+    React.createElement(CardSkeleton, null), /*#__PURE__*/
+    React.createElement(CardSkeleton, null)
+    ) :
+    cards.length === 0 ? /*#__PURE__*/
+    React.createElement(EmptyPaymentMethods, null) : /*#__PURE__*/
+
+    React.createElement("div", { className: "cards-list" },
+    cards.map((card) => /*#__PURE__*/
+    React.createElement(SavedCard, {
+      key: card.id,
+      card: card,
+      onSetDefault: handleSetDefault,
+      onDelete: handleDeleteCard,
+      cardImages: cardImages }
+    )
+    )
+    )
+
+    ), /*#__PURE__*/
+
+
+    React.createElement(BillingHistory, {
+      invoices: billingHistory,
+      onClearHistory: handleClearHistory,
+      loading: loading }
+    ), /*#__PURE__*/
+
+
+    React.createElement(AddCardPopup, {
+      isOpen: showAddCardPopup,
+      onClose: () => setShowAddCardPopup(false),
+      onAddCard: handleAddCard }
+    )
+    )
+    ));
+
 };
 
 export default Payment;

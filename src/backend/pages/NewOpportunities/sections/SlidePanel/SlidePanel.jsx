@@ -87,12 +87,12 @@ const SlidePanel = ({ isOpen, onClose, opportunity }) => {
       if (diffDays === 1) return 'Tomorrow';
       if (diffDays > 0 && diffDays <= 7) return `${diffDays} days left`;
 
-      const options = { 
+      const options = {
         month: 'long',
-        day: 'numeric', 
+        day: 'numeric',
         year: 'numeric'
       };
-      
+
       return new Intl.DateTimeFormat('en-US', options).format(date);
     } catch (error) {
       console.error('Error formatting date:', error);
@@ -110,31 +110,31 @@ const SlidePanel = ({ isOpen, onClose, opportunity }) => {
 
   if (!isOpen) return null;
 
-  return (
-    <div className="slide-panel-overlay" onClick={onClose}>
-      <div className="slide-panel-wrapper" onClick={e => e.stopPropagation()}>
-        <CloseButton onClick={onClose} position="left" />
-        
-        <div className="slide-panel-content">
-          {opportunity && (
-            <OpportunityDetails 
-              opportunity={{
-                ...opportunity,
-                formattedDeadline: formatDate(opportunity.deadline),
-                formattedSalary: opportunity.compensation?.amount ? 
-                  formatCurrency(opportunity.compensation.amount, opportunity.compensation.currency) : 
-                  'Not specified',
-                isSaved,
-                isLoading,
-                onSave: handleSaveOpportunity
-              }}
-              onClose={onClose}
-            />
-          )}
-        </div>
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "slide-panel-overlay", onClick: onClose }, /*#__PURE__*/
+    React.createElement("div", { className: "slide-panel-wrapper", onClick: (e) => e.stopPropagation() }, /*#__PURE__*/
+    React.createElement(CloseButton, { onClick: onClose, position: "left" }), /*#__PURE__*/
+
+    React.createElement("div", { className: "slide-panel-content" },
+    opportunity && /*#__PURE__*/
+    React.createElement(OpportunityDetails, {
+      opportunity: {
+        ...opportunity,
+        formattedDeadline: formatDate(opportunity.deadline),
+        formattedSalary: opportunity.compensation?.amount ?
+        formatCurrency(opportunity.compensation.amount, opportunity.compensation.currency) :
+        'Not specified',
+        isSaved,
+        isLoading,
+        onSave: handleSaveOpportunity
+      },
+      onClose: onClose }
+    )
+
+    )
+    )
+    ));
+
 };
 
 export default SlidePanel;

@@ -11,29 +11,29 @@ import React from 'react';
 import './CardSkeleton.css';
 
 const CardSkeleton = () => {
-  return (
-    <div className="card-skeleton">
-      {/* Card Logo */}
-      <div className="skeleton-header">
-        <div className="skeleton-logo"></div>
-      </div>
-      
-      {/* Card Details */}
-      <div className="skeleton-body">
-        <div className="skeleton-number"></div>
-        <div className="skeleton-details">
-          <div className="skeleton-text"></div>
-          <div className="skeleton-text"></div>
-        </div>
-      </div>
-      
-      {/* Card Actions */}
-      <div className="skeleton-actions">
-        <div className="skeleton-button"></div>
-        <div className="skeleton-icon"></div>
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "card-skeleton" }, /*#__PURE__*/
+
+    React.createElement("div", { className: "skeleton-header" }, /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-logo" })
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "skeleton-body" }, /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-number" }), /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-details" }, /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-text" }), /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-text" })
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "skeleton-actions" }, /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-button" }), /*#__PURE__*/
+    React.createElement("div", { className: "skeleton-icon" })
+    )
+    ));
+
 };
 
-export default CardSkeleton; 
+export default CardSkeleton;

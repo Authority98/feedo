@@ -38,15 +38,15 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "flex items-center justify-center min-h-screen" }, /*#__PURE__*/
+      React.createElement("div", { className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" })
+      ));
+
   }
 
   if (!user) {
-    return <Navigate to="/" replace />;
+    return /*#__PURE__*/React.createElement(Navigate, { to: "/", replace: true });
   }
 
   return children;
@@ -54,13 +54,13 @@ const ProtectedRoute = ({ children }) => {
 
 // Move ProtectedLayout component definition here
 const ProtectedLayout = () => {
-  return (
-    <ProtectedRoute>
-      <Layout>
-        <Outlet />
-      </Layout>
-    </ProtectedRoute>
-  );
+  return (/*#__PURE__*/
+    React.createElement(ProtectedRoute, null, /*#__PURE__*/
+    React.createElement(Layout, null, /*#__PURE__*/
+    React.createElement(Outlet, null)
+    )
+    ));
+
 };
 
 // Update AdminRoute component to use AdminAuthContext
@@ -69,15 +69,15 @@ const AdminRoute = ({ children }) => {
   const navigate = useNavigate();
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "flex items-center justify-center min-h-screen" }, /*#__PURE__*/
+      React.createElement("div", { className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" })
+      ));
+
   }
 
   if (!adminUser) {
-    return <Navigate to="/admin/login" replace />;
+    return /*#__PURE__*/React.createElement(Navigate, { to: "/admin/login", replace: true });
   }
 
   return children;
@@ -85,48 +85,48 @@ const AdminRoute = ({ children }) => {
 
 // Add AdminLayout component wrapper
 const AdminLayoutWrapper = () => {
-  return (
-    <AdminRoute>
-      <AdminLayout>
-        <Outlet />
-      </AdminLayout>
-    </AdminRoute>
-  );
+  return (/*#__PURE__*/
+    React.createElement(AdminRoute, null, /*#__PURE__*/
+    React.createElement(AdminLayout, null, /*#__PURE__*/
+    React.createElement(Outlet, null)
+    )
+    ));
+
 };
 
 // App component definition last
 const App = () => {
-  return (
-    <Router>
-      <ToastProvider>
-        <AuthProvider>
-          <AdminAuthProvider>
-            <div className="App">
-              <Routes>
-                <Route path="/" element={<LoginSignup />} />
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route element={<AdminLayoutWrapper />}>
-                  <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                  <Route path="/admin/questions" element={<ProfileQuestions />} />
-                  <Route path="/admin/data-management" element={<DataManagement />} />
-                </Route>
-                <Route element={<ProtectedLayout />}>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/my-applications" element={<MyApplications />} />
-                  <Route path="/new-opportunities" element={<NewOpportunities />} />
-                  <Route path="/data-management" element={<DataManagement />} />
-                  <Route path="/subscription" element={<Subscription />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/help-center" element={<HelpCenter />} />
-                </Route>
-                <Route path="/profile-type" element={<ProfileType />} />
-              </Routes>
-            </div>
-          </AdminAuthProvider>
-        </AuthProvider>
-      </ToastProvider>
-    </Router>
-  );
+  return (/*#__PURE__*/
+    React.createElement(Router, null, /*#__PURE__*/
+    React.createElement(ToastProvider, null, /*#__PURE__*/
+    React.createElement(AuthProvider, null, /*#__PURE__*/
+    React.createElement(AdminAuthProvider, null, /*#__PURE__*/
+    React.createElement("div", { className: "App" }, /*#__PURE__*/
+    React.createElement(Routes, null, /*#__PURE__*/
+    React.createElement(Route, { path: "/", element: /*#__PURE__*/React.createElement(LoginSignup, null) }), /*#__PURE__*/
+    React.createElement(Route, { path: "/admin/login", element: /*#__PURE__*/React.createElement(AdminLogin, null) }), /*#__PURE__*/
+    React.createElement(Route, { element: /*#__PURE__*/React.createElement(AdminLayoutWrapper, null) }, /*#__PURE__*/
+    React.createElement(Route, { path: "/admin/dashboard", element: /*#__PURE__*/React.createElement(AdminDashboard, null) }), /*#__PURE__*/
+    React.createElement(Route, { path: "/admin/questions", element: /*#__PURE__*/React.createElement(ProfileQuestions, null) }), /*#__PURE__*/
+    React.createElement(Route, { path: "/admin/data-management", element: /*#__PURE__*/React.createElement(DataManagement, null) })
+    ), /*#__PURE__*/
+    React.createElement(Route, { element: /*#__PURE__*/React.createElement(ProtectedLayout, null) }, /*#__PURE__*/
+    React.createElement(Route, { path: "/dashboard", element: /*#__PURE__*/React.createElement(Dashboard, null) }), /*#__PURE__*/
+    React.createElement(Route, { path: "/my-applications", element: /*#__PURE__*/React.createElement(MyApplications, null) }), /*#__PURE__*/
+    React.createElement(Route, { path: "/new-opportunities", element: /*#__PURE__*/React.createElement(NewOpportunities, null) }), /*#__PURE__*/
+    React.createElement(Route, { path: "/data-management", element: /*#__PURE__*/React.createElement(DataManagement, null) }), /*#__PURE__*/
+    React.createElement(Route, { path: "/subscription", element: /*#__PURE__*/React.createElement(Subscription, null) }), /*#__PURE__*/
+    React.createElement(Route, { path: "/settings", element: /*#__PURE__*/React.createElement(Settings, null) }), /*#__PURE__*/
+    React.createElement(Route, { path: "/help-center", element: /*#__PURE__*/React.createElement(HelpCenter, null) })
+    ), /*#__PURE__*/
+    React.createElement(Route, { path: "/profile-type", element: /*#__PURE__*/React.createElement(ProfileType, null) })
+    )
+    )
+    )
+    )
+    )
+    ));
+
 };
 
 export default App;

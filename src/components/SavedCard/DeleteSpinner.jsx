@@ -12,11 +12,11 @@ import { FiLoader } from 'react-icons/fi';
 import './DeleteSpinner.css';
 
 const DeleteSpinner = () => {
-  return (
-    <div className="delete-spinner-container">
-      <FiLoader className="delete-spinner-icon" />
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "delete-spinner-container" }, /*#__PURE__*/
+    React.createElement(FiLoader, { className: "delete-spinner-icon" })
+    ));
+
 };
 
-export default DeleteSpinner; 
+export default DeleteSpinner;

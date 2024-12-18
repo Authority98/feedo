@@ -47,74 +47,74 @@ const SavedCard = ({ card, onSetDefault, onDelete, cardImages }) => {
     }
   };
 
-  return (
-    <div className={`saved-card ${card.isDefault ? 'active' : ''}`}>
-      <div className="saved-card-header">
-        <div className="saved-card-brand-container">
-          <img 
-            src={getCardImage(card.type)} 
-            alt={`${card.type} card`}
-            className="saved-card-brand-image"
-          />
-        </div>
-        <div className="delete-container">
-          {isDeleting ? (
-            <LoadingSpinner 
-              color="text-red-500"
-              isDelete={true}
-            />
-          ) : (
-            <button 
-              onClick={handleDelete}
-              className="delete-saved-card-btn"
-              title={card.isDefault ? "Delete default card" : "Delete card"}
-              disabled={isDeleting || isSettingDefault}
-            >
-              <FiTrash2 />
-            </button>
-          )}
-        </div>
-      </div>
-      
-      <div className="saved-card-body">
-        <div className="saved-card-number">
-          •••• •••• •••• {card.last4}
-        </div>
-        <div className="saved-card-details">
-          <div className="saved-card-holder">{card.cardHolder || 'Card Holder'}</div>
-          <div className="saved-card-expiry">Expires {card.expiry}</div>
-        </div>
-      </div>
-      
-      <div className="saved-card-actions">
-        {!card.isDefault && (
-          <button 
-            onClick={handleSetDefault}
-            className="set-default-btn"
-            disabled={isSettingDefault || isDeleting}
-          >
-            {isSettingDefault ? (
-              <LoadingSpinner 
-                color="text-blue-500"
-                isSetDefault={true}
-              />
-            ) : (
-              'Set as default'
-            )}
-          </button>
-        )}
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: `saved-card ${card.isDefault ? 'active' : ''}` }, /*#__PURE__*/
+    React.createElement("div", { className: "saved-card-header" }, /*#__PURE__*/
+    React.createElement("div", { className: "saved-card-brand-container" }, /*#__PURE__*/
+    React.createElement("img", {
+      src: getCardImage(card.type),
+      alt: `${card.type} card`,
+      className: "saved-card-brand-image" }
+    )
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "delete-container" },
+    isDeleting ? /*#__PURE__*/
+    React.createElement(LoadingSpinner, {
+      color: "text-red-500",
+      isDelete: true }
+    ) : /*#__PURE__*/
 
-      {card.isDefault && (
-        <div className="default-badge-container">
-          <span className="default-badge">
-            <FiCheck className="badge-icon" />
-            Default
-          </span>
-        </div>
-      )}
-    </div>
-  );
+    React.createElement("button", {
+      onClick: handleDelete,
+      className: "delete-saved-card-btn",
+      title: card.isDefault ? "Delete default card" : "Delete card",
+      disabled: isDeleting || isSettingDefault }, /*#__PURE__*/
+
+    React.createElement(FiTrash2, null)
+    )
+
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "saved-card-body" }, /*#__PURE__*/
+    React.createElement("div", { className: "saved-card-number" }, "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 ",
+    card.last4
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "saved-card-details" }, /*#__PURE__*/
+    React.createElement("div", { className: "saved-card-holder" }, card.cardHolder || 'Card Holder'), /*#__PURE__*/
+    React.createElement("div", { className: "saved-card-expiry" }, "Expires ", card.expiry)
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "saved-card-actions" },
+    !card.isDefault && /*#__PURE__*/
+    React.createElement("button", {
+      onClick: handleSetDefault,
+      className: "set-default-btn",
+      disabled: isSettingDefault || isDeleting },
+
+    isSettingDefault ? /*#__PURE__*/
+    React.createElement(LoadingSpinner, {
+      color: "text-blue-500",
+      isSetDefault: true }
+    ) :
+
+    'Set as default'
+
+    )
+
+    ),
+
+    card.isDefault && /*#__PURE__*/
+    React.createElement("div", { className: "default-badge-container" }, /*#__PURE__*/
+    React.createElement("span", { className: "default-badge" }, /*#__PURE__*/
+    React.createElement(FiCheck, { className: "badge-icon" }), "Default"
+
+    )
+    )
+
+    ));
+
 };
 
-export default SavedCard; 
+export default SavedCard;

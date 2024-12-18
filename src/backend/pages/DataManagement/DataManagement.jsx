@@ -43,7 +43,7 @@ const DataManagement = () => {
 
       const profilesDocRef = doc(db, 'admin', 'profiles');
       const profilesDoc = await getDoc(profilesDocRef);
-      
+
       if (!profilesDoc.exists()) {
         setSections([]);
         setLoading(false);
@@ -52,7 +52,7 @@ const DataManagement = () => {
 
       const data = profilesDoc.data();
       const userProfileType = data.profileTypes[user.profile.userType];
-      
+
       if (!userProfileType?.sections) {
         setSections([]);
         setLoading(false);
@@ -65,7 +65,7 @@ const DataManagement = () => {
       }));
 
       setSections(sectionsArray);
-      
+
       // Set initial active tab if not set
       if (!activeTab && sectionsArray.length > 0) {
         setActiveTab(sectionsArray[0].id);
@@ -87,7 +87,7 @@ const DataManagement = () => {
   // Listen for section updates
   useEffect(() => {
     const unsubscribe = eventEmitter.on(EVENTS.SECTION_DATA_UPDATED, () => {
-      console.log('Section data update event received');
+
       fetchSections();
     });
 
@@ -112,24 +112,24 @@ const DataManagement = () => {
 
   // Render appropriate content based on active tab
   const renderTabContent = () => {
-    const activeSection = sections.find(section => section.id === activeTab);
+    const activeSection = sections.find((section) => section.id === activeTab);
     if (!activeSection || !user) {
-      console.log('No active section or user found');
+
       return null;
     }
 
     // Get the saved form data from user's profile sections
     const savedFormData = {};
     const sectionData = user?.profileSections?.[activeSection.id];
-    
-    console.log('Active section:', activeSection);
-    console.log('Section data:', sectionData);
+
+
+
 
     // Initialize form data with default values for all questions
     if (activeSection.questions) {
-      activeSection.questions.forEach(question => {
+      activeSection.questions.forEach((question) => {
         if (!question || !question.id) {
-          console.log('Invalid question found:', question);
+
           return;
         }
 
@@ -137,16 +137,16 @@ const DataManagement = () => {
           if (question.type === 'repeater') {
             // Initialize repeater fields with at least one empty group
             const repeaterData = [];
-            const existingData = sectionData?.questions?.find(q => q.id === question.id)?.answer;
+            const existingData = sectionData?.questions?.find((q) => q.id === question.id)?.answer;
 
             if (Array.isArray(existingData) && existingData.length > 0) {
               // Map existing data and ensure all required fields exist
-              repeaterData.push(...existingData.map(group => ({
+              repeaterData.push(...existingData.map((group) => ({
                 ...Object.fromEntries(
-                  (question.repeaterFields || []).map(field => [
-                    field.id,
-                    field.type === 'multipleChoice' ? [] : ''
-                  ])
+                  (question.repeaterFields || []).map((field) => [
+                  field.id,
+                  field.type === 'multipleChoice' ? [] : '']
+                  )
                 ),
                 ...group
               })));
@@ -154,21 +154,21 @@ const DataManagement = () => {
               // Create one empty group with all fields initialized
               repeaterData.push(
                 Object.fromEntries(
-                  (question.repeaterFields || []).map(field => [
-                    field.id,
-                    field.type === 'multipleChoice' ? [] : ''
-                  ])
+                  (question.repeaterFields || []).map((field) => [
+                  field.id,
+                  field.type === 'multipleChoice' ? [] : '']
+                  )
                 )
               );
             }
             savedFormData[question.id] = repeaterData;
           } else if (question.type === 'multipleChoice') {
-            const answer = sectionData?.questions?.find(q => q.id === question.id)?.answer;
+            const answer = sectionData?.questions?.find((q) => q.id === question.id)?.answer;
             savedFormData[question.id] = Array.isArray(answer) ? answer : [];
           } else if (question.type === 'file') {
-            savedFormData[question.id] = sectionData?.questions?.find(q => q.id === question.id)?.answer || null;
+            savedFormData[question.id] = sectionData?.questions?.find((q) => q.id === question.id)?.answer || null;
           } else {
-            savedFormData[question.id] = sectionData?.questions?.find(q => q.id === question.id)?.answer || '';
+            savedFormData[question.id] = sectionData?.questions?.find((q) => q.id === question.id)?.answer || '';
           }
         } catch (error) {
           console.error('Error initializing question:', question.id, error);
@@ -178,162 +178,162 @@ const DataManagement = () => {
       });
     }
 
-    console.log('Initialized form data:', savedFormData);
 
-    return (
-      <div className="tab-pane">
-        <SectionForm 
-          section={activeSection}
-          profileType={user.userType}
-          formData={savedFormData}
-        />
-      </div>
-    );
+
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "tab-pane" }, /*#__PURE__*/
+      React.createElement(SectionForm, {
+        section: activeSection,
+        profileType: user.userType,
+        formData: savedFormData }
+      )
+      ));
+
   };
 
   if (loading && !sections.length) {
-    return (
-      <div className="data-management">
-        <main className="main-content">
-          <div className="loading-state">
-            <div className="loading-spinner"></div>
-          </div>
-        </main>
-        <DataSubmission />
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "data-management" }, /*#__PURE__*/
+      React.createElement("main", { className: "main-content" }, /*#__PURE__*/
+      React.createElement("div", { className: "loading-state" }, /*#__PURE__*/
+      React.createElement("div", { className: "loading-spinner" })
+      )
+      ), /*#__PURE__*/
+      React.createElement(DataSubmission, null)
+      ));
+
   }
 
   if (error) {
-    return (
-      <div className="data-management">
-        <div className="error-state">
-          <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Retry</button>
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "data-management" }, /*#__PURE__*/
+      React.createElement("div", { className: "error-state" }, /*#__PURE__*/
+      React.createElement("p", null, error), /*#__PURE__*/
+      React.createElement("button", { onClick: () => window.location.reload() }, "Retry")
+      )
+      ));
+
   }
 
-  return (
-    <div className="data-management">
-      <main className="main-content">
-        <Box sx={{ 
-          width: '100%', 
-          bgcolor: 'background.paper', 
-          mb: 2,
-          borderRadius: 1,
-          overflow: 'hidden'
-        }}>
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center',
-            borderBottom: 1,
-            borderColor: 'divider',
-            gap: 2
-          }}>
-            <Tabs
-              value={activeTab}
-              onChange={handleTabChange}
-              variant="scrollable"
-              scrollButtons="auto"
-              aria-label="data management tabs"
-              sx={{
-                flex: 1,
-                '& .MuiTab-root': {
-                  textTransform: 'none',
-                  minHeight: '48px',
-                  fontWeight: 500,
-                }
-              }}
-            >
-              {sections.map(section => {
-                const submissionItem = submissionItems.find(item => item.id === section.id);
-                const isComplete = submissionItem?.status === 'complete';
-                
-                return (
-                  <Tab
-                    key={section.id}
-                    label={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {section.label}
-                        {isComplete ? (
-                          <FiCheckCircle style={{ color: theme.palette.primary.main }} />
-                        ) : (
-                          <FiAlertCircle style={{ color: theme.palette.primary.main }} />
-                        )}
-                      </Box>
-                    }
-                    value={section.id}
-                    sx={{
-                      '&.Mui-selected': {
-                        color: 'primary.main',
-                      }
-                    }}
-                  />
-                );
-              })}
-            </Tabs>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "data-management" }, /*#__PURE__*/
+    React.createElement("main", { className: "main-content" }, /*#__PURE__*/
+    React.createElement(Box, { sx: {
+        width: '100%',
+        bgcolor: 'background.paper',
+        mb: 2,
+        borderRadius: 1,
+        overflow: 'hidden'
+      } }, /*#__PURE__*/
+    React.createElement(Box, { sx: {
+        display: 'flex',
+        alignItems: 'center',
+        borderBottom: 1,
+        borderColor: 'divider',
+        gap: 2
+      } }, /*#__PURE__*/
+    React.createElement(Tabs, {
+      value: activeTab,
+      onChange: handleTabChange,
+      variant: "scrollable",
+      scrollButtons: "auto",
+      "aria-label": "data management tabs",
+      sx: {
+        flex: 1,
+        '& .MuiTab-root': {
+          textTransform: 'none',
+          minHeight: '48px',
+          fontWeight: 500
+        }
+      } },
 
-            {/* New Question Button Design */}
-            <Tooltip 
-              title="Add a question about this section" 
-              placement="left"
-              arrow
-            >
-              <Button
-                variant="text"
-                onClick={() => setOpenQuestionDialog(true)}
-                startIcon={<FiMessageCircle />}
-                sx={{
-                  mr: 2,
-                  color: 'text.secondary',
-                  '&:hover': {
-                    color: 'primary.main',
-                    bgcolor: 'action.hover',
-                  },
-                  transition: 'all 0.2s ease',
-                  textTransform: 'none',
-                  fontWeight: 500,
-                  minWidth: 'auto',
-                  px: 2,
-                  height: '36px',
-                  borderRadius: '18px',
-                  fontSize: '0.875rem',
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  '&:hover .question-text': {
-                    maxWidth: '200px',
-                    marginLeft: '8px',
-                    opacity: 1
-                  }
-                }}
-              >
-                <Box component="span" sx={{ 
-                  maxWidth: 0,
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  opacity: 0,
-                  transition: 'all 0.3s ease',
-                }} className="question-text">
-                  Add a Question
-                </Box>
-              </Button>
-            </Tooltip>
-          </Box>
-        </Box>
-        {renderTabContent()}
+    sections.map((section) => {
+      const submissionItem = submissionItems.find((item) => item.id === section.id);
+      const isComplete = submissionItem?.status === 'complete';
 
-        {/* Question Dialog */}
-        <QuestionDialog 
-          open={openQuestionDialog}
-          onClose={() => setOpenQuestionDialog(false)}
-          currentSection={sections.find(section => section.id === activeTab)}
-        />
-      </main>
-      <DataSubmission />
-    </div>
-  );
+      return (/*#__PURE__*/
+        React.createElement(Tab, {
+          key: section.id,
+          label: /*#__PURE__*/
+          React.createElement(Box, { sx: { display: 'flex', alignItems: 'center', gap: 1 } },
+          section.label,
+          isComplete ? /*#__PURE__*/
+          React.createElement(FiCheckCircle, { style: { color: theme.palette.primary.main } }) : /*#__PURE__*/
+
+          React.createElement(FiAlertCircle, { style: { color: theme.palette.primary.main } })
+
+          ),
+
+          value: section.id,
+          sx: {
+            '&.Mui-selected': {
+              color: 'primary.main'
+            }
+          } }
+        ));
+
+    })
+    ), /*#__PURE__*/
+
+
+    React.createElement(Tooltip, {
+      title: "Add a question about this section",
+      placement: "left",
+      arrow: true }, /*#__PURE__*/
+
+    React.createElement(Button, {
+      variant: "text",
+      onClick: () => setOpenQuestionDialog(true),
+      startIcon: /*#__PURE__*/React.createElement(FiMessageCircle, null),
+      sx: {
+        mr: 2,
+        color: 'text.secondary',
+        '&:hover': {
+          color: 'primary.main',
+          bgcolor: 'action.hover'
+        },
+        transition: 'all 0.2s ease',
+        textTransform: 'none',
+        fontWeight: 500,
+        minWidth: 'auto',
+        px: 2,
+        height: '36px',
+        borderRadius: '18px',
+        fontSize: '0.875rem',
+        border: '1px solid',
+        borderColor: 'divider',
+        '&:hover .question-text': {
+          maxWidth: '200px',
+          marginLeft: '8px',
+          opacity: 1
+        }
+      } }, /*#__PURE__*/
+
+    React.createElement(Box, { component: "span", sx: {
+        maxWidth: 0,
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        opacity: 0,
+        transition: 'all 0.3s ease'
+      }, className: "question-text" }, "Add a Question"
+
+    )
+    )
+    )
+    )
+    ),
+    renderTabContent(), /*#__PURE__*/
+
+
+    React.createElement(QuestionDialog, {
+      open: openQuestionDialog,
+      onClose: () => setOpenQuestionDialog(false),
+      currentSection: sections.find((section) => section.id === activeTab) }
+    )
+    ), /*#__PURE__*/
+    React.createElement(DataSubmission, null)
+    ));
+
 };
 
-export default DataManagement; 
+export default DataManagement;

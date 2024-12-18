@@ -19,32 +19,32 @@ const EmptyProfileSection = ({ onAddClick, profileType, sectionId, sectionLabel 
     onAddClick(questionType);
   };
 
-  return (
-    <div className="section-content">
-      <div className="section-content-container">
-        <div className="section-placeholder">
-          <p>No questions added yet</p>
-          <p className="placeholder-details">
-            Start by adding questions to "{sectionLabel}"
-          </p>
-          <AdminButton
-            variant="primary"
-            className="mt-6"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Add New Question
-          </AdminButton>
-        </div>
-      </div>
-      <AddQuestionModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSelectType={handleQuestionTypeSelect}
-        profileType={profileType}
-        sectionId={sectionId}
-      />
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "section-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "section-content-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "section-placeholder" }, /*#__PURE__*/
+    React.createElement("p", null, "No questions added yet"), /*#__PURE__*/
+    React.createElement("p", { className: "placeholder-details" }, "Start by adding questions to \"",
+    sectionLabel, "\""
+    ), /*#__PURE__*/
+    React.createElement(AdminButton, {
+      variant: "primary",
+      className: "mt-6",
+      onClick: () => setIsModalOpen(true) },
+    "Add New Question"
+
+    )
+    )
+    ), /*#__PURE__*/
+    React.createElement(AddQuestionModal, {
+      isOpen: isModalOpen,
+      onClose: () => setIsModalOpen(false),
+      onSelectType: handleQuestionTypeSelect,
+      profileType: profileType,
+      sectionId: sectionId }
+    )
+    ));
+
 };
 
-export default EmptyProfileSection; 
+export default EmptyProfileSection;

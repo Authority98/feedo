@@ -36,7 +36,7 @@ const Questions = () => {
   const loadProfileTypes = async () => {
     try {
       const types = await adminQuestionsService.getProfileTypes();
-      console.log('Loaded profile types:', types);
+
       setProfileTypes(types);
     } catch (error) {
       console.error('Error loading profile types:', error);
@@ -46,7 +46,7 @@ const Questions = () => {
 
   const handleAddProfileType = async (profileTypeData) => {
     try {
-      console.log('Adding profile type:', profileTypeData);
+
       await adminQuestionsService.addProfileType(profileTypeData);
       showToast('success', 'Profile type added successfully');
       await loadProfileTypes();
@@ -60,23 +60,23 @@ const Questions = () => {
   const handleEditProfileType = async (profileTypeData) => {
     try {
       const result = await adminQuestionsService.updateProfileType(profileTypeData);
-      
+
       if (result.changes.idChanged && selectedProfileType === result.changes.oldId) {
         setSelectedProfileType(result.changes.newId);
       }
-      
+
       const message = `Profile type updated: 
         ${result.changes.newSections.length} new sections, 
         ${Object.keys(result.changes.mappings).length} sections mapped. 
         Questions preserved: ${result.changes.after.questionsCount}`;
-      
+
       showToast('success', message);
       await loadProfileTypes();
       setIsModalOpen(false);
       setEditingProfileType(null);
-      
-      console.log('Profile type update details:', result.changes);
-      
+
+
+
     } catch (error) {
       console.error('Error updating profile type:', error);
       showToast('error', 'Failed to update profile type');
@@ -107,128 +107,128 @@ const Questions = () => {
   };
 
   const getSelectedProfileSections = () => {
-    const selectedProfile = profileTypes.find(t => t.id === selectedProfileType);
+    const selectedProfile = profileTypes.find((t) => t.id === selectedProfileType);
     if (!selectedProfile?.sections) return [];
-    
+
     return Object.entries(selectedProfile.sections).map(([id, section]) => ({
       id,
       ...section
     }));
   };
 
-  return (
-    <div className="questions-container">
-      <div className="page-header">
-        <h1>Profile Questions Management</h1>
-        <AdminButton
-          variant="primary"
-          onClick={() => setIsModalOpen(true)}
-          className="add-profile-button"
-        >
-          <FiPlus /> Add Profile Type
-        </AdminButton>
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "questions-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "page-header" }, /*#__PURE__*/
+    React.createElement("h1", null, "Profile Questions Management"), /*#__PURE__*/
+    React.createElement(AdminButton, {
+      variant: "primary",
+      onClick: () => setIsModalOpen(true),
+      className: "add-profile-button" }, /*#__PURE__*/
 
-      {profileTypes.length === 0 ? (
-        <div className="empty-profile-types">
-          <div className="empty-content">
-            <div className="empty-icon">📝</div>
-            <h2>No Profile Types Added</h2>
-            <p>Get started by adding your first profile type.</p>
-            <p className="empty-details">
-              Profile types help organize different sets of questions for various user categories.
-            </p>
-            <AdminButton
-              variant="primary"
-              onClick={() => setIsModalOpen(true)}
-              className="mt-6"
-            >
-              <FiPlus /> Add Profile Type
-            </AdminButton>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="profile-type-selector">
-            <h2>Select Profile Type</h2>
-            <div className="profile-type-buttons">
-              {profileTypes.map(type => (
-                <div key={type.id} className="profile-type-wrapper">
-                  <AdminButton
-                    variant="outline"
-                    className={`profile-type-btn ${selectedProfileType === type.id ? 'active' : ''}`}
-                    onClick={() => setSelectedProfileType(type.id)}
-                  >
-                    {(() => {
-                      const IconComponent = PROFILE_ICONS.find(icon => icon.id === type.icon)?.icon || FiUser;
-                      return (
-                        <>
-                          <IconComponent className="profile-type-icon" />
-                          {type.label}
-                        </>
-                      );
-                    })()}
-                  </AdminButton>
-                  <div className="profile-type-actions">
-                    <FiEdit2 
-                      className="action-icon edit"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingProfileType(type);
-                        setIsModalOpen(true);
-                      }}
-                      title="Edit profile type"
-                    />
-                    <FiTrash2 
-                      className="action-icon delete"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteClick(type);
-                      }}
-                      title="Delete profile type"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+    React.createElement(FiPlus, null), " Add Profile Type"
+    )
+    ),
 
-          {selectedProfileType && (
-            <div className="questions-content">
-              <QuestionTypeRouter
-                profileType={selectedProfileType}
-                sections={getSelectedProfileSections()}
-              />
-            </div>
-          )}
-        </>
-      )}
+    profileTypes.length === 0 ? /*#__PURE__*/
+    React.createElement("div", { className: "empty-profile-types" }, /*#__PURE__*/
+    React.createElement("div", { className: "empty-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "empty-icon" }, "\uD83D\uDCDD"), /*#__PURE__*/
+    React.createElement("h2", null, "No Profile Types Added"), /*#__PURE__*/
+    React.createElement("p", null, "Get started by adding your first profile type."), /*#__PURE__*/
+    React.createElement("p", { className: "empty-details" }, "Profile types help organize different sets of questions for various user categories."
 
-      <CreateNewProfileTypeModel
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setEditingProfileType(null);
-        }}
-        onSave={editingProfileType ? handleEditProfileType : handleAddProfileType}
-        initialData={editingProfileType}
-      />
+    ), /*#__PURE__*/
+    React.createElement(AdminButton, {
+      variant: "primary",
+      onClick: () => setIsModalOpen(true),
+      className: "mt-6" }, /*#__PURE__*/
 
-      <ConfirmationModal
-        isOpen={deleteConfirmation.isOpen}
-        onClose={() => setDeleteConfirmation({ isOpen: false, profileType: null })}
-        onConfirm={handleDeleteConfirm}
-        title="Delete Profile Type"
-        message={
-          deleteConfirmation.profileType
-            ? `Are you sure you want to delete "${deleteConfirmation.profileType.label}"? This will delete all sections and questions within this profile type.`
-            : ''
-        }
-        confirmText="Delete"
-        cancelText="Cancel"
-      />
-    </div>
-  );
+    React.createElement(FiPlus, null), " Add Profile Type"
+    )
+    )
+    ) : /*#__PURE__*/
+
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement("div", { className: "profile-type-selector" }, /*#__PURE__*/
+    React.createElement("h2", null, "Select Profile Type"), /*#__PURE__*/
+    React.createElement("div", { className: "profile-type-buttons" },
+    profileTypes.map((type) => /*#__PURE__*/
+    React.createElement("div", { key: type.id, className: "profile-type-wrapper" }, /*#__PURE__*/
+    React.createElement(AdminButton, {
+      variant: "outline",
+      className: `profile-type-btn ${selectedProfileType === type.id ? 'active' : ''}`,
+      onClick: () => setSelectedProfileType(type.id) },
+
+    (() => {
+      const IconComponent = PROFILE_ICONS.find((icon) => icon.id === type.icon)?.icon || FiUser;
+      return (/*#__PURE__*/
+        React.createElement(React.Fragment, null, /*#__PURE__*/
+        React.createElement(IconComponent, { className: "profile-type-icon" }),
+        type.label
+        ));
+
+    })()
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "profile-type-actions" }, /*#__PURE__*/
+    React.createElement(FiEdit2, {
+      className: "action-icon edit",
+      onClick: (e) => {
+        e.stopPropagation();
+        setEditingProfileType(type);
+        setIsModalOpen(true);
+      },
+      title: "Edit profile type" }
+    ), /*#__PURE__*/
+    React.createElement(FiTrash2, {
+      className: "action-icon delete",
+      onClick: (e) => {
+        e.stopPropagation();
+        handleDeleteClick(type);
+      },
+      title: "Delete profile type" }
+    )
+    )
+    )
+    )
+    )
+    ),
+
+    selectedProfileType && /*#__PURE__*/
+    React.createElement("div", { className: "questions-content" }, /*#__PURE__*/
+    React.createElement(QuestionTypeRouter, {
+      profileType: selectedProfileType,
+      sections: getSelectedProfileSections() }
+    )
+    )
+
+    ), /*#__PURE__*/
+
+
+    React.createElement(CreateNewProfileTypeModel, {
+      isOpen: isModalOpen,
+      onClose: () => {
+        setIsModalOpen(false);
+        setEditingProfileType(null);
+      },
+      onSave: editingProfileType ? handleEditProfileType : handleAddProfileType,
+      initialData: editingProfileType }
+    ), /*#__PURE__*/
+
+    React.createElement(ConfirmationModal, {
+      isOpen: deleteConfirmation.isOpen,
+      onClose: () => setDeleteConfirmation({ isOpen: false, profileType: null }),
+      onConfirm: handleDeleteConfirm,
+      title: "Delete Profile Type",
+      message:
+      deleteConfirmation.profileType ?
+      `Are you sure you want to delete "${deleteConfirmation.profileType.label}"? This will delete all sections and questions within this profile type.` :
+      '',
+
+      confirmText: "Delete",
+      cancelText: "Cancel" }
+    )
+    ));
+
 };
 
-export default Questions; 
+export default Questions;

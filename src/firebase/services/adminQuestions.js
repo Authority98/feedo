@@ -18,8 +18,8 @@ import {
   query,
   where,
   getDocs,
-  writeBatch
-} from 'firebase/firestore';
+  writeBatch } from
+'firebase/firestore';
 
 export const adminQuestionsService = {
   // Single document reference
@@ -131,9 +131,9 @@ export const adminQuestionsService = {
       if (docSnap.exists()) {
         const data = docSnap.data();
         const questions = data.profileTypes?.[profileType]?.sections?.[sectionId]?.questions || [];
-        
-        const questionIndex = questions.findIndex(q => q.id === questionId);
-        
+
+        const questionIndex = questions.findIndex((q) => q.id === questionId);
+
         if (questionIndex === -1) {
           throw new Error('Question not found');
         }
@@ -152,24 +152,24 @@ export const adminQuestionsService = {
 
         // Add type-specific data
         if (['singleChoice', 'multipleChoice', 'dropdown'].includes(questionData.type)) {
-          cleanData.options = Array.isArray(questionData.options) ? 
-            questionData.options.filter(Boolean) : [];
+          cleanData.options = Array.isArray(questionData.options) ?
+          questionData.options.filter(Boolean) : [];
         }
 
         if (questionData.type === 'text') {
           cleanData.inputType = questionData.inputType || 'text';
-          cleanData.enableRewrite = questionData.inputType === 'textarea' ? 
-            Boolean(questionData.enableRewrite) : false;
+          cleanData.enableRewrite = questionData.inputType === 'textarea' ?
+          Boolean(questionData.enableRewrite) : false;
           cleanData.validation = {
             minLength: parseInt(questionData.validation?.minLength) || 0,
-            maxLength: parseInt(questionData.validation?.maxLength) || 
-              (questionData.inputType === 'textarea' ? 500 : 100),
+            maxLength: parseInt(questionData.validation?.maxLength) || (
+            questionData.inputType === 'textarea' ? 500 : 100),
             pattern: questionData.validation?.pattern || ''
           };
         }
 
         if (questionData.type === 'repeater') {
-          cleanData.repeaterFields = (questionData.repeaterFields || []).map(field => ({
+          cleanData.repeaterFields = (questionData.repeaterFields || []).map((field) => ({
             id: field.id || Date.now().toString(),
             label: field.label || '',
             type: field.type || 'text',
@@ -180,7 +180,7 @@ export const adminQuestionsService = {
               enableRewrite: Boolean(field.enableRewrite)
             }),
             // Preserve options for choice-based fields
-            ...((['dropdown', 'multipleChoice'].includes(field.type) && field.options) && {
+            ...(['dropdown', 'multipleChoice'].includes(field.type) && field.options && {
               options: Array.isArray(field.options) ? field.options.filter(Boolean) : []
             }),
             // Add validation for specific field types
@@ -188,15 +188,15 @@ export const adminQuestionsService = {
               validation: {
                 fileTypes: field.validation.fileTypes || [],
                 minLength: parseInt(field.validation.minLength) || 0,
-                maxLength: parseInt(field.validation.maxLength) || 
-                  (field.type === 'textarea' ? 500 : 100) // Set different max length for textarea
+                maxLength: parseInt(field.validation.maxLength) || (
+                field.type === 'textarea' ? 500 : 100) // Set different max length for textarea
               }
             })
           }));
           cleanData.validation = {
             minGroups: parseInt(questionData.validation?.minGroups) || 1,
-            maxGroups: parseInt(questionData.validation?.maxGroups) || 
-              (questionData.allowMultipleGroups ? 10 : 1)
+            maxGroups: parseInt(questionData.validation?.maxGroups) || (
+            questionData.allowMultipleGroups ? 10 : 1)
           };
           cleanData.allowMultipleGroups = Boolean(questionData.allowMultipleGroups);
         }
@@ -204,7 +204,7 @@ export const adminQuestionsService = {
         // Create updated questions array
         const updatedQuestions = [...questions];
         updatedQuestions[questionIndex] = cleanData;
-        
+
         // Update Firestore with clean data
         await updateDoc(this.profilesDoc, {
           [`profileTypes.${profileType}.sections.${sectionId}.questions`]: updatedQuestions,
@@ -226,9 +226,9 @@ export const adminQuestionsService = {
       if (docSnap.exists()) {
         const data = docSnap.data();
         const questions = data.profileTypes?.[profileType]?.sections?.[sectionId]?.questions || [];
-        
-        const updatedQuestions = questions.filter(q => q.id !== questionId);
-        
+
+        const updatedQuestions = questions.filter((q) => q.id !== questionId);
+
         await updateDoc(this.profilesDoc, {
           [`profileTypes.${profileType}.sections.${sectionId}.questions`]: updatedQuestions,
           [`profileTypes.${profileType}.sections.${sectionId}.updatedAt`]: serverTimestamp(),
@@ -247,12 +247,12 @@ export const adminQuestionsService = {
       if (docSnap.exists()) {
         const data = docSnap.data();
         const currentQuestions = data.profileTypes?.[profileType]?.sections?.[sectionId]?.questions || [];
-        
+
         const updatedQuestions = questions.map((q, index) => ({
           ...q,
           order: index
         }));
-        
+
         await updateDoc(this.profilesDoc, {
           [`profileTypes.${profileType}.sections.${sectionId}.questions`]: updatedQuestions,
           [`profileTypes.${profileType}.sections.${sectionId}.updatedAt`]: serverTimestamp(),
@@ -272,7 +272,7 @@ export const adminQuestionsService = {
 
       const currentData = docSnap.data();
       const existingProfileType = currentData.profileTypes?.[profileTypeData.id];
-      
+
       // Generate new ID if label changed
       const newId = generateId(profileTypeData.label);
       const idChanged = newId !== profileTypeData.id;
@@ -282,7 +282,7 @@ export const adminQuestionsService = {
 
       // First, merge the sections properly
       const mergedSections = {};
-      
+
       // Check for section mappings in the incoming data
       const sectionMappings = profileTypeData._sectionMappings || {};
       delete profileTypeData._sectionMappings; // Remove from final data
@@ -308,7 +308,7 @@ export const adminQuestionsService = {
         if (oldSections.has(oldId) && newSections.has(newId)) {
           const oldSection = oldSections.get(oldId);
           const newSection = newSections.get(newId);
-          
+
           mergedSections[newId] = {
             ...newSection,
             questions: oldSection.questions || [], // Preserve questions from old section
@@ -382,7 +382,7 @@ export const adminQuestionsService = {
           [newId]: updatedProfileType
         };
         delete updatedProfileTypes[profileTypeData.id];
-        
+
         batch.set(this.profilesDoc, {
           ...currentData,
           profileTypes: updatedProfileTypes
@@ -404,15 +404,15 @@ export const adminQuestionsService = {
             id: profileTypeData.id,
             sections: existingProfileType?.sections || {},
             totalSections: Object.keys(existingProfileType?.sections || {}).length,
-            questionsCount: Object.values(existingProfileType?.sections || {})
-              .reduce((total, section) => total + (section.questions?.length || 0), 0)
+            questionsCount: Object.values(existingProfileType?.sections || {}).
+            reduce((total, section) => total + (section.questions?.length || 0), 0)
           },
           after: {
             id: newId,
             sections: mergedSections,
             totalSections: Object.keys(mergedSections).length,
-            questionsCount: Object.values(mergedSections)
-              .reduce((total, section) => total + (section.questions?.length || 0), 0)
+            questionsCount: Object.values(mergedSections).
+            reduce((total, section) => total + (section.questions?.length || 0), 0)
           },
           idChanged,
           oldId: idChanged ? profileTypeData.id : null,
@@ -429,7 +429,7 @@ export const adminQuestionsService = {
       throw error;
     }
   }
-}; 
+};
 
 // Helper function to calculate string similarity (Levenshtein distance based)
 function stringSimilarity(str1, str2) {
@@ -453,14 +453,14 @@ function stringSimilarity(str1, str2) {
 
   const maxLen = Math.max(len1, len2);
   return (maxLen - matrix[len1][len2]) / maxLen;
-} 
+}
 
 // Helper function to generate ID from label
 function generateId(label) {
-  return label
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .trim();
-} 
+  return label.
+  toLowerCase().
+  replace(/[^a-z0-9\s-]/g, '').
+  replace(/\s+/g, '-').
+  replace(/-+/g, '-').
+  trim();
+}

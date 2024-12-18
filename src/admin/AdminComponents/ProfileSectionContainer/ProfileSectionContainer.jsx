@@ -27,18 +27,18 @@ const ProfileSectionContainer = ({ sections, activeSection, onSectionChange }) =
       let totalWidth = 0;
       const sectionElements = container.querySelectorAll('.section-btn:not(.more-btn)');
       const moreButtonWidth = 100; // Approximate width of "More" button
-      
+
       let visibleCount = 0;
       sectionElements.forEach((section, index) => {
         totalWidth += section.offsetWidth;
-        if (totalWidth + moreButtonWidth < containerWidth && index < 7) { // Show up to 7 sections
+        if (totalWidth + moreButtonWidth < containerWidth && index < 7) {// Show up to 7 sections
           visibleCount++;
         }
       });
 
       // Always show 5 sections, but no more than 7
       visibleCount = Math.min(7, Math.max(5, visibleCount));
-      
+
       // If we have 7 or fewer sections total, show them all
       if (sections.length <= 7) {
         setVisibleSections(sections);
@@ -51,14 +51,14 @@ const ProfileSectionContainer = ({ sections, activeSection, onSectionChange }) =
 
     calculateVisibleSections();
     window.addEventListener('resize', calculateVisibleSections);
-    
+
     return () => window.removeEventListener('resize', calculateVisibleSections);
   }, [sections]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
-          !moreButtonRef.current.contains(event.target)) {
+      !moreButtonRef.current.contains(event.target)) {
         setShowMoreMenu(false);
       }
     };
@@ -80,47 +80,47 @@ const ProfileSectionContainer = ({ sections, activeSection, onSectionChange }) =
     return null;
   }
 
-  return (
-    <div className="sections-wrapper">
-      <div ref={containerRef} className="sections-container">
-        {visibleSections.map(section => (
-          <button
-            key={section.id}
-            className={`section-btn ${activeSection === section.id ? 'active' : ''}`}
-            onClick={() => onSectionChange(section.id)}
-          >
-            {section.label}
-          </button>
-        ))}
-        
-        {overflowSections.length > 0 && (
-          <div className="more-sections-wrapper">
-            <button
-              ref={moreButtonRef}
-              className={`section-btn more-btn ${overflowSections.some(section => section.id === activeSection) ? 'active' : ''}`}
-              onClick={handleMoreClick}
-            >
-              More {overflowSections.some(section => section.id === activeSection) && '•'}
-            </button>
-            
-            {showMoreMenu && (
-              <div ref={dropdownRef} className="more-sections-dropdown">
-                {overflowSections.map(section => (
-                  <button
-                    key={section.id}
-                    className={`dropdown-item ${activeSection === section.id ? 'active' : ''}`}
-                    onClick={() => handleOverflowSectionClick(section.id)}
-                  >
-                    {section.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "sections-wrapper" }, /*#__PURE__*/
+    React.createElement("div", { ref: containerRef, className: "sections-container" },
+    visibleSections.map((section) => /*#__PURE__*/
+    React.createElement("button", {
+      key: section.id,
+      className: `section-btn ${activeSection === section.id ? 'active' : ''}`,
+      onClick: () => onSectionChange(section.id) },
+
+    section.label
+    )
+    ),
+
+    overflowSections.length > 0 && /*#__PURE__*/
+    React.createElement("div", { className: "more-sections-wrapper" }, /*#__PURE__*/
+    React.createElement("button", {
+      ref: moreButtonRef,
+      className: `section-btn more-btn ${overflowSections.some((section) => section.id === activeSection) ? 'active' : ''}`,
+      onClick: handleMoreClick },
+    "More ",
+    overflowSections.some((section) => section.id === activeSection) && '•'
+    ),
+
+    showMoreMenu && /*#__PURE__*/
+    React.createElement("div", { ref: dropdownRef, className: "more-sections-dropdown" },
+    overflowSections.map((section) => /*#__PURE__*/
+    React.createElement("button", {
+      key: section.id,
+      className: `dropdown-item ${activeSection === section.id ? 'active' : ''}`,
+      onClick: () => handleOverflowSectionClick(section.id) },
+
+    section.label
+    )
+    )
+    )
+
+    )
+
+    )
+    ));
+
 };
 
-export default ProfileSectionContainer; 
+export default ProfileSectionContainer;

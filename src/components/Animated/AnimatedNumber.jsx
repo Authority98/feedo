@@ -19,7 +19,7 @@ const AnimatedNumber = ({ value, duration = 2000, minDigits = 0 }) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       const currentCount = Math.floor(value * progress);
-      
+
       setCount(currentCount);
 
       if (progress < 1) {
@@ -41,4 +41,4 @@ const AnimatedNumber = ({ value, duration = 2000, minDigits = 0 }) => {
   return minDigits > 0 ? String(count).padStart(minDigits, '0') : count;
 };
 
-export default AnimatedNumber; 
+export default AnimatedNumber;

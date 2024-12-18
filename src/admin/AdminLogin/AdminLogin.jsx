@@ -52,59 +52,59 @@ const AdminLogin = () => {
     }
   };
 
-  return (
-    <div className="admin-login-container">
-      <div className="admin-login-card">
-        <div className="admin-login-header">
-          <h1>Admin Portal</h1>
-          <p>Enter your credentials to access the admin dashboard</p>
-        </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "admin-login-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "admin-login-card" }, /*#__PURE__*/
+    React.createElement("div", { className: "admin-login-header" }, /*#__PURE__*/
+    React.createElement("h1", null, "Admin Portal"), /*#__PURE__*/
+    React.createElement("p", null, "Enter your credentials to access the admin dashboard")
+    ), /*#__PURE__*/
 
-        <form onSubmit={handleSubmit} className="admin-login-form">
-          <div className="form-group">
-            <div className="input-wrapper">
-              <FiMail className="input-icon" />
-              <input
-                type="email"
-                placeholder="Admin Email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-              />
-            </div>
-          </div>
+    React.createElement("form", { onSubmit: handleSubmit, className: "admin-login-form" }, /*#__PURE__*/
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("div", { className: "input-wrapper" }, /*#__PURE__*/
+    React.createElement(FiMail, { className: "input-icon" }), /*#__PURE__*/
+    React.createElement("input", {
+      type: "email",
+      placeholder: "Admin Email",
+      value: formData.email,
+      onChange: (e) => setFormData({ ...formData, email: e.target.value }),
+      required: true }
+    )
+    )
+    ), /*#__PURE__*/
 
-          <div className="form-group">
-            <div className="input-wrapper">
-              <FiLock className="input-icon" />
-              <input
-                type="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                required
-              />
-            </div>
-          </div>
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("div", { className: "input-wrapper" }, /*#__PURE__*/
+    React.createElement(FiLock, { className: "input-icon" }), /*#__PURE__*/
+    React.createElement("input", {
+      type: "password",
+      placeholder: "Password",
+      value: formData.password,
+      onChange: (e) => setFormData({ ...formData, password: e.target.value }),
+      required: true }
+    )
+    )
+    ),
 
-          {error && (
-            <div className="error-message">
-              <FiAlertCircle />
-              <span>{error}</span>
-            </div>
-          )}
+    error && /*#__PURE__*/
+    React.createElement("div", { className: "error-message" }, /*#__PURE__*/
+    React.createElement(FiAlertCircle, null), /*#__PURE__*/
+    React.createElement("span", null, error)
+    ), /*#__PURE__*/
 
-          <Button
-            type="submit"
-            isLoading={loading}
-            className="admin-login-button"
-          >
-            {loading ? 'Authenticating...' : 'Login to Admin Portal'}
-          </Button>
-        </form>
-      </div>
-    </div>
-  );
+
+    React.createElement(Button, {
+      type: "submit",
+      isLoading: loading,
+      className: "admin-login-button" },
+
+    loading ? 'Authenticating...' : 'Login to Admin Portal'
+    )
+    )
+    )
+    ));
+
 };
 
-export default AdminLogin; 
+export default AdminLogin;

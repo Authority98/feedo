@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { 
-  FiCheckCircle, 
-  FiAlertTriangle, 
-  FiClock, 
+import {
+  FiCheckCircle,
+  FiAlertTriangle,
+  FiClock,
   FiAlertCircle,
   FiSun,
-  FiActivity
-} from 'react-icons/fi';
+  FiActivity } from
+'react-icons/fi';
 import './StatusBadge.css';
 
 const STATUS_CONFIG = {
@@ -64,8 +64,8 @@ const STATUS_CONFIG = {
   }
 };
 
-const StatusBadge = ({ 
-  status, 
+const StatusBadge = ({
+  status,
   showIcon = false,
   customLabel,
   customColor,
@@ -83,27 +83,27 @@ const StatusBadge = ({
 
   // Generate CSS classes
   const badgeClasses = [
-    'status-badge',
-    status,
-    `status-badge-${config.color}`,
-    `variant-${config.variant}`,
-    onClick ? 'clickable' : '',
-    className
-  ].filter(Boolean).join(' ');
+  'status-badge',
+  status,
+  `status-badge-${config.color}`,
+  `variant-${config.variant}`,
+  onClick ? 'clickable' : '',
+  className].
+  filter(Boolean).join(' ');
 
   const Icon = config.icon;
   const label = customLabel || config.label || status;
 
-  return (
-    <span 
-      className={badgeClasses}
-      onClick={onClick}
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-    >
-      <span className="status-label">{label}</span>
-    </span>
-  );
+  return (/*#__PURE__*/
+    React.createElement("span", {
+      className: badgeClasses,
+      onClick: onClick,
+      role: onClick ? 'button' : undefined,
+      tabIndex: onClick ? 0 : undefined }, /*#__PURE__*/
+
+    React.createElement("span", { className: "status-label" }, label)
+    ));
+
 };
 
 StatusBadge.propTypes = {
@@ -116,4 +116,4 @@ StatusBadge.propTypes = {
   onClick: PropTypes.func
 };
 
-export default StatusBadge; 
+export default StatusBadge;

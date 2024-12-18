@@ -10,20 +10,20 @@ const LinkedInLogin = ({ isSignUp, isLoading }) => {
     showToast('LinkedIn sign in is not available yet', 'info');
   };
 
-  return (
-    <div className="linkedin-button-wrapper">
-      <button
-        className={`linkedin-auth-btn ${isLoading ? 'loading' : ''}`}
-        onClick={handleLinkedInLogin}
-        disabled={isLoading}
-      >
-        <LinkedInIcon />
-        <span>
-          {isLoading ? 'Loading...' : (isSignUp ? 'Sign up with LinkedIn' : 'Sign in with LinkedIn')}
-        </span>
-      </button>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "linkedin-button-wrapper" }, /*#__PURE__*/
+    React.createElement("button", {
+      className: `linkedin-auth-btn ${isLoading ? 'loading' : ''}`,
+      onClick: handleLinkedInLogin,
+      disabled: isLoading }, /*#__PURE__*/
+
+    React.createElement(LinkedInIcon, null), /*#__PURE__*/
+    React.createElement("span", null,
+    isLoading ? 'Loading...' : isSignUp ? 'Sign up with LinkedIn' : 'Sign in with LinkedIn'
+    )
+    )
+    ));
+
 };
 
-export default LinkedInLogin; 
+export default LinkedInLogin;

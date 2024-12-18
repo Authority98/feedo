@@ -10,7 +10,7 @@ import React from 'react';
 import Payment from './Payment';
 
 const PaymentSection = () => {
-  return <Payment />;
+  return /*#__PURE__*/React.createElement(Payment, null);
 };
 
-export default PaymentSection; 
+export default PaymentSection;

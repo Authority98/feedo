@@ -36,7 +36,7 @@ const SubscriptionSection = () => {
     const fetchSavedCards = async () => {
       try {
         if (!user) {
-          console.log('No authenticated user found');
+
           return;
         }
 
@@ -85,10 +85,10 @@ const SubscriptionSection = () => {
     let intervalId = null;
     let retryCount = 0;
     const MAX_RETRIES = 3;
-    
+
     const checkSubscriptionStatus = async () => {
       if (!user || !isMounted) return;
-      
+
       try {
         const userId = user.profile?.authUid;
         const userEmail = user.profile?.email || user.email;
@@ -100,26 +100,26 @@ const SubscriptionSection = () => {
 
         const customer = await stripeApi.getOrCreateCustomer(userId, userEmail);
         const subscriptionDetails = await stripeApi.getSubscriptionDetails(customer.id);
-        
+
         if (subscriptionDetails && isMounted) {
-          console.log('Subscription details:', subscriptionDetails);
-          
+
+
           if (subscriptionDetails.status === 'active') {
             setCurrentPlan(subscriptionDetails.planName);
-            console.log('Active subscription found:', subscriptionDetails.planName);
+
             // Clear interval once we confirm active subscription
             if (intervalId) {
               clearInterval(intervalId);
               intervalId = null;
             }
           } else {
-            console.log('Subscription status:', subscriptionDetails.status);
+
             setCurrentPlan(null);
           }
           // Reset retry count on successful check
           retryCount = 0;
         } else {
-          console.log('No active subscription found');
+
           if (isMounted) setCurrentPlan(null);
         }
       } catch (error) {
@@ -127,7 +127,7 @@ const SubscriptionSection = () => {
         if (isMounted) {
           retryCount++;
           if (retryCount >= MAX_RETRIES) {
-            console.log('Max retries reached, stopping subscription checks');
+
             if (intervalId) {
               clearInterval(intervalId);
               intervalId = null;
@@ -144,7 +144,7 @@ const SubscriptionSection = () => {
 
     // Set loading state
     setIsLoadingStatus(true);
-    
+
     // Initial check
     checkSubscriptionStatus();
 
@@ -167,7 +167,7 @@ const SubscriptionSection = () => {
     try {
       setIsProcessing(true);
       setSelectedPlan(planName);
-      
+
       // If user has saved cards, show payment options
       if (hasPaymentMethods) {
         setShowPaymentOptions(true);
@@ -199,29 +199,29 @@ const SubscriptionSection = () => {
 
       // Get or create customer
       const customer = await stripeApi.getOrCreateCustomer(userId, userEmail);
-      
+
       // Add payment method
       await stripeApi.addPaymentMethod(customer.id, paymentMethodId);
-      
+
       // Set this card as default
       await stripeApi.setDefaultPaymentMethod(customer.id, paymentMethodId);
-      
+
       // Only update subscription if we have a selected plan
       if (selectedPlan) {
         try {
           // Get price ID based on plan and billing interval
           const priceId = getPriceId(selectedPlan, isAnnual);
-          
+
           // Create subscription with the new card
           await stripeApi.createSubscription(customer.id, priceId);
-          
+
           // Update UI state
           setCurrentPlan(selectedPlan);
-          
+
           toast.showSuccess(
             `Successfully subscribed to ${selectedPlan} plan${isAnnual ? ' (Annual)' : ' (Monthly)'}`
           );
-          
+
           setShowAddCardPopup(false);
         } catch (subscriptionError) {
           console.error('Subscription error:', subscriptionError);
@@ -229,7 +229,7 @@ const SubscriptionSection = () => {
           throw subscriptionError;
         }
       }
-      
+
       setShowAddCardPopup(false);
     } catch (error) {
       console.error('Card error:', error);
@@ -258,7 +258,7 @@ const SubscriptionSection = () => {
 
       setIsProcessing(true);
       const priceId = getPriceId(selectedPlan, isAnnual);
-      
+
       try {
         // Get customer
         const customer = await stripeApi.getOrCreateCustomer(
@@ -267,11 +267,11 @@ const SubscriptionSection = () => {
         );
 
         // Create new subscription with the selected card
-        console.log('Creating subscription with:', {
-          customerId: customer.id,
-          priceId,
-          paymentMethodId: card.id
-        });
+
+
+
+
+
 
         const { subscription } = await stripeApi.createSubscription(
           customer.id,
@@ -283,19 +283,19 @@ const SubscriptionSection = () => {
           throw new Error('Failed to create subscription');
         }
 
-        console.log('Subscription created:', subscription);
+
 
         // Check subscription status
         if (subscription.status === 'active') {
           // Update local state immediately
           setCurrentPlan(selectedPlan);
-          
+
           // Show success message
           toast.showToast(
             PAYMENT_NOTIFICATIONS.SUBSCRIPTION.SUCCESS(
               selectedPlan,
               isAnnual ? 'annual' : 'monthly',
-              isAnnual ? plans.find(p => p.name === selectedPlan)?.annualPrice : plans.find(p => p.name === selectedPlan)?.monthlyPrice
+              isAnnual ? plans.find((p) => p.name === selectedPlan)?.annualPrice : plans.find((p) => p.name === selectedPlan)?.monthlyPrice
             ),
             'success'
           );
@@ -305,14 +305,14 @@ const SubscriptionSection = () => {
           setSelectedPlan(null);
         } else {
           throw new Error(
-            subscription.lastPaymentError || 
+            subscription.lastPaymentError ||
             'Subscription creation failed. Please try again.'
           );
         }
       } catch (subscriptionError) {
         console.error('Subscription error:', subscriptionError);
         toast.showError(
-          subscriptionError.message || 
+          subscriptionError.message ||
           PAYMENT_NOTIFICATIONS.SUBSCRIPTION.ERROR
         );
         throw subscriptionError;
@@ -320,7 +320,7 @@ const SubscriptionSection = () => {
     } catch (error) {
       console.error('Error processing subscription:', error);
       toast.showError(
-        error.message || 
+        error.message ||
         PAYMENT_NOTIFICATIONS.SUBSCRIPTION.UPGRADE_ERROR
       );
     } finally {
@@ -349,196 +349,196 @@ const SubscriptionSection = () => {
   };
 
   const plans = [
-    {
-      name: 'Basic',
-      monthlyPrice: 19.00,
-      annualPrice: 190.00,
-      features: [
-        'Basic Resume Builder',
-        '10 Job Applications/month',
-        'Basic Job Matches',
-        'Community Support',
-        'Email Support'
-      ],
-      popular: false,
-      active: currentPlan?.toLowerCase() === 'basic',
-    },
-    {
-      name: 'Professional',
-      monthlyPrice: 49.00,
-      annualPrice: 390.00,
-      features: [
-        'Advanced Resume Builder',
-        'Unlimited Job Applications',
-        'Priority Job Matches',
-        'Cover Letter Generator',
-        'Interview Preparation',
-        'Priority Support',
-        'Career Path Planning'
-      ],
-      popular: true,
-      active: currentPlan?.toLowerCase() === 'professional',
-    },
-    {
-      name: 'Enterprise',
-      monthlyPrice: 99.00,
-      annualPrice: 1000.00,
-      features: [
-        'Everything in Professional',
-        'Multiple Team Members',
-        'Team Analytics',
-        'Custom Branding',
-        'API Access',
-        'Dedicated Account Manager',
-        '24/7 Phone Support',
-        'Custom Features'
-      ],
-      popular: false,
-      active: currentPlan?.toLowerCase() === 'enterprise',
-    },
-  ];
+  {
+    name: 'Basic',
+    monthlyPrice: 19.00,
+    annualPrice: 190.00,
+    features: [
+    'Basic Resume Builder',
+    '10 Job Applications/month',
+    'Basic Job Matches',
+    'Community Support',
+    'Email Support'],
+
+    popular: false,
+    active: currentPlan?.toLowerCase() === 'basic'
+  },
+  {
+    name: 'Professional',
+    monthlyPrice: 49.00,
+    annualPrice: 390.00,
+    features: [
+    'Advanced Resume Builder',
+    'Unlimited Job Applications',
+    'Priority Job Matches',
+    'Cover Letter Generator',
+    'Interview Preparation',
+    'Priority Support',
+    'Career Path Planning'],
+
+    popular: true,
+    active: currentPlan?.toLowerCase() === 'professional'
+  },
+  {
+    name: 'Enterprise',
+    monthlyPrice: 99.00,
+    annualPrice: 1000.00,
+    features: [
+    'Everything in Professional',
+    'Multiple Team Members',
+    'Team Analytics',
+    'Custom Branding',
+    'API Access',
+    'Dedicated Account Manager',
+    '24/7 Phone Support',
+    'Custom Features'],
+
+    popular: false,
+    active: currentPlan?.toLowerCase() === 'enterprise'
+  }];
+
 
   // Add debug logging for subscription status
   useEffect(() => {
-    console.log('Current Plan:', currentPlan);
-    console.log('Plans Status:', plans.map(p => ({ 
-      name: p.name, 
-      active: p.active,
-      matches: p.name.toLowerCase() === currentPlan?.toLowerCase()
-    })));
+
+
+
+
+
+
   }, [currentPlan]);
 
-  return (
-    <section className="section-wrapper">
-      <div className="background-animation" />
-      
-      <div className="toggle-container">
-        <div className="toggle-wrapper">
-          <span className={!isAnnual ? 'active' : ''}>Monthly</span>
-          <button 
-            className={`toggle-button ${isAnnual ? 'active' : ''}`} 
-            onClick={() => setIsAnnual(!isAnnual)}
-            aria-checked={isAnnual}
-            role="switch"
-          >
-            <motion.div 
-              className="toggle-slider"
-              initial={false}
-              animate={{ 
-                x: isAnnual ? 24 : 4,
-                width: '16px'
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 500,
-                damping: 30,
-                mass: 0.8
-              }}
-            />
-          </button>
-          <span className={isAnnual ? 'active' : ''}>
-            Annual <span className="save-badge">Save 20%</span>
-          </span>
-        </div>
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("section", { className: "section-wrapper" }, /*#__PURE__*/
+    React.createElement("div", { className: "background-animation" }), /*#__PURE__*/
 
-      <div className="content-wrapper">
-        <div className="cards-container">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-            >
-              <div className={`plan-card ${plan.popular ? 'popular' : ''} ${plan.active ? 'active' : ''}`}>
-                {plan.popular && <div className="popular-badge">Most Popular</div>}
-                {plan.active && <div className="active-badge">Current Plan</div>}
-                <h3>{plan.name}</h3>
-                <p className="description">
-                  {plan.name === 'Basic' && 'Perfect for getting started'}
-                  {plan.name === 'Professional' && 'Best for professionals'}
-                  {plan.name === 'Enterprise' && 'For teams and businesses'}
-                </p>
-                <div className="price-tag">
-                  {plan.monthlyPrice > 0 && <span>$</span>}
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      className="amount"
-                      key={isAnnual ? 'annual' : 'monthly'}
-                      initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                      transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-                    >
-                      {isAnnual ? plan.annualPrice : plan.monthlyPrice}
-                    </motion.span>
-                  </AnimatePresence>
-                  <span className="period">{isAnnual ? '/year' : '/mo'}</span>
-                </div>
-                <ul className="features-list">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="feature-item">
-                      <span className="check-icon">✓</span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <button 
-                  className={`select-button ${plan.popular ? 'popular' : ''} ${plan.active ? 'active' : ''}`}
-                  disabled={plan.active || isProcessing || isLoadingStatus}
-                  onClick={() => handleUpgrade(plan.name)}
-                >
-                  {isLoadingStatus ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <FiLoader className="animate-spin" />
-                      Loading...
-                    </span>
-                  ) : plan.active ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <FiCheck />
-                      Current Plan
-                    </span>
-                  ) : isProcessing ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <FiLoader className="animate-spin" />
-                      Processing...
-                    </span>
-                  ) : (
-                    <span className="flex items-center justify-center gap-2">
-                      <FiCreditCard />
-                      Subscribe
-                    </span>
-                  )}
-                </button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+    React.createElement("div", { className: "toggle-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "toggle-wrapper" }, /*#__PURE__*/
+    React.createElement("span", { className: !isAnnual ? 'active' : '' }, "Monthly"), /*#__PURE__*/
+    React.createElement("button", {
+      className: `toggle-button ${isAnnual ? 'active' : ''}`,
+      onClick: () => setIsAnnual(!isAnnual),
+      "aria-checked": isAnnual,
+      role: "switch" }, /*#__PURE__*/
 
-      {/* Payment Options Popup */}
-      <PaymentOptionsPopup 
-        isOpen={showPaymentOptions}
-        onClose={() => setShowPaymentOptions(false)}
-        savedCards={savedCards}
-        onSelectCard={handleCardSelection}
-        onAddNewCard={() => {
-          setShowPaymentOptions(false);
-          setShowAddCardPopup(true);
-        }}
-      />
+    React.createElement(motion.div, {
+      className: "toggle-slider",
+      initial: false,
+      animate: {
+        x: isAnnual ? 24 : 4,
+        width: '16px'
+      },
+      transition: {
+        type: "spring",
+        stiffness: 500,
+        damping: 30,
+        mass: 0.8
+      } }
+    )
+    ), /*#__PURE__*/
+    React.createElement("span", { className: isAnnual ? 'active' : '' }, "Annual ", /*#__PURE__*/
+    React.createElement("span", { className: "save-badge" }, "Save 20%")
+    )
+    )
+    ), /*#__PURE__*/
 
-      {/* Add Card Popup */}
-      <StripeProvider>
-        <AddCardPopup 
-          isOpen={showAddCardPopup}
-          onClose={handleClosePopup}
-          onAddCard={handleAddCard}
-        />
-      </StripeProvider>
-    </section>
-  );
+    React.createElement("div", { className: "content-wrapper" }, /*#__PURE__*/
+    React.createElement("div", { className: "cards-container" },
+    plans.map((plan, index) => /*#__PURE__*/
+    React.createElement(motion.div, {
+      key: plan.name,
+      initial: { opacity: 0, y: 30 },
+      animate: { opacity: 1, y: 0 },
+      transition: { duration: 0.6, delay: index * 0.2 } }, /*#__PURE__*/
+
+    React.createElement("div", { className: `plan-card ${plan.popular ? 'popular' : ''} ${plan.active ? 'active' : ''}` },
+    plan.popular && /*#__PURE__*/React.createElement("div", { className: "popular-badge" }, "Most Popular"),
+    plan.active && /*#__PURE__*/React.createElement("div", { className: "active-badge" }, "Current Plan"), /*#__PURE__*/
+    React.createElement("h3", null, plan.name), /*#__PURE__*/
+    React.createElement("p", { className: "description" },
+    plan.name === 'Basic' && 'Perfect for getting started',
+    plan.name === 'Professional' && 'Best for professionals',
+    plan.name === 'Enterprise' && 'For teams and businesses'
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "price-tag" },
+    plan.monthlyPrice > 0 && /*#__PURE__*/React.createElement("span", null, "$"), /*#__PURE__*/
+    React.createElement(AnimatePresence, { mode: "wait" }, /*#__PURE__*/
+    React.createElement(motion.span, {
+      className: "amount",
+      key: isAnnual ? 'annual' : 'monthly',
+      initial: { opacity: 0, y: -20, scale: 0.95 },
+      animate: { opacity: 1, y: 0, scale: 1 },
+      exit: { opacity: 0, y: 20, scale: 0.95 },
+      transition: { duration: 0.4, ease: [0.34, 1.56, 0.64, 1] } },
+
+    isAnnual ? plan.annualPrice : plan.monthlyPrice
+    )
+    ), /*#__PURE__*/
+    React.createElement("span", { className: "period" }, isAnnual ? '/year' : '/mo')
+    ), /*#__PURE__*/
+    React.createElement("ul", { className: "features-list" },
+    plan.features.map((feature) => /*#__PURE__*/
+    React.createElement("li", { key: feature, className: "feature-item" }, /*#__PURE__*/
+    React.createElement("span", { className: "check-icon" }, "\u2713"),
+    feature
+    )
+    )
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      className: `select-button ${plan.popular ? 'popular' : ''} ${plan.active ? 'active' : ''}`,
+      disabled: plan.active || isProcessing || isLoadingStatus,
+      onClick: () => handleUpgrade(plan.name) },
+
+    isLoadingStatus ? /*#__PURE__*/
+    React.createElement("span", { className: "flex items-center justify-center gap-2" }, /*#__PURE__*/
+    React.createElement(FiLoader, { className: "animate-spin" }), "Loading..."
+
+    ) :
+    plan.active ? /*#__PURE__*/
+    React.createElement("span", { className: "flex items-center justify-center gap-2" }, /*#__PURE__*/
+    React.createElement(FiCheck, null), "Current Plan"
+
+    ) :
+    isProcessing ? /*#__PURE__*/
+    React.createElement("span", { className: "flex items-center justify-center gap-2" }, /*#__PURE__*/
+    React.createElement(FiLoader, { className: "animate-spin" }), "Processing..."
+
+    ) : /*#__PURE__*/
+
+    React.createElement("span", { className: "flex items-center justify-center gap-2" }, /*#__PURE__*/
+    React.createElement(FiCreditCard, null), "Subscribe"
+
+    )
+
+    )
+    )
+    )
+    )
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement(PaymentOptionsPopup, {
+      isOpen: showPaymentOptions,
+      onClose: () => setShowPaymentOptions(false),
+      savedCards: savedCards,
+      onSelectCard: handleCardSelection,
+      onAddNewCard: () => {
+        setShowPaymentOptions(false);
+        setShowAddCardPopup(true);
+      } }
+    ), /*#__PURE__*/
+
+
+    React.createElement(StripeProvider, null, /*#__PURE__*/
+    React.createElement(AddCardPopup, {
+      isOpen: showAddCardPopup,
+      onClose: handleClosePopup,
+      onAddCard: handleAddCard }
+    )
+    )
+    ));
+
 };
 
-export default SubscriptionSection; 
+export default SubscriptionSection;

@@ -10,17 +10,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  FiSun,          // For new opportunities
-  FiFileText,     // For submissions
-  FiCheckCircle,  // For approvals
+import {
+  FiSun, // For new opportunities
+  FiFileText, // For submissions
+  FiCheckCircle, // For approvals
   FiAlertTriangle, // For incomplete items
-  FiUser,         // For profile updates
-  FiBook,         // For education updates
-  FiBriefcase,    // For work experience
-  FiShield,       // For verification
-  FiAlertCircle,  // For follow-up
-  FiArrowRight   // For the view all button
+  FiUser, // For profile updates
+  FiBook, // For education updates
+  FiBriefcase, // For work experience
+  FiShield, // For verification
+  FiAlertCircle, // For follow-up
+  FiArrowRight // For the view all button
 } from 'react-icons/fi';
 import './RecentActivity.css';
 import { useAuth } from '../../../../../auth/AuthContext';
@@ -103,9 +103,9 @@ const RecentActivity = () => {
 
         // Fetch both applications and opportunities
         const [applications, opportunities] = await Promise.all([
-          applicationOperations.getUserApplications(user.profile.authUid),
-          opportunityOperations.getOpportunities({ userId: user.profile.authUid })
-        ]);
+        applicationOperations.getUserApplications(user.profile.authUid),
+        opportunityOperations.getOpportunities({ userId: user.profile.authUid })]
+        );
 
         // Format submission notifications (using the most recent application)
         const submissionActivities = applications.length > 0 ? [{
@@ -138,7 +138,7 @@ const RecentActivity = () => {
         }] : [];
 
         // Format opportunity notifications
-        const opportunityActivities = opportunities.slice(0, 1).map(opp => ({
+        const opportunityActivities = opportunities.slice(0, 1).map((opp) => ({
           id: `opp-${opp.id}`,
           icon: FiSun,
           description: {
@@ -156,11 +156,11 @@ const RecentActivity = () => {
 
         // Combine all activities
         const allActivities = [
-          ...missingStepActivities,
-          ...submissionActivities,
-          ...applicationActivities,
-          ...opportunityActivities
-        ].sort((a, b) => b.date - a.date);
+        ...missingStepActivities,
+        ...submissionActivities,
+        ...applicationActivities,
+        ...opportunityActivities].
+        sort((a, b) => b.date - a.date);
 
         setActivities(allActivities);
         setError(null);
@@ -247,38 +247,38 @@ const RecentActivity = () => {
   const checkSectionCompletion = (sectionId, user, questions) => {
     // If no user data or no profile sections, section is incomplete
     if (!user?.profileSections || !user.profileSections[sectionId]) {
-      console.log(`Section ${sectionId} incomplete: No user data or section data`);
+
       return false;
     }
 
     const sectionData = user.profileSections[sectionId];
-    
+
     // If no questions array in section data, section is incomplete
     if (!sectionData.questions || !Array.isArray(sectionData.questions)) {
-      console.log(`Section ${sectionId} incomplete: No questions array in section data`);
+
       return false;
     }
 
     // If no questions in config, section is incomplete
     if (!questions || !Array.isArray(questions) || questions.length === 0) {
-      console.log(`Section ${sectionId} incomplete: No questions in config`);
+
       return false;
     }
 
     // Get required questions from config
-    const requiredQuestions = questions.filter(q => q.required);
-    
+    const requiredQuestions = questions.filter((q) => q.required);
+
     // For sections with no required questions, treat all questions as required
     // This ensures at least one question must be answered
     const questionsToCheck = requiredQuestions.length > 0 ? requiredQuestions : questions;
-    
+
     // Check each question
     for (const question of questionsToCheck) {
-      const questionData = sectionData.questions.find(q => q.id === question.id);
-      
+      const questionData = sectionData.questions.find((q) => q.id === question.id);
+
       // If question data doesn't exist or has no answer, section is incomplete
       if (!questionData || !questionData.answer) {
-        console.log(`Section ${sectionId} incomplete: Missing answer for question ${question.id}`);
+
         return false;
       }
 
@@ -286,16 +286,16 @@ const RecentActivity = () => {
       if (question.type === 'repeater' && question.repeaterFields) {
         // If answer is not an array or is empty, section is incomplete
         if (!Array.isArray(questionData.answer) || questionData.answer.length === 0) {
-          console.log(`Section ${sectionId} incomplete: Empty or invalid repeater answer for question ${question.id}`);
+
           return false;
         }
 
         // Check each repeater entry for fields
-        const fieldsToCheck = question.repeaterFields.filter(field => field.required || requiredQuestions.length === 0);
+        const fieldsToCheck = question.repeaterFields.filter((field) => field.required || requiredQuestions.length === 0);
         for (const entry of questionData.answer) {
           for (const field of fieldsToCheck) {
             if (!entry || !entry[field.id] || entry[field.id] === '') {
-              console.log(`Section ${sectionId} incomplete: Missing field ${field.id} in question ${question.id}`);
+
               return false;
             }
           }
@@ -304,40 +304,40 @@ const RecentActivity = () => {
       // For non-repeater questions
       else {
         // Check for empty string, null, undefined, or empty array
-        const isEmpty = 
-          questionData.answer === '' || 
-          questionData.answer === null || 
-          questionData.answer === undefined ||
-          (Array.isArray(questionData.answer) && (
-            questionData.answer.length === 0 || 
-            questionData.answer.every(a => a === null || a === undefined || a === '')
-          )) ||
-          (question.type === 'phone' && (
-            !questionData.answer ||
-            typeof questionData.answer !== 'object' ||
-            !questionData.answer.countryCode ||
-            !questionData.answer.number ||
-            !questionData.answer.number.trim()
-          ));
+        const isEmpty =
+        questionData.answer === '' ||
+        questionData.answer === null ||
+        questionData.answer === undefined ||
+        Array.isArray(questionData.answer) && (
+        questionData.answer.length === 0 ||
+        questionData.answer.every((a) => a === null || a === undefined || a === '')) ||
+
+        question.type === 'phone' && (
+        !questionData.answer ||
+        typeof questionData.answer !== 'object' ||
+        !questionData.answer.countryCode ||
+        !questionData.answer.number ||
+        !questionData.answer.number.trim());
+
 
         if (isEmpty) {
-          console.log(`Section ${sectionId} incomplete: Empty answer for question ${question.id}`);
+
           return false;
         }
       }
     }
 
     // If we get here, all checked questions have valid answers
-    console.log(`Section ${sectionId} complete: All questions answered`);
+
     return true;
   };
 
   // Helper function to format section name
   const formatSectionName = (sectionId) => {
-    return sectionId
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    return sectionId.
+    split('-').
+    map((word) => word.charAt(0).toUpperCase() + word.slice(1)).
+    join(' ');
   };
 
   // Helper function to get appropriate icon for each section
@@ -346,7 +346,7 @@ const RecentActivity = () => {
       'personal': FiUser,
       'education': FiBook,
       'work-experience': FiBriefcase,
-      'verification': FiShield,
+      'verification': FiShield
       // Add more section mappings as needed
     };
 
@@ -356,11 +356,11 @@ const RecentActivity = () => {
   // Format date helper function
   const formatDate = (date) => {
     if (!date) return '';
-    
+
     const now = new Date();
     const diffTime = Math.abs(now - date);
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) {
       const hours = Math.floor(diffTime / (1000 * 60 * 60));
       if (hours === 0) {
@@ -369,10 +369,10 @@ const RecentActivity = () => {
       }
       return `${hours} hours ago`;
     }
-    
+
     if (diffDays === 1) return 'Yesterday';
     if (diffDays < 7) return `${diffDays} days ago`;
-    
+
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
@@ -395,7 +395,7 @@ const RecentActivity = () => {
   // Get button config based on activity type
   const getViewButton = (activity) => {
     const Icon = FiArrowRight; // Default icon
-    
+
     switch (activity.type) {
       case 'Application':
       case 'Submission':
@@ -423,95 +423,95 @@ const RecentActivity = () => {
   };
 
   if (loading) {
-    return (
-      <div className="recent-activity">
-        <div className="loading-state">
-          <div className="loading-spinner"></div>
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "recent-activity" }, /*#__PURE__*/
+      React.createElement("div", { className: "loading-state" }, /*#__PURE__*/
+      React.createElement("div", { className: "loading-spinner" })
+      )
+      ));
+
   }
 
   if (error) {
-    return (
-      <div className="recent-activity">
-        <div className="activity-header">
-          <h2 className="activity-title">Recent Activity</h2>
-        </div>
-        <div className="text-red-500 text-center py-4">
-          {error}
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "recent-activity" }, /*#__PURE__*/
+      React.createElement("div", { className: "activity-header" }, /*#__PURE__*/
+      React.createElement("h2", { className: "activity-title" }, "Recent Activity")
+      ), /*#__PURE__*/
+      React.createElement("div", { className: "text-red-500 text-center py-4" },
+      error
+      )
+      ));
+
   }
 
-  return (
-    <div className="recent-activity">
-      <div className="activity-header">
-        <h2 className="activity-title">Recent Activity</h2>
-      </div>
-      
-      <div className="activity-list">
-        {activities.length > 0 ? (
-          activities.map((activity, index) => (
-            <div 
-              key={activity.id}
-              className="activity-item"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <div className={`activity-icon-wrapper ${activity.bgColor}`}>
-                <activity.icon className={`activity-icon ${activity.color}`} />
-              </div>
-              
-              <div className="activity-content">
-                <div className="activity-main">
-                  <span className="activity-type">{activity.type}:</span>
-                  <span className="activity-description">
-                    {typeof activity.description === 'string' ? (
-                      activity.description
-                    ) : (
-                      <>
-                        {activity.description.prefix}
-                        <span 
-                          className="opportunity-name"
-                          onClick={() => {
-                            if (activity.type === 'Opportunity') {
-                              handleViewOpportunities(activity.opportunityId);
-                            } else if (activity.type === 'Application' || activity.type === 'Submission') {
-                              handleViewApplications(activity.applicationId);
-                            }
-                          }}
-                        >
-                          {activity.description.name}
-                        </span>
-                        {activity.description.suffix}
-                      </>
-                    )}
-                  </span>
-                  {(activity.type === 'Application' || activity.type === 'Opportunity' || activity.type === 'Submission') && (
-                    <span className="activity-date">{formatDate(activity.date)}</span>
-                  )}
-                </div>
-                {getViewButton(activity) && (
-                  <button 
-                    onClick={getViewButton(activity).onClick}
-                    className="activity-view-btn"
-                  >
-                    {getViewButton(activity).label}
-                    <FiArrowRight className="inline ml-1" />
-                  </button>
-                )}
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-gray-500 text-center py-4">
-            No recent activities
-          </div>
-        )}
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "recent-activity" }, /*#__PURE__*/
+    React.createElement("div", { className: "activity-header" }, /*#__PURE__*/
+    React.createElement("h2", { className: "activity-title" }, "Recent Activity")
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "activity-list" },
+    activities.length > 0 ?
+    activities.map((activity, index) => /*#__PURE__*/
+    React.createElement("div", {
+      key: activity.id,
+      className: "activity-item",
+      style: { animationDelay: `${index * 100}ms` } }, /*#__PURE__*/
+
+    React.createElement("div", { className: `activity-icon-wrapper ${activity.bgColor}` }, /*#__PURE__*/
+    React.createElement(activity.icon, { className: `activity-icon ${activity.color}` })
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "activity-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "activity-main" }, /*#__PURE__*/
+    React.createElement("span", { className: "activity-type" }, activity.type, ":"), /*#__PURE__*/
+    React.createElement("span", { className: "activity-description" },
+    typeof activity.description === 'string' ?
+    activity.description : /*#__PURE__*/
+
+    React.createElement(React.Fragment, null,
+    activity.description.prefix, /*#__PURE__*/
+    React.createElement("span", {
+      className: "opportunity-name",
+      onClick: () => {
+        if (activity.type === 'Opportunity') {
+          handleViewOpportunities(activity.opportunityId);
+        } else if (activity.type === 'Application' || activity.type === 'Submission') {
+          handleViewApplications(activity.applicationId);
+        }
+      } },
+
+    activity.description.name
+    ),
+    activity.description.suffix
+    )
+
+    ),
+    (activity.type === 'Application' || activity.type === 'Opportunity' || activity.type === 'Submission') && /*#__PURE__*/
+    React.createElement("span", { className: "activity-date" }, formatDate(activity.date))
+
+    ),
+    getViewButton(activity) && /*#__PURE__*/
+    React.createElement("button", {
+      onClick: getViewButton(activity).onClick,
+      className: "activity-view-btn" },
+
+    getViewButton(activity).label, /*#__PURE__*/
+    React.createElement(FiArrowRight, { className: "inline ml-1" })
+    )
+
+    )
+    )
+    ) : /*#__PURE__*/
+
+    React.createElement("div", { className: "text-gray-500 text-center py-4" }, "No recent activities"
+
+    )
+
+    )
+    ));
+
 };
 
 export default RecentActivity;

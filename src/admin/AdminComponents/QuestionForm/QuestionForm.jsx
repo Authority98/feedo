@@ -16,13 +16,13 @@ import { FiPlus, FiTrash2, FiMove } from 'react-icons/fi';
 import EnhanceWithAI from '../../../components/EnhanceWithAI/EnhanceWithAI';
 import PhoneNumberInput from '../../../components/PhoneNumberInput/PhoneNumberInput';
 
-const QuestionForm = ({ 
-  questionType, 
-  onSubmit, 
-  onCancel, 
+const QuestionForm = ({
+  questionType,
+  onSubmit,
+  onCancel,
   initialData,
   profileType,
-  sectionId 
+  sectionId
 }) => {
   const [formData, setFormData] = useState({
     id: Date.now().toString(),
@@ -36,15 +36,15 @@ const QuestionForm = ({
     enableRewrite: false,
     allowMultipleGroups: false,
     groupFields: [
-      {
-        id: Date.now(),
-        label: '',
-        type: 'text',
-        required: false,
-        width: '100',
-        options: ['']
-      }
-    ],
+    {
+      id: Date.now(),
+      label: '',
+      type: 'text',
+      required: false,
+      width: '100',
+      options: ['']
+    }],
+
     validation: {
       minLength: 0,
       maxLength: 100,
@@ -65,31 +65,31 @@ const QuestionForm = ({
         enableRewrite: initialData.enableRewrite || false,
         options: initialData.options || [''],
         allowMultipleGroups: initialData.allowMultipleGroups ?? false,
-        groupFields: initialData.repeaterFields?.map(field => ({
+        groupFields: initialData.repeaterFields?.map((field) => ({
           ...field,
-          options: ['dropdown', 'singleChoice', 'multipleChoice'].includes(field.type) 
-            ? (field.options || [''])
-            : ['']
+          options: ['dropdown', 'singleChoice', 'multipleChoice'].includes(field.type) ?
+          field.options || [''] :
+          ['']
         })) || [
-          {
-            id: Date.now(),
-            label: '',
-            type: 'text',
-            required: false,
-            width: '100',
-            options: ['']
-          }
-        ],
+        {
+          id: Date.now(),
+          label: '',
+          type: 'text',
+          required: false,
+          width: '100',
+          options: ['']
+        }],
+
         validation: {
           ...initialData.validation,
           minLength: initialData.validation?.minLength || 0,
-          maxLength: initialData.validation?.maxLength || 
-                    (initialData.inputType === 'textarea' ? 500 : 100),
-          minGroups: initialData.validation?.minGroups || 
-                    initialData.validation?.minRepeats || 1,
-          maxGroups: initialData.validation?.maxGroups || 
-                    initialData.validation?.maxRepeats || 
-                    (initialData.allowMultipleGroups ? 10 : 1)
+          maxLength: initialData.validation?.maxLength || (
+          initialData.inputType === 'textarea' ? 500 : 100),
+          minGroups: initialData.validation?.minGroups ||
+          initialData.validation?.minRepeats || 1,
+          maxGroups: initialData.validation?.maxGroups ||
+          initialData.validation?.maxRepeats || (
+          initialData.allowMultipleGroups ? 10 : 1)
         }
       });
     }
@@ -106,7 +106,7 @@ const QuestionForm = ({
       if (formData.options.length < 2) {
         newErrors.options = 'At least two options are required';
       }
-      if (formData.options.some(opt => !opt.trim())) {
+      if (formData.options.some((opt) => !opt.trim())) {
         newErrors.options = 'All options must have a value';
       }
     }
@@ -134,9 +134,9 @@ const QuestionForm = ({
 
     try {
       setIsSubmitting(true);
-      
+
       // Clean repeater fields data
-      const cleanGroupFields = formData.groupFields.map(field => {
+      const cleanGroupFields = formData.groupFields.map((field) => {
         const cleanField = {
           id: field.id,
           label: field.label.trim(),
@@ -147,7 +147,7 @@ const QuestionForm = ({
 
         // Add options array for choice-based fields
         if (['dropdown', 'multipleChoice'].includes(field.type)) {
-          cleanField.options = (field.options || []).filter(opt => opt.trim());
+          cleanField.options = (field.options || []).filter((opt) => opt.trim());
         }
 
         // Add enableRewrite for textarea fields
@@ -171,20 +171,20 @@ const QuestionForm = ({
         order: formData.order,
         width: formData.width,
         updatedAt: new Date().toISOString(),
-        
+
         // Add inputType and enableRewrite for text questions
         ...(questionType === 'text' && {
           inputType: formData.inputType || 'text',
-          enableRewrite: formData.inputType === 'textarea' ? (formData.enableRewrite || false) : false
+          enableRewrite: formData.inputType === 'textarea' ? formData.enableRewrite || false : false
         }),
-        
+
         // Add options for choice-based questions
-        ...((['multipleChoice', 'dropdown'].includes(questionType)) && {
-          options: formData.options.filter(opt => opt.trim())
+        ...(['multipleChoice', 'dropdown'].includes(questionType) && {
+          options: formData.options.filter((opt) => opt.trim())
         }),
-        
+
         // Add validation for text inputs
-        ...((['text', 'textarea'].includes(questionType)) && {
+        ...(['text', 'textarea'].includes(questionType) && {
           validation: {
             minLength: parseInt(formData.validation.minLength) || 0,
             maxLength: parseInt(formData.validation.maxLength) || 1000,
@@ -196,7 +196,7 @@ const QuestionForm = ({
         ...(questionType === 'phone' && {
           example: formData.example || { countryCode: '+1', number: '' }
         }),
-        
+
         // Add repeater fields configuration with options and validation
         ...(questionType === 'repeater' && {
           repeaterFields: cleanGroupFields,
@@ -208,10 +208,10 @@ const QuestionForm = ({
         })
       };
 
-      console.log('Submitting question data:', cleanData); // Debug log
+      // Debug log
 
       const success = await onSubmit(cleanData);
-      
+
       if (success) {
         onCancel();
       }
@@ -232,9 +232,9 @@ const QuestionForm = ({
   };
 
   const addOption = () => {
-    setFormData({ 
-      ...formData, 
-      options: [...formData.options, ''] 
+    setFormData({
+      ...formData,
+      options: [...formData.options, '']
     });
   };
 
@@ -251,15 +251,15 @@ const QuestionForm = ({
     setFormData({
       ...formData,
       groupFields: [
-        ...formData.groupFields,
-        {
-          id: Date.now(),
-          label: '',
-          type: 'text',
-          required: false,
-          width: '100'
-        }
-      ]
+      ...formData.groupFields,
+      {
+        id: Date.now(),
+        label: '',
+        type: 'text',
+        required: false,
+        width: '100'
+      }]
+
     });
   };
 
@@ -312,7 +312,7 @@ const QuestionForm = ({
         ...currentField,
         [field]: value,
         // Preserve options array for choice-based fields
-        ...((['dropdown', 'multipleChoice'].includes(currentField.type) && currentField.options) && {
+        ...(['dropdown', 'multipleChoice'].includes(currentField.type) && currentField.options && {
           options: currentField.options
         })
       };
@@ -324,294 +324,294 @@ const QuestionForm = ({
     });
 
     // Debug log to check the state after update
-    console.log('Updated field:', newGroupFields[index]);
+
   };
 
   const getPlaceholderExample = (index) => {
     const examples = [
-      'e.g., School Name',
-      'e.g., Degree/Qualification',
-      'e.g., Field of Study',
-      'e.g., Start Date',
-      'e.g., End Date',
-      'e.g., Grade/Score',
-      'e.g., Description',
-      'e.g., Location',
-      'e.g., Achievement',
-      'e.g., Additional Details'
-    ];
-    
+    'e.g., School Name',
+    'e.g., Degree/Qualification',
+    'e.g., Field of Study',
+    'e.g., Start Date',
+    'e.g., End Date',
+    'e.g., Grade/Score',
+    'e.g., Description',
+    'e.g., Location',
+    'e.g., Achievement',
+    'e.g., Additional Details'];
+
+
     return examples[index % examples.length];
   };
 
   const renderValidationFields = () => {
     if (['text', 'textarea'].includes(questionType)) {
-      return (
-        <div className="validation-fields">
-          <h4 className="validation-title">Validation Rules</h4>
-          <div className="validation-grid">
-            <div className="validation-row">
-              <div className="form-group">
-                <label className="form-label">Minimum Length</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={formData.validation.minLength}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    validation: {
-                      ...formData.validation,
-                      minLength: parseInt(e.target.value) || 0
-                    }
-                  })}
-                  className={`form-input ${errors.validation ? 'error' : ''}`}
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Maximum Length</label>
-                <input
-                  type="number"
-                  min="0"
-                  value={formData.validation.maxLength}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    validation: {
-                      ...formData.validation,
-                      maxLength: parseInt(e.target.value) || 0
-                    }
-                  })}
-                  className={`form-input ${errors.validation ? 'error' : ''}`}
-                />
-              </div>
-            </div>
-          </div>
-          {errors.validation && (
-            <p className="error-message">{errors.validation}</p>
-          )}
-        </div>
-      );
+      return (/*#__PURE__*/
+        React.createElement("div", { className: "validation-fields" }, /*#__PURE__*/
+        React.createElement("h4", { className: "validation-title" }, "Validation Rules"), /*#__PURE__*/
+        React.createElement("div", { className: "validation-grid" }, /*#__PURE__*/
+        React.createElement("div", { className: "validation-row" }, /*#__PURE__*/
+        React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+        React.createElement("label", { className: "form-label" }, "Minimum Length"), /*#__PURE__*/
+        React.createElement("input", {
+          type: "number",
+          min: "0",
+          value: formData.validation.minLength,
+          onChange: (e) => setFormData({
+            ...formData,
+            validation: {
+              ...formData.validation,
+              minLength: parseInt(e.target.value) || 0
+            }
+          }),
+          className: `form-input ${errors.validation ? 'error' : ''}` }
+        )
+        ), /*#__PURE__*/
+        React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+        React.createElement("label", { className: "form-label" }, "Maximum Length"), /*#__PURE__*/
+        React.createElement("input", {
+          type: "number",
+          min: "0",
+          value: formData.validation.maxLength,
+          onChange: (e) => setFormData({
+            ...formData,
+            validation: {
+              ...formData.validation,
+              maxLength: parseInt(e.target.value) || 0
+            }
+          }),
+          className: `form-input ${errors.validation ? 'error' : ''}` }
+        )
+        )
+        )
+        ),
+        errors.validation && /*#__PURE__*/
+        React.createElement("p", { className: "error-message" }, errors.validation)
+
+        ));
+
     }
     return null;
   };
 
   const renderGroupFields = () => {
     if (questionType === 'repeater') {
-      return (
-        <div className="group-fields-section">
-          <h3 className="section-title">Group Fields</h3>
-          <p className="helper-text mb-4">
-            Configure the fields that will be included in each group.
-          </p>
+      return (/*#__PURE__*/
+        React.createElement("div", { className: "group-fields-section" }, /*#__PURE__*/
+        React.createElement("h3", { className: "section-title" }, "Group Fields"), /*#__PURE__*/
+        React.createElement("p", { className: "helper-text mb-4" }, "Configure the fields that will be included in each group."
 
-          <div className="group-settings mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <h4 className="text-sm font-medium text-gray-700 mb-3">Group Settings</h4>
-            
-            <div className="form-checkbox mb-4">
-              <input
-                type="checkbox"
-                checked={formData.allowMultipleGroups}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  allowMultipleGroups: e.target.checked,
-                  validation: {
-                    ...prev.validation,
-                    maxGroups: e.target.checked ? 10 : 1,
-                    minGroups: 1
-                  }
-                }))}
-              />
-              <span>Allow multiple groups</span>
-            </div>
+        ), /*#__PURE__*/
 
-            {formData.allowMultipleGroups && (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="form-group">
-                  <label className="text-sm">Minimum Groups</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max={formData.validation.maxGroups}
-                    value={formData.validation.minGroups}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      validation: {
-                        ...prev.validation,
-                        minGroups: parseInt(e.target.value) || 1
-                      }
-                    }))}
-                    className="form-input"
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="text-sm">Maximum Groups</label>
-                  <input
-                    type="number"
-                    min={formData.validation.minGroups}
-                    value={formData.validation.maxGroups}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      validation: {
-                        ...prev.validation,
-                        maxGroups: parseInt(e.target.value) || 10
-                      }
-                    }))}
-                    className="form-input"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
+        React.createElement("div", { className: "group-settings mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200" }, /*#__PURE__*/
+        React.createElement("h4", { className: "text-sm font-medium text-gray-700 mb-3" }, "Group Settings"), /*#__PURE__*/
 
-          <div className="group-fields space-y-4">
-            {formData.groupFields.map((field, index) => (
-              <div key={field.id} className="group-field-item">
-                <div className="field-header">
-                  <div className="drag-handle">
-                    <FiMove className="text-gray-400" />
-                  </div>
-                  <div className="field-content">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="form-group">
-                        <label>Field Label</label>
-                        <input
-                          type="text"
-                          value={field.label}
-                          onChange={(e) => handleGroupFieldChange(index, 'label', e.target.value)}
-                          placeholder={getPlaceholderExample(index)}
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Field Type</label>
-                        <select
-                          value={field.type}
-                          onChange={(e) => handleGroupFieldChange(index, 'type', e.target.value)}
-                          className="form-input"
-                        >
-                          <option value="text">Single Line Text</option>
-                          <option value="textarea">Multi-line Text</option>
-                          <option value="date">Date</option>
-                          <option value="dropdown">Dropdown</option>
-                          <option value="multipleChoice">Multiple Choice</option>
-                          <option value="file">File Upload</option>
-                          <option value="phone">Phone Number</option>
-                        </select>
-                      </div>
-                    </div>
-                    
-                    <div className="field-width mt-4">
-                      <label className="text-sm font-medium text-gray-700 mb-2">Field Width</label>
-                      <div className="flex gap-4">
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            name={`width-${field.id}`}
-                            value="50"
-                            checked={field.width === '50'}
-                            onChange={(e) => handleGroupFieldChange(index, 'width', e.target.value)}
-                            className="mr-2"
-                          />
-                          <span className="text-sm text-gray-600">Half Width (50%)</span>
-                        </label>
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            name={`width-${field.id}`}
-                            value="100"
-                            checked={field.width === '100'}
-                            onChange={(e) => handleGroupFieldChange(index, 'width', e.target.value)}
-                            className="mr-2"
-                          />
-                          <span className="text-sm text-gray-600">Full Width (100%)</span>
-                        </label>
-                      </div>
-                    </div>
+        React.createElement("div", { className: "form-checkbox mb-4" }, /*#__PURE__*/
+        React.createElement("input", {
+          type: "checkbox",
+          checked: formData.allowMultipleGroups,
+          onChange: (e) => setFormData((prev) => ({
+            ...prev,
+            allowMultipleGroups: e.target.checked,
+            validation: {
+              ...prev.validation,
+              maxGroups: e.target.checked ? 10 : 1,
+              minGroups: 1
+            }
+          })) }
+        ), /*#__PURE__*/
+        React.createElement("span", null, "Allow multiple groups")
+        ),
 
-                    <div className="field-options mt-4">
-                      <label className="form-checkbox">
-                        <input
-                          type="checkbox"
-                          checked={field.required}
-                          onChange={(e) => handleGroupFieldChange(index, 'required', e.target.checked)}
-                        />
-                        <span>Required field</span>
-                      </label>
-                    </div>
+        formData.allowMultipleGroups && /*#__PURE__*/
+        React.createElement("div", { className: "grid grid-cols-2 gap-4" }, /*#__PURE__*/
+        React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+        React.createElement("label", { className: "text-sm" }, "Minimum Groups"), /*#__PURE__*/
+        React.createElement("input", {
+          type: "number",
+          min: "1",
+          max: formData.validation.maxGroups,
+          value: formData.validation.minGroups,
+          onChange: (e) => setFormData((prev) => ({
+            ...prev,
+            validation: {
+              ...prev.validation,
+              minGroups: parseInt(e.target.value) || 1
+            }
+          })),
+          className: "form-input" }
+        )
+        ), /*#__PURE__*/
+        React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+        React.createElement("label", { className: "text-sm" }, "Maximum Groups"), /*#__PURE__*/
+        React.createElement("input", {
+          type: "number",
+          min: formData.validation.minGroups,
+          value: formData.validation.maxGroups,
+          onChange: (e) => setFormData((prev) => ({
+            ...prev,
+            validation: {
+              ...prev.validation,
+              maxGroups: parseInt(e.target.value) || 10
+            }
+          })),
+          className: "form-input" }
+        )
+        )
+        )
 
-                    {['dropdown', 'singleChoice', 'multipleChoice'].includes(field.type) && (
-                      <div className="field-options mt-4">
-                        <label className="text-sm font-medium text-gray-700 mb-2">Options</label>
-                        <div className="space-y-2">
-                          {(field.options || ['']).map((option, optionIndex) => (
-                            <div key={optionIndex} className="flex gap-2">
-                              <input
-                                type="text"
-                                value={option}
-                                onChange={(e) => handleGroupFieldOptionChange(index, optionIndex, e.target.value)}
-                                placeholder={`Option ${optionIndex + 1}`}
-                                className="form-input"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveGroupFieldOption(index, optionIndex)}
-                                className="remove-option-btn"
-                                disabled={(field.options || []).length <= 1}
-                              >
-                                ×
-                              </button>
-                            </div>
-                          ))}
-                          <AdminButton
-                            type="button"
-                            variant="outline"
-                            onClick={() => handleAddGroupFieldOption(index)}
-                            className="add-option-btn"
-                          >
-                            Add Option
-                          </AdminButton>
-                        </div>
-                      </div>
-                    )}
+        ), /*#__PURE__*/
 
-                    {field.type === 'textarea' && (
-                      <div className="form-group mt-4">
-                        <label className="form-checkbox">
-                          <input
-                            type="checkbox"
-                            checked={field.enableRewrite || false}
-                            onChange={(e) => handleGroupFieldChange(index, 'enableRewrite', e.target.checked)}
-                          />
-                          <span>Enable AI Rewrite Feature</span>
-                          <p className="info-text">
-                            Allows users to rewrite their text using AI assistance
-                          </p>
-                        </label>
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveGroupField(index)}
-                    className="remove-field-btn"
-                    disabled={formData.groupFields.length <= 1}
-                  >
-                    <FiTrash2 className="text-gray-400 hover:text-red-500" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+        React.createElement("div", { className: "group-fields space-y-4" },
+        formData.groupFields.map((field, index) => /*#__PURE__*/
+        React.createElement("div", { key: field.id, className: "group-field-item" }, /*#__PURE__*/
+        React.createElement("div", { className: "field-header" }, /*#__PURE__*/
+        React.createElement("div", { className: "drag-handle" }, /*#__PURE__*/
+        React.createElement(FiMove, { className: "text-gray-400" })
+        ), /*#__PURE__*/
+        React.createElement("div", { className: "field-content" }, /*#__PURE__*/
+        React.createElement("div", { className: "grid grid-cols-2 gap-4" }, /*#__PURE__*/
+        React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+        React.createElement("label", null, "Field Label"), /*#__PURE__*/
+        React.createElement("input", {
+          type: "text",
+          value: field.label,
+          onChange: (e) => handleGroupFieldChange(index, 'label', e.target.value),
+          placeholder: getPlaceholderExample(index),
+          className: "form-input" }
+        )
+        ), /*#__PURE__*/
+        React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+        React.createElement("label", null, "Field Type"), /*#__PURE__*/
+        React.createElement("select", {
+          value: field.type,
+          onChange: (e) => handleGroupFieldChange(index, 'type', e.target.value),
+          className: "form-input" }, /*#__PURE__*/
 
-          <AdminButton
-            type="button"
-            variant="outline"
-            onClick={handleAddGroupField}
-            className="mt-4"
-          >
-            <FiPlus /> Add Field
-          </AdminButton>
-        </div>
-      );
+        React.createElement("option", { value: "text" }, "Single Line Text"), /*#__PURE__*/
+        React.createElement("option", { value: "textarea" }, "Multi-line Text"), /*#__PURE__*/
+        React.createElement("option", { value: "date" }, "Date"), /*#__PURE__*/
+        React.createElement("option", { value: "dropdown" }, "Dropdown"), /*#__PURE__*/
+        React.createElement("option", { value: "multipleChoice" }, "Multiple Choice"), /*#__PURE__*/
+        React.createElement("option", { value: "file" }, "File Upload"), /*#__PURE__*/
+        React.createElement("option", { value: "phone" }, "Phone Number")
+        )
+        )
+        ), /*#__PURE__*/
+
+        React.createElement("div", { className: "field-width mt-4" }, /*#__PURE__*/
+        React.createElement("label", { className: "text-sm font-medium text-gray-700 mb-2" }, "Field Width"), /*#__PURE__*/
+        React.createElement("div", { className: "flex gap-4" }, /*#__PURE__*/
+        React.createElement("label", { className: "flex items-center" }, /*#__PURE__*/
+        React.createElement("input", {
+          type: "radio",
+          name: `width-${field.id}`,
+          value: "50",
+          checked: field.width === '50',
+          onChange: (e) => handleGroupFieldChange(index, 'width', e.target.value),
+          className: "mr-2" }
+        ), /*#__PURE__*/
+        React.createElement("span", { className: "text-sm text-gray-600" }, "Half Width (50%)")
+        ), /*#__PURE__*/
+        React.createElement("label", { className: "flex items-center" }, /*#__PURE__*/
+        React.createElement("input", {
+          type: "radio",
+          name: `width-${field.id}`,
+          value: "100",
+          checked: field.width === '100',
+          onChange: (e) => handleGroupFieldChange(index, 'width', e.target.value),
+          className: "mr-2" }
+        ), /*#__PURE__*/
+        React.createElement("span", { className: "text-sm text-gray-600" }, "Full Width (100%)")
+        )
+        )
+        ), /*#__PURE__*/
+
+        React.createElement("div", { className: "field-options mt-4" }, /*#__PURE__*/
+        React.createElement("label", { className: "form-checkbox" }, /*#__PURE__*/
+        React.createElement("input", {
+          type: "checkbox",
+          checked: field.required,
+          onChange: (e) => handleGroupFieldChange(index, 'required', e.target.checked) }
+        ), /*#__PURE__*/
+        React.createElement("span", null, "Required field")
+        )
+        ),
+
+        ['dropdown', 'singleChoice', 'multipleChoice'].includes(field.type) && /*#__PURE__*/
+        React.createElement("div", { className: "field-options mt-4" }, /*#__PURE__*/
+        React.createElement("label", { className: "text-sm font-medium text-gray-700 mb-2" }, "Options"), /*#__PURE__*/
+        React.createElement("div", { className: "space-y-2" },
+        (field.options || ['']).map((option, optionIndex) => /*#__PURE__*/
+        React.createElement("div", { key: optionIndex, className: "flex gap-2" }, /*#__PURE__*/
+        React.createElement("input", {
+          type: "text",
+          value: option,
+          onChange: (e) => handleGroupFieldOptionChange(index, optionIndex, e.target.value),
+          placeholder: `Option ${optionIndex + 1}`,
+          className: "form-input" }
+        ), /*#__PURE__*/
+        React.createElement("button", {
+          type: "button",
+          onClick: () => handleRemoveGroupFieldOption(index, optionIndex),
+          className: "remove-option-btn",
+          disabled: (field.options || []).length <= 1 },
+        "\xD7"
+
+        )
+        )
+        ), /*#__PURE__*/
+        React.createElement(AdminButton, {
+          type: "button",
+          variant: "outline",
+          onClick: () => handleAddGroupFieldOption(index),
+          className: "add-option-btn" },
+        "Add Option"
+
+        )
+        )
+        ),
+
+
+        field.type === 'textarea' && /*#__PURE__*/
+        React.createElement("div", { className: "form-group mt-4" }, /*#__PURE__*/
+        React.createElement("label", { className: "form-checkbox" }, /*#__PURE__*/
+        React.createElement("input", {
+          type: "checkbox",
+          checked: field.enableRewrite || false,
+          onChange: (e) => handleGroupFieldChange(index, 'enableRewrite', e.target.checked) }
+        ), /*#__PURE__*/
+        React.createElement("span", null, "Enable AI Rewrite Feature"), /*#__PURE__*/
+        React.createElement("p", { className: "info-text" }, "Allows users to rewrite their text using AI assistance"
+
+        )
+        )
+        )
+
+        ), /*#__PURE__*/
+        React.createElement("button", {
+          type: "button",
+          onClick: () => handleRemoveGroupField(index),
+          className: "remove-field-btn",
+          disabled: formData.groupFields.length <= 1 }, /*#__PURE__*/
+
+        React.createElement(FiTrash2, { className: "text-gray-400 hover:text-red-500" })
+        )
+        )
+        )
+        )
+        ), /*#__PURE__*/
+
+        React.createElement(AdminButton, {
+          type: "button",
+          variant: "outline",
+          onClick: handleAddGroupField,
+          className: "mt-4" }, /*#__PURE__*/
+
+        React.createElement(FiPlus, null), " Add Field"
+        )
+        ));
+
     }
     return null;
   };
@@ -619,121 +619,121 @@ const QuestionForm = ({
   const renderTypeSpecificFields = () => {
     switch (questionType) {
       case 'text':
-        return (
-          <div className="text-options">
-            <div className="form-group">
-              <label className="form-label">Input Type</label>
-              <select
-                value={formData.inputType || 'text'}
-                onChange={(e) => setFormData({
-                  ...formData,
-                  inputType: e.target.value,
-                  validation: {
-                    ...formData.validation,
-                    maxLength: e.target.value === 'textarea' ? 500 : 100
-                  }
-                })}
-                className="form-input"
-              >
-                <option value="text">Single Line Text</option>
-                <option value="textarea">Multi-line Text (Textarea)</option>
-              </select>
-            </div>
+        return (/*#__PURE__*/
+          React.createElement("div", { className: "text-options" }, /*#__PURE__*/
+          React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+          React.createElement("label", { className: "form-label" }, "Input Type"), /*#__PURE__*/
+          React.createElement("select", {
+            value: formData.inputType || 'text',
+            onChange: (e) => setFormData({
+              ...formData,
+              inputType: e.target.value,
+              validation: {
+                ...formData.validation,
+                maxLength: e.target.value === 'textarea' ? 500 : 100
+              }
+            }),
+            className: "form-input" }, /*#__PURE__*/
 
-            {formData.inputType === 'textarea' && (
-              <div className="form-group mt-4">
-                <label className="form-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={formData.enableRewrite || false}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      enableRewrite: e.target.checked
-                    })}
-                  />
-                  <span>Enable AI Rewrite Feature</span>
-                  <p className="info-text">
-                    Allows users to rewrite their text using AI assistance
-                  </p>
-                </label>
-              </div>
-            )}
-          </div>
-        );
+          React.createElement("option", { value: "text" }, "Single Line Text"), /*#__PURE__*/
+          React.createElement("option", { value: "textarea" }, "Multi-line Text (Textarea)")
+          )
+          ),
+
+          formData.inputType === 'textarea' && /*#__PURE__*/
+          React.createElement("div", { className: "form-group mt-4" }, /*#__PURE__*/
+          React.createElement("label", { className: "form-checkbox" }, /*#__PURE__*/
+          React.createElement("input", {
+            type: "checkbox",
+            checked: formData.enableRewrite || false,
+            onChange: (e) => setFormData({
+              ...formData,
+              enableRewrite: e.target.checked
+            }) }
+          ), /*#__PURE__*/
+          React.createElement("span", null, "Enable AI Rewrite Feature"), /*#__PURE__*/
+          React.createElement("p", { className: "info-text" }, "Allows users to rewrite their text using AI assistance"
+
+          )
+          )
+          )
+
+          ));
+
 
       case 'phone':
         return null;
 
       case 'multipleChoice':
       case 'dropdown':
-        return (
-          <div className="options-container">
-            <label className="form-label required-field">Options</label>
-            {formData.options.map((option, index) => (
-              <div key={index} className="option-row">
-                <input
-                  type="text"
-                  value={option}
-                  onChange={(e) => handleOptionChange(index, e.target.value)}
-                  placeholder={`Option ${index + 1}`}
-                  className={`form-input ${errors.options ? 'error' : ''}`}
-                />
-                <button
-                  type="button"
-                  onClick={() => removeOption(index)}
-                  className="remove-option-btn"
-                  disabled={formData.options.length <= 1}
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-            {errors.options && (
-              <p className="error-message">{errors.options}</p>
-            )}
-            <AdminButton
-              type="button"
-              variant="outline"
-              onClick={addOption}
-              className="add-option-btn"
-            >
-              Add Option
-            </AdminButton>
-          </div>
-        );
+        return (/*#__PURE__*/
+          React.createElement("div", { className: "options-container" }, /*#__PURE__*/
+          React.createElement("label", { className: "form-label required-field" }, "Options"),
+          formData.options.map((option, index) => /*#__PURE__*/
+          React.createElement("div", { key: index, className: "option-row" }, /*#__PURE__*/
+          React.createElement("input", {
+            type: "text",
+            value: option,
+            onChange: (e) => handleOptionChange(index, e.target.value),
+            placeholder: `Option ${index + 1}`,
+            className: `form-input ${errors.options ? 'error' : ''}` }
+          ), /*#__PURE__*/
+          React.createElement("button", {
+            type: "button",
+            onClick: () => removeOption(index),
+            className: "remove-option-btn",
+            disabled: formData.options.length <= 1 },
+          "\xD7"
+
+          )
+          )
+          ),
+          errors.options && /*#__PURE__*/
+          React.createElement("p", { className: "error-message" }, errors.options), /*#__PURE__*/
+
+          React.createElement(AdminButton, {
+            type: "button",
+            variant: "outline",
+            onClick: addOption,
+            className: "add-option-btn" },
+          "Add Option"
+
+          )
+          ));
+
     }
   };
 
   const renderWidthSelection = () => {
-    return (
-      <div className="field-width mt-4">
-        <label className="text-sm font-medium text-gray-700 mb-2">Field Width</label>
-        <div className="flex gap-4">
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="field-width"
-              value="50"
-              checked={formData.width === '50'}
-              onChange={(e) => setFormData({ ...formData, width: e.target.value })}
-              className="mr-2"
-            />
-            <span className="text-sm text-gray-600">Half Width (50%)</span>
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="field-width"
-              value="100"
-              checked={formData.width === '100'}
-              onChange={(e) => setFormData({ ...formData, width: e.target.value })}
-              className="mr-2"
-            />
-            <span className="text-sm text-gray-600">Full Width (100%)</span>
-          </label>
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "field-width mt-4" }, /*#__PURE__*/
+      React.createElement("label", { className: "text-sm font-medium text-gray-700 mb-2" }, "Field Width"), /*#__PURE__*/
+      React.createElement("div", { className: "flex gap-4" }, /*#__PURE__*/
+      React.createElement("label", { className: "flex items-center" }, /*#__PURE__*/
+      React.createElement("input", {
+        type: "radio",
+        name: "field-width",
+        value: "50",
+        checked: formData.width === '50',
+        onChange: (e) => setFormData({ ...formData, width: e.target.value }),
+        className: "mr-2" }
+      ), /*#__PURE__*/
+      React.createElement("span", { className: "text-sm text-gray-600" }, "Half Width (50%)")
+      ), /*#__PURE__*/
+      React.createElement("label", { className: "flex items-center" }, /*#__PURE__*/
+      React.createElement("input", {
+        type: "radio",
+        name: "field-width",
+        value: "100",
+        checked: formData.width === '100',
+        onChange: (e) => setFormData({ ...formData, width: e.target.value }),
+        className: "mr-2" }
+      ), /*#__PURE__*/
+      React.createElement("span", { className: "text-sm text-gray-600" }, "Full Width (100%)")
+      )
+      )
+      ));
+
   };
 
   const handleGroupFieldOptionChange = (fieldIndex, optionIndex, value) => {
@@ -774,73 +774,73 @@ const QuestionForm = ({
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="question-form">
-      {questionType !== 'phone' && (
-        <div className="form-group">
-          <label className="form-label required-field">Question Text</label>
-          <input
-            type="text"
-            value={formData.question}
-            onChange={(e) => {
-              setFormData({ ...formData, question: e.target.value });
-              if (errors.question) setErrors({ ...errors, question: null });
-            }}
-            placeholder="Enter your question"
-            className={`form-input ${errors.question ? 'error' : ''}`}
-          />
-          {errors.question && (
-            <p className="error-message">{errors.question}</p>
-          )}
-        </div>
-      )}
+  return (/*#__PURE__*/
+    React.createElement("form", { onSubmit: handleSubmit, className: "question-form" },
+    questionType !== 'phone' && /*#__PURE__*/
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { className: "form-label required-field" }, "Question Text"), /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      value: formData.question,
+      onChange: (e) => {
+        setFormData({ ...formData, question: e.target.value });
+        if (errors.question) setErrors({ ...errors, question: null });
+      },
+      placeholder: "Enter your question",
+      className: `form-input ${errors.question ? 'error' : ''}` }
+    ),
+    errors.question && /*#__PURE__*/
+    React.createElement("p", { className: "error-message" }, errors.question)
 
-      {questionType !== 'repeater' && renderWidthSelection()}
+    ),
 
-      {renderTypeSpecificFields()}
-      {renderValidationFields()}
 
-      <div className="form-group">
-        <label className="form-checkbox">
-          <input
-            type="checkbox"
-            checked={formData.required}
-            onChange={(e) => setFormData({ ...formData, required: e.target.checked })}
-          />
-          <span>Required field</span>
-        </label>
-      </div>
+    questionType !== 'repeater' && renderWidthSelection(),
 
-      {renderGroupFields()}
+    renderTypeSpecificFields(),
+    renderValidationFields(), /*#__PURE__*/
 
-      {errors.submit && (
-        <div className="error-message submit-error">
-          {errors.submit}
-        </div>
-      )}
+    React.createElement("div", { className: "form-group" }, /*#__PURE__*/
+    React.createElement("label", { className: "form-checkbox" }, /*#__PURE__*/
+    React.createElement("input", {
+      type: "checkbox",
+      checked: formData.required,
+      onChange: (e) => setFormData({ ...formData, required: e.target.checked }) }
+    ), /*#__PURE__*/
+    React.createElement("span", null, "Required field")
+    )
+    ),
 
-      <div className="form-actions">
-        <AdminButton
-          variant="outline"
-          onClick={onCancel}
-          disabled={isSubmitting}
-        >
-          Cancel
-        </AdminButton>
-        <AdminButton
-          type="submit"
-          variant="primary"
-          isLoading={isSubmitting}
-          disabled={isSubmitting}
-        >
-          {initialData ? 'Save Changes' : 'Add Question'}
-        </AdminButton>
-      </div>
+    renderGroupFields(),
 
-      <input type="hidden" name="profileType" value={profileType} />
-      <input type="hidden" name="sectionId" value={sectionId} />
-    </form>
-  );
+    errors.submit && /*#__PURE__*/
+    React.createElement("div", { className: "error-message submit-error" },
+    errors.submit
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "form-actions" }, /*#__PURE__*/
+    React.createElement(AdminButton, {
+      variant: "outline",
+      onClick: onCancel,
+      disabled: isSubmitting },
+    "Cancel"
+
+    ), /*#__PURE__*/
+    React.createElement(AdminButton, {
+      type: "submit",
+      variant: "primary",
+      isLoading: isSubmitting,
+      disabled: isSubmitting },
+
+    initialData ? 'Save Changes' : 'Add Question'
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("input", { type: "hidden", name: "profileType", value: profileType }), /*#__PURE__*/
+    React.createElement("input", { type: "hidden", name: "sectionId", value: sectionId })
+    ));
+
 };
 
-export default QuestionForm; 
+export default QuestionForm;

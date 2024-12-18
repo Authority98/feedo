@@ -66,39 +66,39 @@ const firestoreSchema = {
               id: 'string',
               label: 'string',
               questions: [
+              {
+                id: 'string',
+                question: 'string',
+                description: 'string',
+                type: 'string',
+                required: 'boolean',
+                order: 'number',
+                options: ['string'],
+                validation: {
+                  minLength: 'number?',
+                  maxLength: 'number?',
+                  pattern: 'string?',
+                  minGroups: 'number?',
+                  maxGroups: 'number?'
+                },
+                repeaterFields: [
                 {
                   id: 'string',
-                  question: 'string',
-                  description: 'string',
+                  label: 'string',
                   type: 'string',
                   required: 'boolean',
-                  order: 'number',
-                  options: ['string'],
+                  width: 'string',
+                  options: ['string[]?'],
                   validation: {
-                    minLength: 'number?',
-                    maxLength: 'number?',
-                    pattern: 'string?',
-                    minGroups: 'number?',
-                    maxGroups: 'number?'
-                  },
-                  repeaterFields: [
-                    {
-                      id: 'string',
-                      label: 'string',
-                      type: 'string',
-                      required: 'boolean',
-                      width: 'string',
-                      options: ['string[]?'],
-                      validation: {
-                        fileTypes: ['string'],
-                        minLength: 'number',
-                        maxLength: 'number'
-                      }
-                    }
-                  ],
-                  allowMultipleGroups: 'boolean?'
-                }
-              ],
+                    fileTypes: ['string'],
+                    minLength: 'number',
+                    maxLength: 'number'
+                  }
+                }],
+
+                allowMultipleGroups: 'boolean?'
+              }],
+
               updatedAt: 'timestamp'
             }
           },
@@ -113,4 +113,4 @@ const firestoreSchema = {
   }
 };
 
-export { firestoreSchema }; 
+export { firestoreSchema };

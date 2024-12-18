@@ -14,13 +14,13 @@ import SubscriptionSection from './sections/SubscriptionSection';
 import './Subscription.css';
 
 const Subscription = () => {
-  return (
-    <ToastProvider>
-      <div className="subscription-page">
-        <SubscriptionSection />
-      </div>
-    </ToastProvider>
-  );
+  return (/*#__PURE__*/
+    React.createElement(ToastProvider, null, /*#__PURE__*/
+    React.createElement("div", { className: "subscription-page" }, /*#__PURE__*/
+    React.createElement(SubscriptionSection, null)
+    )
+    ));
+
 };
 
-export default Subscription; 
+export default Subscription;

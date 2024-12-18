@@ -102,116 +102,116 @@ const QuestionsList = ({ questions, onAdd, onEdit, onDelete, onReorder }) => {
     setDraggedItem(null);
     draggedOverItem.current = null;
     // Clean up all drag-related classes
-    document.querySelectorAll('.question-card').forEach(card => {
+    document.querySelectorAll('.question-card').forEach((card) => {
       card.classList.remove('drag-over', 'dragging');
     });
   };
 
-  return (
-    <div className="questions-list-container">
-      <div className="questions-header">
-        <div className="header-content">
-          <h3>Questions</h3>
-          <span className="question-count">
-            {questions.length} {questions.length === 1 ? 'Question' : 'Questions'}
-          </span>
-        </div>
-        <AdminButton
-          variant="primary"
-          className="min-w-[180px] ml-6"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Add New Question
-        </AdminButton>
-      </div>
-      
-      <div className={`questions-grid ${isDragging ? 'is-dragging' : ''}`}>
-        {questions.map((question, index) => (
-          <div 
-            key={question.id} 
-            className="question-card"
-            draggable
-            onDragStart={(e) => handleDragStart(e, index)}
-            onDragEnter={(e) => handleDragEnter(e, index)}
-            onDragEnd={handleDragEnd}
-            onDragOver={(e) => e.preventDefault()}
-          >
-            <div className="question-content">
-              <span className="question-number">{index + 1}</span>
-              <div className="drag-handle" title="Drag to reorder">⋮⋮</div>
-              <div className="question-details">
-                <div className="question-header">
-                  <span className="question-type-icon">
-                    {typeIcons[question.type]}
-                  </span>
-                  <h4>{question.question}</h4>
-                </div>
-                <p className="question-type">
-                  {question.type === 'repeater' ? 'Group' : 
-                    question.type.charAt(0).toUpperCase() + question.type.slice(1)}
-                </p>
-                {question.description && (
-                  <p className="question-description">{question.description}</p>
-                )}
-                <div className="question-badges">
-                  {question.required && (
-                    <span className="required-badge">Required</span>
-                  )}
-                  {question.validation?.minLength > 0 && (
-                    <span className="validation-badge">
-                      Min: {question.validation.minLength}
-                    </span>
-                  )}
-                  {question.validation?.maxLength < 1000 && (
-                    <span className="validation-badge">
-                      Max: {question.validation.maxLength}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-            
-            <div className="question-actions">
-              <AdminButton
-                variant="outline"
-                className="min-w-[100px]"
-                onClick={() => handleEdit(question)}
-              >
-                Edit
-              </AdminButton>
-              <AdminButton
-                variant="danger"
-                className="min-w-[100px]"
-                onClick={() => handleDeleteClick(question)}
-              >
-                Delete
-              </AdminButton>
-            </div>
-          </div>
-        ))}
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "questions-list-container" }, /*#__PURE__*/
+    React.createElement("div", { className: "questions-header" }, /*#__PURE__*/
+    React.createElement("div", { className: "header-content" }, /*#__PURE__*/
+    React.createElement("h3", null, "Questions"), /*#__PURE__*/
+    React.createElement("span", { className: "question-count" },
+    questions.length, " ", questions.length === 1 ? 'Question' : 'Questions'
+    )
+    ), /*#__PURE__*/
+    React.createElement(AdminButton, {
+      variant: "primary",
+      className: "min-w-[180px] ml-6",
+      onClick: () => setIsModalOpen(true) },
+    "Add New Question"
 
-      <AddQuestionModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setEditingQuestion(null);
-        }}
-        onSelectType={handleQuestionTypeSelect}
-        editingQuestion={editingQuestion}
-      />
+    )
+    ), /*#__PURE__*/
 
-      <ConfirmationModal
-        isOpen={deleteConfirmation.isOpen}
-        onClose={() => setDeleteConfirmation({ isOpen: false, questionId: null, questionTitle: '' })}
-        onConfirm={handleDeleteConfirm}
-        title="Delete Question"
-        message={`Are you sure you want to delete the question "${deleteConfirmation.questionTitle}"? This action cannot be undone.`}
-        confirmText="Delete"
-        cancelText="Cancel"
-      />
-    </div>
-  );
+    React.createElement("div", { className: `questions-grid ${isDragging ? 'is-dragging' : ''}` },
+    questions.map((question, index) => /*#__PURE__*/
+    React.createElement("div", {
+      key: question.id,
+      className: "question-card",
+      draggable: true,
+      onDragStart: (e) => handleDragStart(e, index),
+      onDragEnter: (e) => handleDragEnter(e, index),
+      onDragEnd: handleDragEnd,
+      onDragOver: (e) => e.preventDefault() }, /*#__PURE__*/
+
+    React.createElement("div", { className: "question-content" }, /*#__PURE__*/
+    React.createElement("span", { className: "question-number" }, index + 1), /*#__PURE__*/
+    React.createElement("div", { className: "drag-handle", title: "Drag to reorder" }, "\u22EE\u22EE"), /*#__PURE__*/
+    React.createElement("div", { className: "question-details" }, /*#__PURE__*/
+    React.createElement("div", { className: "question-header" }, /*#__PURE__*/
+    React.createElement("span", { className: "question-type-icon" },
+    typeIcons[question.type]
+    ), /*#__PURE__*/
+    React.createElement("h4", null, question.question)
+    ), /*#__PURE__*/
+    React.createElement("p", { className: "question-type" },
+    question.type === 'repeater' ? 'Group' :
+    question.type.charAt(0).toUpperCase() + question.type.slice(1)
+    ),
+    question.description && /*#__PURE__*/
+    React.createElement("p", { className: "question-description" }, question.description), /*#__PURE__*/
+
+    React.createElement("div", { className: "question-badges" },
+    question.required && /*#__PURE__*/
+    React.createElement("span", { className: "required-badge" }, "Required"),
+
+    question.validation?.minLength > 0 && /*#__PURE__*/
+    React.createElement("span", { className: "validation-badge" }, "Min: ",
+    question.validation.minLength
+    ),
+
+    question.validation?.maxLength < 1000 && /*#__PURE__*/
+    React.createElement("span", { className: "validation-badge" }, "Max: ",
+    question.validation.maxLength
+    )
+
+    )
+    )
+    ), /*#__PURE__*/
+
+    React.createElement("div", { className: "question-actions" }, /*#__PURE__*/
+    React.createElement(AdminButton, {
+      variant: "outline",
+      className: "min-w-[100px]",
+      onClick: () => handleEdit(question) },
+    "Edit"
+
+    ), /*#__PURE__*/
+    React.createElement(AdminButton, {
+      variant: "danger",
+      className: "min-w-[100px]",
+      onClick: () => handleDeleteClick(question) },
+    "Delete"
+
+    )
+    )
+    )
+    )
+    ), /*#__PURE__*/
+
+    React.createElement(AddQuestionModal, {
+      isOpen: isModalOpen,
+      onClose: () => {
+        setIsModalOpen(false);
+        setEditingQuestion(null);
+      },
+      onSelectType: handleQuestionTypeSelect,
+      editingQuestion: editingQuestion }
+    ), /*#__PURE__*/
+
+    React.createElement(ConfirmationModal, {
+      isOpen: deleteConfirmation.isOpen,
+      onClose: () => setDeleteConfirmation({ isOpen: false, questionId: null, questionTitle: '' }),
+      onConfirm: handleDeleteConfirm,
+      title: "Delete Question",
+      message: `Are you sure you want to delete the question "${deleteConfirmation.questionTitle}"? This action cannot be undone.`,
+      confirmText: "Delete",
+      cancelText: "Cancel" }
+    )
+    ));
+
 };
 
-export default QuestionsList; 
+export default QuestionsList;

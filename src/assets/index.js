@@ -34,28 +34,18 @@ export {
   // Logos
   logo,
   feedoLogo,
-  
+
   // Badges
   awardBadge,
-  
+
   // FAQ and Profile Images
   faqGirl,
   girl,
   zaid,
   userPhoto,
-  
+
   // Card images
-  cardImages
-};
+  cardImages };
+
 
 // For debugging
-console.log('Assets loaded:', {
-  logo,
-  feedoLogo,
-  awardBadge,
-  faqGirl,
-  girl,
-  zaid,
-  userPhoto,
-  cardImages
-}); 

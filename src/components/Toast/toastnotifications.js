@@ -64,8 +64,8 @@ export const PAYMENT_NOTIFICATIONS = {
     LOAD_ERROR: 'Failed to load billing history'
   },
   SUBSCRIPTION: {
-    SUCCESS: (plan, interval, amount) => 
-      `Payment successful! You are now subscribed to the ${plan} plan (${interval}) - $${amount}`,
+    SUCCESS: (plan, interval, amount) =>
+    `Payment successful! You are now subscribed to the ${plan} plan (${interval}) - $${amount}`,
     ERROR: 'Failed to process subscription. Please try again.',
     UPGRADE_ERROR: 'Failed to upgrade plan. Please try again.',
     CANCEL: {
@@ -86,4 +86,4 @@ export const handleAuthError = (error) => {
   }
 
   return 'An error occurred. Please try again.';
-}; 
+};

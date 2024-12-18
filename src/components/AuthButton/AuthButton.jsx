@@ -11,23 +11,23 @@
 import React from 'react';
 import './AuthButton.css';
 
-const AuthButton = ({ 
+const AuthButton = ({
   type = 'submit',
-  isLoading = false, 
+  isLoading = false,
   children,
   onClick,
   className = ''
 }) => {
-  return (
-    <button 
-      type={type}
-      className={`auth-button ${isLoading ? 'loading' : ''} ${className}`}
-      disabled={isLoading}
-      onClick={onClick}
-    >
-      <span>{children}</span>
-    </button>
-  );
+  return (/*#__PURE__*/
+    React.createElement("button", {
+      type: type,
+      className: `auth-button ${isLoading ? 'loading' : ''} ${className}`,
+      disabled: isLoading,
+      onClick: onClick }, /*#__PURE__*/
+
+    React.createElement("span", null, children)
+    ));
+
 };
 
-export default AuthButton; 
+export default AuthButton;

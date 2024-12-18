@@ -19,4 +19,4 @@ export const validateUserData = {
     const cleanPhone = phone.replace(/\D/g, '');
     return /^\d{10}$/.test(cleanPhone);
   }
-}; 
+};

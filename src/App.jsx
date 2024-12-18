@@ -5,22 +5,22 @@ import { AuthProvider } from './auth/AuthContext';
 import CrispChat from './components/CrispChat/CrispChat';
 
 function App() {
-  return (
-    <>
-      <ToastProvider>
-        <AuthProvider>
-          <Router>
-            <div className="app">
-              <Routes>
-                {/* ... existing routes ... */}
-              </Routes>
-            </div>
-          </Router>
-          <CrispChat />
-        </AuthProvider>
-      </ToastProvider>
-    </>
-  );
+  return (/*#__PURE__*/
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement(ToastProvider, null, /*#__PURE__*/
+    React.createElement(AuthProvider, null, /*#__PURE__*/
+    React.createElement(Router, null, /*#__PURE__*/
+    React.createElement("div", { className: "app" }, /*#__PURE__*/
+    React.createElement(Routes, null
+
+    )
+    )
+    ), /*#__PURE__*/
+    React.createElement(CrispChat, null)
+    )
+    )
+    ));
+
 }
 
-export default App; 
+export default App;

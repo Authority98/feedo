@@ -13,28 +13,28 @@ import DashboardHeader from '../Header/DashboardHeader';
 import './Layout.css';
 
 const Layout = ({ children }) => {
-  return (
-    <div className="layout-container">
-      {/* Fixed Header */}
-      <div className="layout-header">
-        <DashboardHeader />
-      </div>
-      
-      {/* Sidebar - Fixed width and position */}
-      <div className="layout-sidebar">
-        <Sidebar />
-      </div>
-      
-      {/* Main Content - Adjusted margin to account for fixed sidebar */}
-      <div className="layout-main">
-        <main className="layout-content">
-          <div className="layout-content-inner">
-            {children}
-          </div>
-        </main>
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "layout-container" }, /*#__PURE__*/
+
+    React.createElement("div", { className: "layout-header" }, /*#__PURE__*/
+    React.createElement(DashboardHeader, null)
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "layout-sidebar" }, /*#__PURE__*/
+    React.createElement(Sidebar, null)
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "layout-main" }, /*#__PURE__*/
+    React.createElement("main", { className: "layout-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "layout-content-inner" },
+    children
+    )
+    )
+    )
+    ));
+
 };
 
-export default Layout; 
+export default Layout;

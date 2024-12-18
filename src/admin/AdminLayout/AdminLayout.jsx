@@ -13,14 +13,14 @@ import AdminSidebar from '../AdminSidebar/AdminSidebar';
 import './AdminLayout.css';
 
 const AdminLayout = ({ children }) => {
-  return (
-    <div className="admin-layout">
-      <AdminSidebar />
-      <div className="admin-content">
-        {children}
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "admin-layout" }, /*#__PURE__*/
+    React.createElement(AdminSidebar, null), /*#__PURE__*/
+    React.createElement("div", { className: "admin-content" },
+    children
+    )
+    ));
+
 };
 
-export default AdminLayout; 
+export default AdminLayout;

@@ -54,19 +54,19 @@ import { useAuth } from '../../../auth/AuthContext';
 import { applicationOperations } from '../../../applications/applicationManager';
 import { useLocation } from 'react-router-dom';
 import {
-    FiSearch,      // Search/magnifying glass icon - Used for search functionality
-    FiFilter,      // Filter icon - Used for filtering applications
-    FiEdit2,       // Pencil icon - Used for editing applications
-    FiTrash2,      // Trash bin icon - Used for deleting applications
-    FiClock,       // Clock icon - Used for pending/time-related status
-    FiFileText,    // Document icon - Used for application/form representation
-    FiAlertCircle, // Alert circle icon - Used for warnings or important notices
-    FiRefreshCw,   // Refresh icon - Used for refreshing data/status
-    FiCheckCircle, // Check circle icon - Used for approved/success status
-    FiXCircle,     // X circle icon - Used for rejected/error status
-    FiPlus,        // Plus icon - Used for adding new applications
-    FiEye,         // Eye icon - Used for viewing application details
-    FiChevronRight, // Chevron icon - Used for navigation
+  FiSearch, // Search/magnifying glass icon - Used for search functionality
+  FiFilter, // Filter icon - Used for filtering applications
+  FiEdit2, // Pencil icon - Used for editing applications
+  FiTrash2, // Trash bin icon - Used for deleting applications
+  FiClock, // Clock icon - Used for pending/time-related status
+  FiFileText, // Document icon - Used for application/form representation
+  FiAlertCircle, // Alert circle icon - Used for warnings or important notices
+  FiRefreshCw, // Refresh icon - Used for refreshing data/status
+  FiCheckCircle, // Check circle icon - Used for approved/success status
+  FiXCircle, // X circle icon - Used for rejected/error status
+  FiPlus, // Plus icon - Used for adding new applications
+  FiEye, // Eye icon - Used for viewing application details
+  FiChevronRight // Chevron icon - Used for navigation
 } from 'react-icons/fi';
 import './MyApplications.css';
 import AnimatedNumber from '../../../components/Animated/AnimatedNumber';
@@ -86,18 +86,18 @@ const formatDate = (dateString) => {
   if (!dateString) {
     return 'No date set';
   }
-  
+
   try {
     const date = new Date(dateString);
-    
+
     if (isNaN(date.getTime())) {
       return 'Invalid date';
     }
-    
-    const options = { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+
+    const options = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     };
     return date.toLocaleDateString('en-US', options);
   } catch (error) {
@@ -130,11 +130,11 @@ const MyApplications = () => {
       try {
         setFilterLoading(true);
         const [applicationsData, statsData] = await Promise.all([
-          applicationOperations.getUserApplications(user.profile.authUid, {
-            status: filterStatus !== 'all' ? filterStatus : undefined
-          }),
-          applicationOperations.getApplicationStats(user.profile.authUid)
-        ]);
+        applicationOperations.getUserApplications(user.profile.authUid, {
+          status: filterStatus !== 'all' ? filterStatus : undefined
+        }),
+        applicationOperations.getApplicationStats(user.profile.authUid)]
+        );
 
         setApplications(applicationsData);
         setStats(statsData);
@@ -154,10 +154,10 @@ const MyApplications = () => {
   useEffect(() => {
     const handleNavigationState = () => {
       const { openApplicationId } = location.state || {};
-      
+
       if (openApplicationId) {
         // Find and open specific application
-        const application = applications.find(app => app.id === openApplicationId);
+        const application = applications.find((app) => app.id === openApplicationId);
         if (application) {
           setSelectedApplication(application);
         }
@@ -180,7 +180,7 @@ const MyApplications = () => {
     const positions = ['Frontend Developer', 'Backend Engineer', 'Full Stack Developer', 'UI/UX Designer', 'Product Manager'];
     const categories = ['Technology', 'Development', 'Design', 'Product', 'Engineering'];
     const statuses = ['pending', 'approved', 'rejected', 'follow-up', 'incomplete'];
-    
+
     const randomCompany = companies[Math.floor(Math.random() * companies.length)];
     const randomPosition = positions[Math.floor(Math.random() * positions.length)];
     const randomCategory = categories[Math.floor(Math.random() * categories.length)];
@@ -221,15 +221,15 @@ const MyApplications = () => {
     try {
       setDemoLoading(true);
       const demoApplication = createDemoApplication();
-      
+
       // Create new application using applicationOperations
       const newApplication = await applicationOperations.createApplication(demoApplication);
 
       // Update local state
-      setApplications(prev => [newApplication, ...prev]);
-      
+      setApplications((prev) => [newApplication, ...prev]);
+
       // Update stats - Add null check and initialize if needed
-      setStats(prev => {
+      setStats((prev) => {
         const currentStats = prev || {
           total: 0,
           pending: 0,
@@ -238,10 +238,10 @@ const MyApplications = () => {
           incomplete: 0,
           followUp: 0
         };
-        
+
         // Convert follow-up status to match stats key
         const statusKey = newApplication.status === 'follow-up' ? 'followUp' : newApplication.status;
-        
+
         return {
           ...currentStats,
           total: currentStats.total + 1,
@@ -249,7 +249,7 @@ const MyApplications = () => {
         };
       });
 
-      console.log('Demo application created successfully!');
+
     } catch (err) {
       console.error('Error creating demo application:', err);
       setError('Failed to create application. Please try again.');
@@ -264,14 +264,14 @@ const MyApplications = () => {
       try {
         setFilterLoading(true);
         await applicationOperations.deleteApplication(id);
-        
+
         // Update local state
-        const deletedApp = applications.find(app => app.id === id);
-        setApplications(prev => prev.filter(app => app.id !== id));
-        
+        const deletedApp = applications.find((app) => app.id === id);
+        setApplications((prev) => prev.filter((app) => app.id !== id));
+
         // Update stats
         if (deletedApp) {
-          setStats(prev => ({
+          setStats((prev) => ({
             ...prev,
             total: prev.total - 1,
             [deletedApp.status]: prev[deletedApp.status] - 1
@@ -317,20 +317,20 @@ const MyApplications = () => {
    * @returns {Array} Filtered applications array
    */
   const getFilteredApplications = () => {
-    return applications.filter(app => {
+    return applications.filter((app) => {
       // Status filter
-      const statusMatch = filterStatus === 'all' || 
-                         (filterStatus === 'follow-up' && app.status === 'follow-up') ||
-                         (filterStatus === 'incomplete' && app.status === 'incomplete') ||
-                         app.status === filterStatus;
-      
+      const statusMatch = filterStatus === 'all' ||
+      filterStatus === 'follow-up' && app.status === 'follow-up' ||
+      filterStatus === 'incomplete' && app.status === 'incomplete' ||
+      app.status === filterStatus;
+
       // Search filter - case insensitive search across multiple fields
       const searchLower = searchTerm.toLowerCase();
-      const searchMatch = searchTerm === '' || 
-        app.name.toLowerCase().includes(searchLower) ||
-        app.category.toLowerCase().includes(searchLower) ||
-        app.status.toLowerCase().includes(searchLower);
-      
+      const searchMatch = searchTerm === '' ||
+      app.name.toLowerCase().includes(searchLower) ||
+      app.category.toLowerCase().includes(searchLower) ||
+      app.status.toLowerCase().includes(searchLower);
+
       // Return true only if both status and search filters match
       return statusMatch && searchMatch;
     });
@@ -342,15 +342,15 @@ const MyApplications = () => {
    * @param {number} id - Application ID to edit
    */
   const handleEdit = (id) => {
-    const application = applications.find(app => app.id === id);
+    const application = applications.find((app) => app.id === id);
     if (application) {
       setEditingApplication(application);
     }
   };
 
   const handleUpdateApplication = (updatedApplication) => {
-    setApplications(prev => prev.map(app => 
-      app.id === updatedApplication.id ? updatedApplication : app
+    setApplications((prev) => prev.map((app) =>
+    app.id === updatedApplication.id ? updatedApplication : app
     ));
   };
 
@@ -395,12 +395,12 @@ const MyApplications = () => {
     try {
       setIsDeleting(true);
       await applicationOperations.deleteApplication(deletingApplication.id);
-      
+
       // Update local state
-      setApplications(prev => prev.filter(app => app.id !== deletingApplication.id));
-      
+      setApplications((prev) => prev.filter((app) => app.id !== deletingApplication.id));
+
       // Update stats
-      setStats(prev => ({
+      setStats((prev) => ({
         ...prev,
         total: prev.total - 1,
         [deletingApplication.status]: prev[deletingApplication.status] - 1
@@ -426,334 +426,334 @@ const MyApplications = () => {
     setSelectedApplication(application);
   };
 
-  return (
-    <div className="my-applications-page">
-      {/* Header Section - Contains create button and page title */}
-      <div className="applications-header">
-        <Button 
-          variant="create"
-          onClick={handleCreateApplication}
-          disabled={demoLoading}
-          className="w-auto px-10 inline-flex items-center"
-        >
-          <FiPlus className="w-4 h-4 mr-2 inline-block" />
-          <span>{demoLoading ? 'Creating...' : 'Create Demo Application'}</span>
-        </Button>
-      </div>
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "my-applications-page" }, /*#__PURE__*/
 
-      {/* Status Summary Section - Interactive status filter boxes */}
-      <div className="status-boxes">
-        {/* Total Applications Box */}
-        <div 
-          className={`status-box total ${filterStatus === 'all' ? 'active' : ''}`}
-          onClick={() => handleStatusFilter('all')}
-          role="button"
-          tabIndex={0}
-          aria-label="Filter by all applications"
-        >
-          <div className="status-icon">
-            <FiFileText size={24} />
-          </div>
-          <div className="status-content">
-            <div className="status-label">Total</div>
-            <div className="status-value">
-              <AnimatedNumber value={statusSummary.total} />
-            </div>
-          </div>
-        </div>
+    React.createElement("div", { className: "applications-header" }, /*#__PURE__*/
+    React.createElement(Button, {
+      variant: "create",
+      onClick: handleCreateApplication,
+      disabled: demoLoading,
+      className: "w-auto px-10 inline-flex items-center" }, /*#__PURE__*/
 
-        <div 
-          className={`status-box pending ${filterStatus === 'pending' ? 'active' : ''}`}
-          onClick={() => handleStatusFilter('pending')}
-          role="button"
-          tabIndex={0}
-          aria-label="Filter by pending applications"
-        >
-          <div className="status-icon">
-            <FiClock size={24} />
-          </div>
-          <div className="status-content">
-            <div className="status-label">Pending</div>
-            <div className="status-value">
-              <AnimatedNumber value={statusSummary.pending} />
-            </div>
-          </div>
-        </div>
+    React.createElement(FiPlus, { className: "w-4 h-4 mr-2 inline-block" }), /*#__PURE__*/
+    React.createElement("span", null, demoLoading ? 'Creating...' : 'Create Demo Application')
+    )
+    ), /*#__PURE__*/
 
-        <div 
-          className={`status-box incomplete ${filterStatus === 'incomplete' ? 'active' : ''}`}
-          onClick={() => handleStatusFilter('incomplete')}
-          role="button"
-          tabIndex={0}
-          aria-label="Filter by incomplete applications"
-        >
-          <div className="status-icon">
-            <FiAlertCircle size={24} />
-          </div>
-          <div className="status-content">
-            <div className="status-label">Incomplete</div>
-            <div className="status-value">
-              <AnimatedNumber value={statusSummary.incomplete} />
-            </div>
-          </div>
-        </div>
 
-        <div 
-          className={`status-box follow-up ${filterStatus === 'follow-up' ? 'active' : ''}`}
-          onClick={() => handleStatusFilter('follow-up')}
-          role="button"
-          tabIndex={0}
-          aria-label="Filter by follow-up applications"
-        >
-          <div className="status-icon">
-            <FiRefreshCw size={24} />
-          </div>
-          <div className="status-content">
-            <div className="status-label">Follow-Up</div>
-            <div className="status-value">
-              <AnimatedNumber value={statusSummary.followUp} />
-            </div>
-          </div>
-        </div>
+    React.createElement("div", { className: "status-boxes" }, /*#__PURE__*/
 
-        <div 
-          className={`status-box approved ${filterStatus === 'approved' ? 'active' : ''}`}
-          onClick={() => handleStatusFilter('approved')}
-          role="button"
-          tabIndex={0}
-          aria-label="Filter by approved applications"
-        >
-          <div className="status-icon">
-            <FiCheckCircle size={24} />
-          </div>
-          <div className="status-content">
-            <div className="status-label">Approved</div>
-            <div className="status-value">
-              <AnimatedNumber value={statusSummary.approved} />
-            </div>
-          </div>
-        </div>
+    React.createElement("div", {
+      className: `status-box total ${filterStatus === 'all' ? 'active' : ''}`,
+      onClick: () => handleStatusFilter('all'),
+      role: "button",
+      tabIndex: 0,
+      "aria-label": "Filter by all applications" }, /*#__PURE__*/
 
-        <div 
-          className={`status-box rejected ${filterStatus === 'rejected' ? 'active' : ''}`}
-          onClick={() => handleStatusFilter('rejected')}
-          role="button"
-          tabIndex={0}
-          aria-label="Filter by rejected applications"
-        >
-          <div className="status-icon">
-            <FiXCircle size={24} />
-          </div>
-          <div className="status-content">
-            <div className="status-label">Rejected</div>
-            <div className="status-value">
-              <AnimatedNumber value={statusSummary.rejected} />
-            </div>
-          </div>
-        </div>
-      </div>
+    React.createElement("div", { className: "status-icon" }, /*#__PURE__*/
+    React.createElement(FiFileText, { size: 24 })
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "status-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "status-label" }, "Total"), /*#__PURE__*/
+    React.createElement("div", { className: "status-value" }, /*#__PURE__*/
+    React.createElement(AnimatedNumber, { value: statusSummary.total })
+    )
+    )
+    ), /*#__PURE__*/
 
-      {/* Search and Filter Controls */}
-      <div className="search-filter-section">
-        <div className="flex items-center gap-4 justify-end">
-          {/* Search Input */}
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Search job applications..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className="search-input"
-              aria-label="Search applications"
-            />
-          </div>
-        </div>
-      </div>
+    React.createElement("div", {
+      className: `status-box pending ${filterStatus === 'pending' ? 'active' : ''}`,
+      onClick: () => handleStatusFilter('pending'),
+      role: "button",
+      tabIndex: 0,
+      "aria-label": "Filter by pending applications" }, /*#__PURE__*/
 
-      {/* Applications Table Section */}
-      <div className="applications-table">
-        <table>
-          {/* Table Header - Removed Deadline */}
-          <thead>
-            <tr>
-              <th>Application Name</th>
-              <th>Deadline</th>
-              <th>Status</th>
-              <th>Category</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          
-          {/* Table Body - Updated */}
-          <tbody>
-            {filterLoading ? (
-              <tr>
-                <td colSpan="5">
-                  <div className="loading-state">
-                    <LoadingSpinner size="lg" isBackend={true} text="Loading applications..." />
-                  </div>
-                </td>
-              </tr>
-            ) : error ? (
-              <tr>
-                <td colSpan="5">
-                  <div className="error-state p-8 text-center text-gray-500">
-                    {error}
-                  </div>
-                </td>
-              </tr>
-            ) : currentItems.length === 0 ? (
-              <tr>
-                <td colSpan="5">
-                  <div className="empty-state p-4 text-center text-gray-500">
-                    {searchTerm || filterStatus !== 'all' ? 
-                      'No applications found matching your search.' : 
-                      'No applications yet.'}
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              currentItems.map((app) => (
-                <tr key={app.id}>
-                  {/* Application Name */}
-                  <td>
-                    <button
-                      onClick={() => handleViewApplication(app)}
-                      className="text-left group flex items-center gap-2 hover:text-blue-600 transition-colors duration-200"
-                    >
-                      <span className="relative">
-                        {app.name}
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
-                      </span>
-                      <FiChevronRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                    </button>
-                  </td>
+    React.createElement("div", { className: "status-icon" }, /*#__PURE__*/
+    React.createElement(FiClock, { size: 24 })
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "status-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "status-label" }, "Pending"), /*#__PURE__*/
+    React.createElement("div", { className: "status-value" }, /*#__PURE__*/
+    React.createElement(AnimatedNumber, { value: statusSummary.pending })
+    )
+    )
+    ), /*#__PURE__*/
 
-                  {/* Deadline */}
-                  <td>{formatDate(app.deadline)}</td>
-                  
-                  {/* Status Badge */}
-                  <td>
-                    <StatusBadge 
-                      status={app.status}
-                      variant="application"
-                    />
-                  </td>
-                  
-                  {/* Category */}
-                  <td>{app.category}</td>
-                  
-                  {/* Action Buttons */}
-                  <td>
-                    <div className="action-buttons">
-                      <button 
-                        onClick={() => handleViewApplication(app)}
-                        className="action-btn view"
-                        title="View Application Details"
-                        aria-label={`View details of ${app.name}`}
-                      >
-                        <FiEye />
-                      </button>
-                      <button 
-                        onClick={() => handleEdit(app.id)}
-                        className="action-btn edit"
-                        title="Edit Application"
-                        aria-label={`Edit ${app.name}`}
-                      >
-                        <FiEdit2 />
-                      </button>
-                      <button 
-                        onClick={() => handleDeleteClick(app)}
-                        className="action-btn delete"
-                        title="Delete Application"
-                        aria-label={`Delete ${app.name}`}
-                      >
-                        <FiTrash2 />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+    React.createElement("div", {
+      className: `status-box incomplete ${filterStatus === 'incomplete' ? 'active' : ''}`,
+      onClick: () => handleStatusFilter('incomplete'),
+      role: "button",
+      tabIndex: 0,
+      "aria-label": "Filter by incomplete applications" }, /*#__PURE__*/
 
-      {/* Pagination Controls */}
-      <div className="pagination">
-        <div className="pagination-numbers">
-          {/* First page */}
-          {currentPage > 3 && (
-            <>
-              <button
-                className={`pagination-number ${currentPage === 1 ? 'active' : ''}`}
-                onClick={() => handlePageChange(1)}
-              >
-                1
-              </button>
-              {currentPage > 4 && <span className="pagination-ellipsis">...</span>}
-            </>
-          )}
+    React.createElement("div", { className: "status-icon" }, /*#__PURE__*/
+    React.createElement(FiAlertCircle, { size: 24 })
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "status-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "status-label" }, "Incomplete"), /*#__PURE__*/
+    React.createElement("div", { className: "status-value" }, /*#__PURE__*/
+    React.createElement(AnimatedNumber, { value: statusSummary.incomplete })
+    )
+    )
+    ), /*#__PURE__*/
 
-          {/* Page numbers */}
-          {Array.from({ length: totalPages }, (_, i) => i + 1)
-            .filter(page => {
-              if (totalPages <= 7) return true;
-              if (page === 1 || page === totalPages) return true;
-              if (Math.abs(currentPage - page) <= 1) return true;
-              return false;
-            })
-            .map(page => (
-              <button
-                key={page}
-                className={`pagination-number ${currentPage === page ? 'active' : ''}`}
-                onClick={() => handlePageChange(page)}
-              >
-                {page}
-              </button>
-            ))}
+    React.createElement("div", {
+      className: `status-box follow-up ${filterStatus === 'follow-up' ? 'active' : ''}`,
+      onClick: () => handleStatusFilter('follow-up'),
+      role: "button",
+      tabIndex: 0,
+      "aria-label": "Filter by follow-up applications" }, /*#__PURE__*/
 
-          {/* Last page */}
-          {currentPage < totalPages - 2 && (
-            <>
-              {currentPage < totalPages - 3 && <span className="pagination-ellipsis">...</span>}
-              <button
-                className={`pagination-number ${currentPage === totalPages ? 'active' : ''}`}
-                onClick={() => handlePageChange(totalPages)}
-              >
-                {totalPages}
-              </button>
-            </>
-          )}
-        </div>
-      </div>
+    React.createElement("div", { className: "status-icon" }, /*#__PURE__*/
+    React.createElement(FiRefreshCw, { size: 24 })
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "status-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "status-label" }, "Follow-Up"), /*#__PURE__*/
+    React.createElement("div", { className: "status-value" }, /*#__PURE__*/
+    React.createElement(AnimatedNumber, { value: statusSummary.followUp })
+    )
+    )
+    ), /*#__PURE__*/
 
-      {editingApplication && (
-        <EditApplicationPanel
-          application={editingApplication}
-          onClose={() => setEditingApplication(null)}
-          onUpdate={handleUpdateApplication}
-        />
-      )}
+    React.createElement("div", {
+      className: `status-box approved ${filterStatus === 'approved' ? 'active' : ''}`,
+      onClick: () => handleStatusFilter('approved'),
+      role: "button",
+      tabIndex: 0,
+      "aria-label": "Filter by approved applications" }, /*#__PURE__*/
 
-      {/* Delete Confirmation Modal */}
-      {deletingApplication && (
-        <DeleteConfirmationModal
-          application={deletingApplication}
-          onConfirm={handleDeleteConfirm}
-          onCancel={handleDeleteCancel}
-          isLoading={isDeleting}
-        />
-      )}
+    React.createElement("div", { className: "status-icon" }, /*#__PURE__*/
+    React.createElement(FiCheckCircle, { size: 24 })
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "status-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "status-label" }, "Approved"), /*#__PURE__*/
+    React.createElement("div", { className: "status-value" }, /*#__PURE__*/
+    React.createElement(AnimatedNumber, { value: statusSummary.approved })
+    )
+    )
+    ), /*#__PURE__*/
 
-      {/* Add the ApplicationPanel */}
-      <ApplicationPanel
-        isOpen={!!selectedApplication}
-        onClose={() => setSelectedApplication(null)}
-        application={selectedApplication}
-      />
-    </div>
-  );
+    React.createElement("div", {
+      className: `status-box rejected ${filterStatus === 'rejected' ? 'active' : ''}`,
+      onClick: () => handleStatusFilter('rejected'),
+      role: "button",
+      tabIndex: 0,
+      "aria-label": "Filter by rejected applications" }, /*#__PURE__*/
+
+    React.createElement("div", { className: "status-icon" }, /*#__PURE__*/
+    React.createElement(FiXCircle, { size: 24 })
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "status-content" }, /*#__PURE__*/
+    React.createElement("div", { className: "status-label" }, "Rejected"), /*#__PURE__*/
+    React.createElement("div", { className: "status-value" }, /*#__PURE__*/
+    React.createElement(AnimatedNumber, { value: statusSummary.rejected })
+    )
+    )
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "search-filter-section" }, /*#__PURE__*/
+    React.createElement("div", { className: "flex items-center gap-4 justify-end" }, /*#__PURE__*/
+
+    React.createElement("div", { className: "search-bar" }, /*#__PURE__*/
+    React.createElement("input", {
+      type: "text",
+      placeholder: "Search job applications...",
+      value: searchTerm,
+      onChange: handleSearch,
+      className: "search-input",
+      "aria-label": "Search applications" }
+    )
+    )
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "applications-table" }, /*#__PURE__*/
+    React.createElement("table", null, /*#__PURE__*/
+
+    React.createElement("thead", null, /*#__PURE__*/
+    React.createElement("tr", null, /*#__PURE__*/
+    React.createElement("th", null, "Application Name"), /*#__PURE__*/
+    React.createElement("th", null, "Deadline"), /*#__PURE__*/
+    React.createElement("th", null, "Status"), /*#__PURE__*/
+    React.createElement("th", null, "Category"), /*#__PURE__*/
+    React.createElement("th", null, "Actions")
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("tbody", null,
+    filterLoading ? /*#__PURE__*/
+    React.createElement("tr", null, /*#__PURE__*/
+    React.createElement("td", { colSpan: "5" }, /*#__PURE__*/
+    React.createElement("div", { className: "loading-state" }, /*#__PURE__*/
+    React.createElement(LoadingSpinner, { size: "lg", isBackend: true, text: "Loading applications..." })
+    )
+    )
+    ) :
+    error ? /*#__PURE__*/
+    React.createElement("tr", null, /*#__PURE__*/
+    React.createElement("td", { colSpan: "5" }, /*#__PURE__*/
+    React.createElement("div", { className: "error-state p-8 text-center text-gray-500" },
+    error
+    )
+    )
+    ) :
+    currentItems.length === 0 ? /*#__PURE__*/
+    React.createElement("tr", null, /*#__PURE__*/
+    React.createElement("td", { colSpan: "5" }, /*#__PURE__*/
+    React.createElement("div", { className: "empty-state p-4 text-center text-gray-500" },
+    searchTerm || filterStatus !== 'all' ?
+    'No applications found matching your search.' :
+    'No applications yet.'
+    )
+    )
+    ) :
+
+    currentItems.map((app) => /*#__PURE__*/
+    React.createElement("tr", { key: app.id }, /*#__PURE__*/
+
+    React.createElement("td", null, /*#__PURE__*/
+    React.createElement("button", {
+      onClick: () => handleViewApplication(app),
+      className: "text-left group flex items-center gap-2 hover:text-blue-600 transition-colors duration-200" }, /*#__PURE__*/
+
+    React.createElement("span", { className: "relative" },
+    app.name, /*#__PURE__*/
+    React.createElement("span", { className: "absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300" })
+    ), /*#__PURE__*/
+    React.createElement(FiChevronRight, { className: "w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" })
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("td", null, formatDate(app.deadline)), /*#__PURE__*/
+
+
+    React.createElement("td", null, /*#__PURE__*/
+    React.createElement(StatusBadge, {
+      status: app.status,
+      variant: "application" }
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("td", null, app.category), /*#__PURE__*/
+
+
+    React.createElement("td", null, /*#__PURE__*/
+    React.createElement("div", { className: "action-buttons" }, /*#__PURE__*/
+    React.createElement("button", {
+      onClick: () => handleViewApplication(app),
+      className: "action-btn view",
+      title: "View Application Details",
+      "aria-label": `View details of ${app.name}` }, /*#__PURE__*/
+
+    React.createElement(FiEye, null)
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      onClick: () => handleEdit(app.id),
+      className: "action-btn edit",
+      title: "Edit Application",
+      "aria-label": `Edit ${app.name}` }, /*#__PURE__*/
+
+    React.createElement(FiEdit2, null)
+    ), /*#__PURE__*/
+    React.createElement("button", {
+      onClick: () => handleDeleteClick(app),
+      className: "action-btn delete",
+      title: "Delete Application",
+      "aria-label": `Delete ${app.name}` }, /*#__PURE__*/
+
+    React.createElement(FiTrash2, null)
+    )
+    )
+    )
+    )
+    )
+
+    )
+    )
+    ), /*#__PURE__*/
+
+
+    React.createElement("div", { className: "pagination" }, /*#__PURE__*/
+    React.createElement("div", { className: "pagination-numbers" },
+
+    currentPage > 3 && /*#__PURE__*/
+    React.createElement(React.Fragment, null, /*#__PURE__*/
+    React.createElement("button", {
+      className: `pagination-number ${currentPage === 1 ? 'active' : ''}`,
+      onClick: () => handlePageChange(1) },
+    "1"
+
+    ),
+    currentPage > 4 && /*#__PURE__*/React.createElement("span", { className: "pagination-ellipsis" }, "...")
+    ),
+
+
+
+    Array.from({ length: totalPages }, (_, i) => i + 1).
+    filter((page) => {
+      if (totalPages <= 7) return true;
+      if (page === 1 || page === totalPages) return true;
+      if (Math.abs(currentPage - page) <= 1) return true;
+      return false;
+    }).
+    map((page) => /*#__PURE__*/
+    React.createElement("button", {
+      key: page,
+      className: `pagination-number ${currentPage === page ? 'active' : ''}`,
+      onClick: () => handlePageChange(page) },
+
+    page
+    )
+    ),
+
+
+    currentPage < totalPages - 2 && /*#__PURE__*/
+    React.createElement(React.Fragment, null,
+    currentPage < totalPages - 3 && /*#__PURE__*/React.createElement("span", { className: "pagination-ellipsis" }, "..."), /*#__PURE__*/
+    React.createElement("button", {
+      className: `pagination-number ${currentPage === totalPages ? 'active' : ''}`,
+      onClick: () => handlePageChange(totalPages) },
+
+    totalPages
+    )
+    )
+
+    )
+    ),
+
+    editingApplication && /*#__PURE__*/
+    React.createElement(EditApplicationPanel, {
+      application: editingApplication,
+      onClose: () => setEditingApplication(null),
+      onUpdate: handleUpdateApplication }
+    ),
+
+
+
+    deletingApplication && /*#__PURE__*/
+    React.createElement(DeleteConfirmationModal, {
+      application: deletingApplication,
+      onConfirm: handleDeleteConfirm,
+      onCancel: handleDeleteCancel,
+      isLoading: isDeleting }
+    ), /*#__PURE__*/
+
+
+
+    React.createElement(ApplicationPanel, {
+      isOpen: !!selectedApplication,
+      onClose: () => setSelectedApplication(null),
+      application: selectedApplication }
+    )
+    ));
+
 };
 
 export default MyApplications;

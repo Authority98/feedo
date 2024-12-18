@@ -21,7 +21,7 @@ import './BillingHistory.css';
 
 const BillingHistory = ({ invoices = [], onClearHistory, loading = false }) => {
   // Filter out $0 invoices
-  const filteredInvoices = invoices.filter(invoice => invoice.amount > 0);
+  const filteredInvoices = invoices.filter((invoice) => invoice.amount > 0);
 
   // Helper function to capitalize status
   const formatStatus = (status) => {
@@ -31,7 +31,7 @@ const BillingHistory = ({ invoices = [], onClearHistory, loading = false }) => {
   // Add this helper function at the top of the component
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    
+
     // Format date like "5 Jan, 2024"
     const formattedDate = date.toLocaleDateString('en-US', {
       day: 'numeric',
@@ -59,81 +59,81 @@ const BillingHistory = ({ invoices = [], onClearHistory, loading = false }) => {
   };
 
   if (loading) {
-    return <SkeletonLoading />;
+    return /*#__PURE__*/React.createElement(SkeletonLoading, null);
   }
 
   if (!Array.isArray(invoices)) {
     console.error('Invalid invoices data:', invoices);
-    return (
-      <div className="billing-history">
-        <h3 className="subsection-title">Billing History</h3>
-        <div className="empty-history">
-          <FiInbox className="empty-icon" />
-          <p className="empty-text">Unable to load billing history</p>
-          <p className="empty-subtext">Please try again later</p>
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "billing-history" }, /*#__PURE__*/
+      React.createElement("h3", { className: "subsection-title" }, "Billing History"), /*#__PURE__*/
+      React.createElement("div", { className: "empty-history" }, /*#__PURE__*/
+      React.createElement(FiInbox, { className: "empty-icon" }), /*#__PURE__*/
+      React.createElement("p", { className: "empty-text" }, "Unable to load billing history"), /*#__PURE__*/
+      React.createElement("p", { className: "empty-subtext" }, "Please try again later")
+      )
+      ));
+
   }
 
   if (invoices.length === 0) {
-    return (
-      <div className="billing-history">
-        <h3 className="subsection-title">Billing History</h3>
-        <div className="empty-history">
-          <FiInbox className="empty-icon" />
-          <p className="empty-text">No billing history available yet</p>
-          <p className="empty-subtext">Your payment history will appear here once you make a purchase</p>
-        </div>
-      </div>
-    );
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "billing-history" }, /*#__PURE__*/
+      React.createElement("h3", { className: "subsection-title" }, "Billing History"), /*#__PURE__*/
+      React.createElement("div", { className: "empty-history" }, /*#__PURE__*/
+      React.createElement(FiInbox, { className: "empty-icon" }), /*#__PURE__*/
+      React.createElement("p", { className: "empty-text" }, "No billing history available yet"), /*#__PURE__*/
+      React.createElement("p", { className: "empty-subtext" }, "Your payment history will appear here once you make a purchase")
+      )
+      ));
+
   }
 
-  return (
-    <div className="billing-history">
-      <div className="history-header">
-        <h3 className="subsection-title">Billing History</h3>
-        {filteredInvoices.length > 0 && (
-          <button 
-            onClick={onClearHistory}
-            className="clear-history-btn"
-          >
-            <FiTrash2 className="clear-icon" />
-            Clear History
-          </button>
-        )}
-      </div>
-      <div className="history-list">
-        {filteredInvoices.map((invoice) => (
-          <div key={invoice.id} className="history-item">
-            <div className="invoice-details">
-              <span className="invoice-date">
-                {formatDate(invoice.date)}
-              </span>
-              <span className="invoice-id">#{invoice.number}</span>
-            </div>
-            <div className="invoice-amount">
-              <FiDollarSign className="amount-icon" />
-              <span>{formatAmount(invoice.amount)}</span>
-            </div>
-            <div className="invoice-status success">
-              <FiCheck className="status-icon" />
-              <span>Paid</span>
-            </div>
-            <a 
-              href={invoice.invoice_pdf}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="download-btn"
-            >
-              <FiDownload />
-              Download
-            </a>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  return (/*#__PURE__*/
+    React.createElement("div", { className: "billing-history" }, /*#__PURE__*/
+    React.createElement("div", { className: "history-header" }, /*#__PURE__*/
+    React.createElement("h3", { className: "subsection-title" }, "Billing History"),
+    filteredInvoices.length > 0 && /*#__PURE__*/
+    React.createElement("button", {
+      onClick: onClearHistory,
+      className: "clear-history-btn" }, /*#__PURE__*/
+
+    React.createElement(FiTrash2, { className: "clear-icon" }), "Clear History"
+
+    )
+
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "history-list" },
+    filteredInvoices.map((invoice) => /*#__PURE__*/
+    React.createElement("div", { key: invoice.id, className: "history-item" }, /*#__PURE__*/
+    React.createElement("div", { className: "invoice-details" }, /*#__PURE__*/
+    React.createElement("span", { className: "invoice-date" },
+    formatDate(invoice.date)
+    ), /*#__PURE__*/
+    React.createElement("span", { className: "invoice-id" }, "#", invoice.number)
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "invoice-amount" }, /*#__PURE__*/
+    React.createElement(FiDollarSign, { className: "amount-icon" }), /*#__PURE__*/
+    React.createElement("span", null, formatAmount(invoice.amount))
+    ), /*#__PURE__*/
+    React.createElement("div", { className: "invoice-status success" }, /*#__PURE__*/
+    React.createElement(FiCheck, { className: "status-icon" }), /*#__PURE__*/
+    React.createElement("span", null, "Paid")
+    ), /*#__PURE__*/
+    React.createElement("a", {
+      href: invoice.invoice_pdf,
+      target: "_blank",
+      rel: "noopener noreferrer",
+      className: "download-btn" }, /*#__PURE__*/
+
+    React.createElement(FiDownload, null), "Download"
+
+    )
+    )
+    )
+    )
+    ));
+
 };
 
-export default BillingHistory; 
+export default BillingHistory;

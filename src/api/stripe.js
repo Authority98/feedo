@@ -18,7 +18,7 @@ import { db } from '../firebase/config';
 
 // Initialize Stripe instance with server-side secret key
 const stripe = new Stripe(stripeConfig.secretKey, {
-  apiVersion: stripeConfig.apiVersion,
+  apiVersion: stripeConfig.apiVersion
 });
 
 // Verify database connection
@@ -50,7 +50,7 @@ export const getStripePromise = () => {
 const verifyCustomerOwnership = async (userId, customerId) => {
   try {
     verifyDbConnection();
-    
+
     if (!userId) {
       throw new Error('User ID is required');
     }
@@ -58,7 +58,7 @@ const verifyCustomerOwnership = async (userId, customerId) => {
     // Get the customer mapping from Firebase
     const customerRef = doc(db, 'stripe_customers', userId);
     const customerDoc = await getDoc(customerRef);
-    
+
     if (!customerDoc.exists()) {
       throw new Error('Customer mapping not found');
     }
@@ -113,8 +113,8 @@ export const stripeApi = {
       const customer = await stripe.customers.create({
         email,
         metadata: {
-          userId,
-        },
+          userId
+        }
       });
 
       // Store the mapping in Firebase
@@ -145,14 +145,14 @@ export const stripeApi = {
       await verifyCustomerOwnership(user.uid, customerId);
 
       await stripe.paymentMethods.attach(paymentMethodId, {
-        customer: customerId,
+        customer: customerId
       });
 
       // Set as default payment method
       await stripe.customers.update(customerId, {
         invoice_settings: {
-          default_payment_method: paymentMethodId,
-        },
+          default_payment_method: paymentMethodId
+        }
       });
 
       return { success: true };
@@ -181,7 +181,7 @@ export const stripeApi = {
 
       const paymentMethods = await stripe.paymentMethods.list({
         customer: customerId,
-        type: 'card',
+        type: 'card'
       });
 
       return paymentMethods.data;
@@ -196,7 +196,7 @@ export const stripeApi = {
     try {
       // Get the payment method to verify ownership
       const paymentMethod = await stripe.paymentMethods.retrieve(paymentMethodId);
-      
+
       // Get userId from the current context
       const auth = getAuth();
       const user = auth.currentUser;
@@ -230,14 +230,14 @@ export const stripeApi = {
 
       // First attach the payment method to the customer if not already attached
       await stripe.paymentMethods.attach(paymentMethodId, {
-        customer: customerId,
+        customer: customerId
       });
 
       // Then set it as the default payment method
       const customer = await stripe.customers.update(customerId, {
         invoice_settings: {
-          default_payment_method: paymentMethodId,
-        },
+          default_payment_method: paymentMethodId
+        }
       });
 
       // Verify the update was successful
@@ -278,16 +278,16 @@ export const stripeApi = {
       });
 
       // Map and format the invoices
-      const formattedInvoices = invoices.data.map(invoice => ({
+      const formattedInvoices = invoices.data.map((invoice) => ({
         id: invoice.id,
         date: new Date(invoice.created * 1000),
         amount: invoice.amount_paid / 100,
         status: invoice.status,
         invoice_pdf: invoice.hosted_invoice_url,
         number: invoice.number,
-        description: invoice.subscription ? 
-          `${invoice.subscription.plan?.nickname || 'Subscription'} - ${invoice.subscription.plan?.interval}ly` : 
-          'One-time payment'
+        description: invoice.subscription ?
+        `${invoice.subscription.plan?.nickname || 'Subscription'} - ${invoice.subscription.plan?.interval}ly` :
+        'One-time payment'
       }));
 
       return formattedInvoices;
@@ -345,7 +345,7 @@ export const stripeApi = {
       // Get all invoices for the customer
       const invoices = await stripe.invoices.list({
         customer: customerId,
-        limit: 100,
+        limit: 100
       });
 
       // Delete each invoice
@@ -404,16 +404,16 @@ export const stripeApi = {
 
       const subscription = subscriptions.data[0];
       const price = subscription.items.data[0].price;
-      
+
       // Get the product details separately
       const product = await stripe.products.retrieve(price.product);
-      
-      console.log('Raw subscription data:', {
-        subscription,
-        price,
-        product,
-        planName: product.name
-      });
+
+
+
+
+
+
+
 
       return {
         id: subscription.id,
@@ -452,17 +452,17 @@ export const stripeApi = {
 
       // Get the customer to check for default payment method
       const customer = await stripe.customers.retrieve(customerId);
-      
+
       // Ensure the payment method is attached and set as default
       if (paymentMethodId) {
         await stripe.paymentMethods.attach(paymentMethodId, {
-          customer: customerId,
+          customer: customerId
         });
-        
+
         await stripe.customers.update(customerId, {
           invoice_settings: {
-            default_payment_method: paymentMethodId,
-          },
+            default_payment_method: paymentMethodId
+          }
         });
       } else if (!customer.invoice_settings.default_payment_method) {
         throw new Error('No default payment method found');
@@ -483,14 +483,14 @@ export const stripeApi = {
       // Handle the subscription status
       if (subscription.status === 'incomplete') {
         const paymentIntent = subscription.latest_invoice.payment_intent;
-        
+
         if (paymentIntent.status === 'requires_payment_method') {
           throw new Error('Payment failed. Please check your card details and try again.');
         }
-        
+
         // Wait for the payment to be confirmed
         const confirmedPaymentIntent = await stripe.paymentIntents.confirm(paymentIntent.id);
-        
+
         if (confirmedPaymentIntent.status === 'succeeded') {
           // Refresh the subscription to get the latest status
           const updatedSubscription = await stripe.subscriptions.retrieve(subscription.id);
@@ -516,7 +516,7 @@ export const stripeApi = {
 
       // Get the subscription to verify customer
       const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-      
+
       // Get userId from the current context
       const auth = getAuth();
       const user = auth.currentUser;
@@ -531,9 +531,9 @@ export const stripeApi = {
       const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
         items: [{
           id: subscription.items.data[0].id,
-          price: newPriceId,
+          price: newPriceId
         }],
-        proration_behavior: 'create_prorations',
+        proration_behavior: 'create_prorations'
       });
 
       return updatedSubscription;
@@ -552,7 +552,7 @@ export const stripeApi = {
 
       // Get the subscription to verify customer
       const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-      
+
       // Get userId from the current context
       const auth = getAuth();
       const user = auth.currentUser;
@@ -589,7 +589,7 @@ export const stripeApi = {
 
       // Get the subscription to verify customer
       const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-      
+
       // Get userId from the current context
       const auth = getAuth();
       const user = auth.currentUser;
@@ -610,5 +610,5 @@ export const stripeApi = {
       console.error('Error resuming subscription:', error);
       throw error;
     }
-  },
-}; 
+  }
+};
