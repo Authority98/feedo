@@ -55,6 +55,13 @@
   - Added updateProfile prop to useFileHandling hook
   - Improved user experience by updating percentage without waiting for auto-save
 
+- Fixed file handling loading states in Data Management
+  - Moved state management to parent level to fix React hooks error
+  - Added proper tracking of file deletion state
+  - Improved loading text accuracy during operations
+  - Fixed incorrect loading text during file upload
+  - Enhanced user feedback during file operations
+
 ## UI/UX Improvements
 - Enhanced Recent Activity section
   - Added bold styling for opportunity names
