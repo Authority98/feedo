@@ -97,7 +97,6 @@
   - Removed redundant borders and asterisks
   - Added loading state during email submission
   - Pre-filled user email in From field
-  - Direct integration with support@feedo.ai
   - Improved form validation and error handling
   - Success/error toast notifications
 
