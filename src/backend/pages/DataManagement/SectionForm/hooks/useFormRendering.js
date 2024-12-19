@@ -65,148 +65,146 @@ fileUploading) =>
     formData[questionId]?.[groupIndex]?.[fieldId] :
     formData[questionId];
 
+    // Only show file data if it has both name and url
+    const hasValidFile = existingFile && existingFile.name && existingFile.url;
+    
     const filePreview = filePreviews?.[previewKey];
     const isNewFile = existingFile instanceof File;
-    const displayName = isNewFile ?
-    existingFile?.name :
-    existingFile ?
-    existingFile?.name || (typeof existingFile === 'string' ? existingFile.split('/').pop() : '') :
-    '';
+    
+    // Only show display name if we have a valid file
+    const displayName = hasValidFile ? existingFile.name : '';
 
     // Get the URL for display
-    const fileUrl = isNewFile ?
-    filePreview || (existingFile ? URL.createObjectURL(existingFile) : '') :
-    existingFile ?
-    existingFile?.url || (typeof existingFile === 'string' ? existingFile : '') :
-    '';
+    const fileUrl = hasValidFile ? existingFile.url : '';
 
     const isUploading = fileUploading?.[previewKey];
     const validation = field?.validation || {};
     const label = field?.label || field?.question || '';
     const required = field?.required || false;
 
-    // Create a unique key for the input element that changes when the file is removed
-    const inputKey = `${previewKey}_${existingFile ? 'has-file' : 'no-file'}`;
+    // Create a unique key that changes when file status changes
+    const inputKey = `${previewKey}_${hasValidFile ? 'has-file' : 'no-file'}_${Date.now()}`;
 
-    return (/*#__PURE__*/
-      React.createElement(Box, null, /*#__PURE__*/
-      React.createElement(Typography, { variant: "body1", gutterBottom: true },
-      label,
-      required && /*#__PURE__*/
-      React.createElement(Typography, { component: "span", color: "error" }, "*")
+    return (
+      <Box>
+        <Typography variant="body1" gutterBottom>
+          {label}
+          {required && <Typography component="span" color="error">*</Typography>}
+        </Typography>
+        
+        <input
+          key={inputKey}
+          type="file"
+          accept={validation?.fileTypes?.join(',')}
+          onChange={(e) => {
+            if (typeof handleFileChange === 'function') {
+              handleFileChange(questionId, e.target.files?.[0], groupIndex, fieldId);
+            }
+          }}
+          style={{ display: 'none' }}
+          id={`file-input-${previewKey}`}
+        />
+        
+        <label htmlFor={`file-input-${previewKey}`}>
+          <Button
+            variant="outlined"
+            component="span"
+            fullWidth
+            sx={{ mb: 1 }}
+            disabled={isUploading}
+          >
+            {isUploading ? (
+              <Box display="flex" alignItems="center" gap={1}>
+                <CircularProgress size={16} />
+                <span>Uploading...</span>
+              </Box>
+            ) : (
+              hasValidFile ? 'Change File' : 'Choose File'
+            )}
+          </Button>
+        </label>
 
-      ), /*#__PURE__*/
-      React.createElement("input", {
-        key: inputKey,
-        type: "file",
-        accept: validation?.fileTypes?.join(','),
-        onChange: (e) => {
-          if (typeof handleFileChange === 'function') {
-            handleFileChange(questionId, e.target.files?.[0], groupIndex, fieldId);
-          } else {
-            console.error('handleFileChange is not a function:', handleFileChange);
-          }
-        },
-        style: { display: 'none' },
-        id: `file-input-${previewKey}` }
-      ), /*#__PURE__*/
-      React.createElement("label", { htmlFor: `file-input-${previewKey}` }, /*#__PURE__*/
-      React.createElement(Button, {
-        variant: "outlined",
-        component: "span",
-        fullWidth: true,
-        sx: { mb: 1 },
-        disabled: isUploading },
+        {hasValidFile && (
+          <Box mt={1}>
+            <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
+              <Typography variant="caption" color="textSecondary">
+                Selected file: {displayName}
+              </Typography>
+              <IconButton
+                size="small"
+                onClick={() => {
+                  if (typeof handleFileChange === 'function') {
+                    handleFileChange(questionId, null, groupIndex, fieldId);
+                  }
+                }}
+                sx={{ color: 'error.main' }}
+                disabled={isUploading}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Box>
 
-      isUploading && existingFile ? /*#__PURE__*/
-      React.createElement(Box, { display: "flex", alignItems: "center", gap: 1 }, /*#__PURE__*/
-      React.createElement(CircularProgress, { size: 16 }), /*#__PURE__*/
-      React.createElement("span", null, "Uploading...")
-      ) :
+            {fileUrl && (
+              <Box
+                sx={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '150px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  overflow: 'hidden',
+                  borderRadius: 1,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  p: 1,
+                  bgcolor: 'background.paper',
+                  position: 'relative'
+                }}
+              >
+                <img
+                  src={fileUrl}
+                  alt={displayName}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '140px',
+                    objectFit: 'contain',
+                    display: 'block',
+                    opacity: isUploading ? 0.5 : 1,
+                    transition: 'opacity 0.2s'
+                  }}
+                />
+                {isUploading && (
+                  <Box
+                    position="absolute"
+                    top="50%"
+                    left="50%"
+                    sx={{
+                      transform: 'translate(-50%, -50%)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 1
+                    }}
+                  >
+                    <CircularProgress size={24} />
+                    <Typography variant="caption" color="text.secondary">
+                      Uploading...
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+            )}
+          </Box>
+        )}
 
-      displayName ? 'Change File' : 'Choose File'
-
-      )
-      ),
-      displayName && /*#__PURE__*/
-      React.createElement(Box, { mt: 1 }, /*#__PURE__*/
-      React.createElement(Box, { display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }, /*#__PURE__*/
-      React.createElement(Typography, { variant: "caption", color: "textSecondary" }, "Selected file: ",
-      displayName
-      ), /*#__PURE__*/
-      React.createElement(IconButton, {
-        size: "small",
-        onClick: () => {
-          if (typeof handleFileChange === 'function') {
-            handleFileChange(questionId, null, groupIndex, fieldId);
-          } else {
-            console.error('handleFileChange is not a function:', handleFileChange);
-          }
-        },
-        sx: { color: 'error.main' },
-        disabled: isUploading }, /*#__PURE__*/
-
-      React.createElement(DeleteIcon, { fontSize: "small" })
-      )
-      ),
-      !isNewFile && existingFile && fileUrl && /*#__PURE__*/
-      React.createElement(Box, {
-        sx: {
-          width: '100%',
-          height: 'auto',
-          maxHeight: '150px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          overflow: 'hidden',
-          borderRadius: 1,
-          border: '1px solid',
-          borderColor: 'divider',
-          p: 1,
-          bgcolor: 'background.paper',
-          position: 'relative'
-        } }, /*#__PURE__*/
-
-      React.createElement("img", {
-        src: fileUrl,
-        alt: displayName,
-        style: {
-          maxWidth: '100%',
-          maxHeight: '140px',
-          objectFit: 'contain',
-          display: 'block',
-          opacity: isUploading && existingFile ? 0.5 : 1,
-          transition: 'opacity 0.2s'
-        } }
-      ),
-      isUploading && existingFile && /*#__PURE__*/
-      React.createElement(Box, {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        sx: {
-          transform: 'translate(-50%, -50%)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 1
-        } }, /*#__PURE__*/
-
-      React.createElement(CircularProgress, { size: 24 }), /*#__PURE__*/
-      React.createElement(Typography, { variant: "caption", color: "text.secondary" }, "Uploading..."
-
-      )
-      )
-
-      )
-
-      ),
-
-      errors?.[questionId] && /*#__PURE__*/
-      React.createElement(FormHelperText, { error: true }, errors[questionId])
-
-      ));
-
+        {errors?.[questionId] && (
+          <FormHelperText error>
+            {errors[questionId]}
+          </FormHelperText>
+        )}
+      </Box>
+    );
   };
 
   const handleGroupRemoval = (questionId, groupIndex) => {

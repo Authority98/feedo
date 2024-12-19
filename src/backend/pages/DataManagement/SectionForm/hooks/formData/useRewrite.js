@@ -12,7 +12,36 @@ export const useRewrite = ({
   queueChange,
   showToast
 }) => {
-  return useCallback(async (questionId, groupIndex, fieldId) => {
+  const updateFormData = useCallback((questionId, groupIndex, fieldId, enhancedText) => {
+    if (groupIndex !== undefined && fieldId !== undefined) {
+      setFormData(prev => {
+        const groups = [...(prev[questionId] || [])];
+        if (!groups[groupIndex]) {
+          groups[groupIndex] = {};
+        }
+        groups[groupIndex] = {
+          ...groups[groupIndex],
+          [fieldId]: enhancedText
+        };
+        queueChange(questionId, groups);
+        return {
+          ...prev,
+          [questionId]: groups
+        };
+      });
+    } else {
+      setFormData(prev => {
+        const newData = {
+          ...prev,
+          [questionId]: enhancedText
+        };
+        queueChange(questionId, enhancedText);
+        return newData;
+      });
+    }
+  }, [setFormData, queueChange]);
+
+  const handleRewrite = useCallback(async (questionId, groupIndex, fieldId) => {
     if (!user?.profile?.authUid) {
       showToast(ERROR_MESSAGES.LOGIN_REQUIRED.REWRITE, 'error');
       return;
@@ -62,34 +91,7 @@ export const useRewrite = ({
         [questionId]: false
       }));
     }
-  }, [formData, section.questions, user?.profile?.authUid, queueChange, showToast]);
+  }, [formData, section.questions, user?.profile?.authUid, updateFormData, showToast, setEnhancingFields]);
 
-  const updateFormData = (questionId, groupIndex, fieldId, enhancedText) => {
-    if (groupIndex !== undefined && fieldId !== undefined) {
-      setFormData(prev => {
-        const groups = [...(prev[questionId] || [])];
-        if (!groups[groupIndex]) {
-          groups[groupIndex] = {};
-        }
-        groups[groupIndex] = {
-          ...groups[groupIndex],
-          [fieldId]: enhancedText
-        };
-        queueChange(questionId, groups);
-        return {
-          ...prev,
-          [questionId]: groups
-        };
-      });
-    } else {
-      setFormData(prev => {
-        const newData = {
-          ...prev,
-          [questionId]: enhancedText
-        };
-        queueChange(questionId, enhancedText);
-        return newData;
-      });
-    }
-  };
+  return handleRewrite;
 }; 

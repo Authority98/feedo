@@ -15,6 +15,19 @@ export const mapFormDataToProfileSection = (formData, section, profileType) => {
         const answer = formData[question.id];
         if (answer === undefined) return null;
 
+        // For file type questions, preserve the entire file data structure
+        if (question.type === 'file' && answer) {
+          return {
+            id: question.id,
+            type: question.type,
+            answer: {
+              url: answer.url,
+              name: answer.name,
+              type: answer.type
+            }
+          };
+        }
+
         return {
           id: question.id,
           type: question.type,
@@ -70,7 +83,12 @@ export const mapSectionDataToFormData = (userSectionData, sectionQuestions) => {
         savedFormData[question.id] = userSectionData?.questions?.find((q) => q.id === question.id)?.answer || [];
       } else if (question.type === 'file') {
         // Initialize file fields with null or existing data
-        savedFormData[question.id] = userSectionData?.questions?.find((q) => q.id === question.id)?.answer || null;
+        const fileData = userSectionData?.questions?.find((q) => q.id === question.id)?.answer;
+        savedFormData[question.id] = fileData ? {
+          url: fileData.url,
+          name: fileData.name,
+          type: fileData.type
+        } : null;
       } else {
         // Initialize all other fields with empty string or existing data
         savedFormData[question.id] = userSectionData?.questions?.find((q) => q.id === question.id)?.answer || '';

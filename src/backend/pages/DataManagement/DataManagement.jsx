@@ -98,17 +98,19 @@ const DataManagement = () => {
 
   // Update URL when tab changes
   const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-    setSearchParams({ tab: newValue });
+    if (newValue !== activeTab) {  // Only update if the tab actually changed
+      setActiveTab(newValue);
+      setSearchParams({ tab: newValue });
+    }
   };
 
   // Listen for URL changes
   useEffect(() => {
     const tabFromUrl = searchParams.get('tab');
-    if (tabFromUrl && tabFromUrl !== activeTab) {
+    if (tabFromUrl && tabFromUrl !== activeTab && sections.some(section => section.id === tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
-  }, [searchParams]);
+  }, [searchParams, sections]);
 
   // Render appropriate content based on active tab
   const renderTabContent = () => {
