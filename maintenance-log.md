@@ -49,6 +49,12 @@
   - Added support for repeater fields
   - Made progress calculation dynamic based on profile type
 
+- Fixed profile completion percentage not updating immediately after file deletion
+  - Modified useFileHandling to save changes to Firebase immediately
+  - Added SECTION_DATA_UPDATED event emission after successful save
+  - Added updateProfile prop to useFileHandling hook
+  - Improved user experience by updating percentage without waiting for auto-save
+
 ## UI/UX Improvements
 - Enhanced Recent Activity section
   - Added bold styling for opportunity names
