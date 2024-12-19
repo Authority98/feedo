@@ -62,11 +62,13 @@ export const useFormData = (section, profileType) => {
   const handleFileChange = useFileHandling({
     user,
     section,
+    formData,
     setFormData,
     setFileUploading,
     setFilePreviews,
     queueChange,
-    showToast
+    showToast,
+    updateProfile
   });
 
   // Initialize rewrite functionality
