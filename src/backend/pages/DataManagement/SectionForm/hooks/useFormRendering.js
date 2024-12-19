@@ -46,6 +46,37 @@ fileUploading) =>
   const theme = useTheme();
   const { user } = useAuth();
   const { showToast } = useToast();
+  const [deletingFiles, setDeletingFiles] = React.useState({});
+
+  const handleDeleteFile = (questionId, groupIndex, fieldId) => {
+    const previewKey = groupIndex !== undefined && fieldId !== undefined ?
+      `${questionId}_${groupIndex}_${fieldId}` :
+      questionId;
+
+    setDeletingFiles(prev => ({ ...prev, [previewKey]: true }));
+    if (typeof handleFileChange === 'function') {
+      handleFileChange(questionId, null, groupIndex, fieldId).finally(() => {
+        setDeletingFiles(prev => {
+          const { [previewKey]: _, ...rest } = prev;
+          return rest;
+        });
+      });
+    }
+  };
+
+  const handleUploadFile = (questionId, file, groupIndex, fieldId) => {
+    const previewKey = groupIndex !== undefined && fieldId !== undefined ?
+      `${questionId}_${groupIndex}_${fieldId}` :
+      questionId;
+
+    setDeletingFiles(prev => {
+      const { [previewKey]: _, ...rest } = prev;
+      return rest;
+    });
+    if (typeof handleFileChange === 'function') {
+      handleFileChange(questionId, file, groupIndex, fieldId);
+    }
+  };
 
   const getStyles = (option, selectedOptions, theme) => {
     return {
@@ -78,6 +109,7 @@ fileUploading) =>
     const fileUrl = hasValidFile ? existingFile.url : '';
 
     const isUploading = fileUploading?.[previewKey];
+    const isDeleting = deletingFiles?.[previewKey];
     const validation = field?.validation || {};
     const label = field?.label || field?.question || '';
     const required = field?.required || false;
@@ -96,11 +128,7 @@ fileUploading) =>
           key={inputKey}
           type="file"
           accept={validation?.fileTypes?.join(',')}
-          onChange={(e) => {
-            if (typeof handleFileChange === 'function') {
-              handleFileChange(questionId, e.target.files?.[0], groupIndex, fieldId);
-            }
-          }}
+          onChange={(e) => handleUploadFile(questionId, e.target.files?.[0], groupIndex, fieldId)}
           style={{ display: 'none' }}
           id={`file-input-${previewKey}`}
         />
@@ -116,7 +144,7 @@ fileUploading) =>
             {isUploading ? (
               <Box display="flex" alignItems="center" gap={1}>
                 <CircularProgress size={16} />
-                <span>Uploading...</span>
+                <span>{isDeleting ? "Deleting..." : "Uploading..."}</span>
               </Box>
             ) : (
               hasValidFile ? 'Change File' : 'Choose File'
@@ -132,11 +160,7 @@ fileUploading) =>
               </Typography>
               <IconButton
                 size="small"
-                onClick={() => {
-                  if (typeof handleFileChange === 'function') {
-                    handleFileChange(questionId, null, groupIndex, fieldId);
-                  }
-                }}
+                onClick={() => handleDeleteFile(questionId, groupIndex, fieldId)}
                 sx={{ color: 'error.main' }}
                 disabled={isUploading}
               >
@@ -189,7 +213,7 @@ fileUploading) =>
                   >
                     <CircularProgress size={24} />
                     <Typography variant="caption" color="text.secondary">
-                      Uploading...
+                      {isDeleting ? "Deleting..." : "Uploading..."}
                     </Typography>
                   </Box>
                 )}

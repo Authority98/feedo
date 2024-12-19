@@ -94,6 +94,12 @@
   - Improved form validation and error handling
   - Success/error toast notifications
 
+- Enhanced file handling feedback
+  - Added distinct loading text for file deletion ("Deleting...")
+  - Maintained existing upload feedback ("Uploading...")
+  - Improved user feedback during file operations
+  - Applied to both button and preview overlay
+
 ## Code Quality
 - Created maintenance log to track platform changes
 - Improved error handling across authentication flows
