@@ -62,6 +62,12 @@
   - Fixed incorrect loading text during file upload
   - Enhanced user feedback during file operations
 
+- Fixed Netlify build issues
+  - Added missing @babel/plugin-proposal-private-property-in-object dependency
+  - Resolved build-time dependency errors
+  - Improved build configuration stability
+  - Updated package.json with required dev dependencies
+
 ## UI/UX Improvements
 - Enhanced Recent Activity section
   - Added bold styling for opportunity names
