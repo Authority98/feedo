@@ -502,7 +502,6 @@ const DataOverview = () => {
     )
     )
     )
-    )
     ));
 
 };
