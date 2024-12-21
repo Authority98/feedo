@@ -1,4 +1,4 @@
-# Feedo Platform Maintenance Log
+# Feedo Platform Changelog
 
 ## New Features
 - Enhanced Data Management Form UI/UX
