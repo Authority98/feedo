@@ -141,6 +141,15 @@ const NewOpportunities = () => {
     const createdAtDays = isNew ? Math.floor(Math.random() * 7) : Math.floor(Math.random() * 30);
     const createdAt = new Date(now.getTime() - createdAtDays * 24 * 60 * 60 * 1000);
 
+    // Log the creation date for debugging
+    console.log('Creating opportunity:', {
+      isNew,
+      createdAtDays,
+      createdAt: createdAt.toISOString(),
+      now: now.toISOString(),
+      isWithinSevenDays: (now.getTime() - createdAt.getTime()) <= 7 * 24 * 60 * 60 * 1000
+    });
+
     // Generate a random match percentage with 20% chance of being ≥90%
     const isHighMatch = Math.random() < 0.2; // 20% chance
     const matchPercentage = isHighMatch ? Math.floor(Math.random() * 10) + 90 : Math.floor(Math.random() * 89) + 1;
@@ -217,21 +226,30 @@ const NewOpportunities = () => {
     try {
       setLoading(true);
       const demoOpportunity = createDemoOpportunity();
-      const opportunityData = createOpportunityDataStructure({
+
+      // Ensure dates are properly formatted
+      const opportunityData = {
         ...demoOpportunity,
-        creatorId: user.profile.authUid
-      });
+        creatorId: user.profile.authUid,
+        createdAt: demoOpportunity.createdAt.toISOString(),
+        deadline: demoOpportunity.deadline.toISOString()
+      };
 
       // Create new opportunity using opportunityOperations
       const newOpportunity = await opportunityOperations.createOpportunity(opportunityData);
 
-      // Update local state
-      setOpportunities((prev) => [newOpportunity, ...prev]);
+      // Update local state with the new opportunity
+      setOpportunities((prev) => [
+        {
+          ...newOpportunity,
+          createdAt: new Date(opportunityData.createdAt),
+          deadline: new Date(opportunityData.deadline)
+        },
+        ...prev
+      ]);
 
       // Trigger stats refresh
       setStatsRefreshTrigger((prev) => prev + 1);
-
-
     } catch (err) {
       console.error('Error creating demo opportunity:', err);
       setError('Failed to create opportunity. Please try again.');
@@ -275,6 +293,7 @@ const NewOpportunities = () => {
       const createdAt = opp.createdAt ? 
         (typeof opp.createdAt === 'string' ? new Date(opp.createdAt) : 
          typeof opp.createdAt.toDate === 'function' ? opp.createdAt.toDate() : 
+         opp.createdAt instanceof Date ? opp.createdAt :
          new Date(opp.createdAt)) : null;
       
       const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -283,6 +302,15 @@ const NewOpportunities = () => {
       if (!createdAt || isNaN(createdAt.getTime())) {
         return false;
       }
+
+      // Add temporary logging to debug the dates
+      console.log('Opportunity:', {
+        title: opp.title,
+        createdAt: createdAt.toISOString(),
+        sevenDaysAgo: sevenDaysAgo.toISOString(),
+        now: now.toISOString(),
+        isNew: createdAt >= sevenDaysAgo && createdAt <= now
+      });
       
       return createdAt >= sevenDaysAgo && createdAt <= now;
     } else if (activeFilter === 'matches') {

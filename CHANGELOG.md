@@ -3,15 +3,17 @@
 ## Latest Updates (December 21, 2024)
 
 ### Fixed
-- Fixed "New Opportunities" filter to correctly handle different date formats
-- Improved date parsing for createdAt timestamps
-- Enhanced validation for date comparisons in filters
-- Fixed filtering logic to properly handle Firebase timestamps
+- Fixed "New Opportunities" filter to correctly handle Firebase timestamps
+- Improved date handling in opportunity creation and filtering
+- Added proper date conversion for different timestamp formats
+- Fixed filtering logic to correctly identify new opportunities
+- Added date validation and debugging logs for better troubleshooting
 
 ### Changed
-- Updated opportunity creation logic to generate more varied dates
-- Improved date handling in filtering logic
-- Enhanced demo opportunity generation with better date distribution
+- Updated opportunity creation to use proper date formatting
+- Enhanced local state management for dates
+- Improved date comparison logic in filters
+- Added better validation for createdAt dates
 
 ### Enhanced New Opportunities Page
 - Improved filtering functionality for opportunity cards
