@@ -128,6 +128,23 @@ const NewOpportunities = () => {
     const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
     const randomLocation = locations[Math.floor(Math.random() * locations.length)];
 
+    // Generate a random deadline between now and 30 days from now
+    // With a 40% chance of being within the next 7 days
+    const now = new Date();
+    const isClosingSoon = Math.random() < 0.4; // 40% chance
+    const maxDays = isClosingSoon ? 7 : 30;
+    const randomDays = Math.floor(Math.random() * maxDays) + 1;
+    const deadline = new Date(now.getTime() + randomDays * 24 * 60 * 60 * 1000);
+
+    // Set createdAt to be within the last 7 days with 30% chance
+    const isNew = Math.random() < 0.3; // 30% chance
+    const createdAtDays = isNew ? Math.floor(Math.random() * 7) : Math.floor(Math.random() * 30);
+    const createdAt = new Date(now.getTime() - createdAtDays * 24 * 60 * 60 * 1000);
+
+    // Generate a random match percentage with 20% chance of being ≥90%
+    const isHighMatch = Math.random() < 0.2; // 20% chance
+    const matchPercentage = isHighMatch ? Math.floor(Math.random() * 10) + 90 : Math.floor(Math.random() * 89) + 1;
+
     return {
       title: `${randomPosition} at ${randomCompany}`,
       type: 'job',
@@ -141,18 +158,22 @@ const NewOpportunities = () => {
         city: 'London'
       },
       requirements: [
-      'Bachelor\'s degree in Computer Science or related field',
-      '3+ years of professional experience',
-      'Strong problem-solving skills',
-      'Excellent communication skills'],
-
+        'Bachelor\'s degree in Computer Science or related field',
+        '3+ years of professional experience',
+        'Strong problem-solving skills',
+        'Excellent communication skills'
+      ],
       compensation: {
         type: 'paid',
         amount: Math.floor(Math.random() * (150000 - 50000) + 50000),
         currency: 'GBP',
         details: 'Annual salary + benefits'
       },
-      visibility: 'public'
+      visibility: 'public',
+      deadline,
+      createdAt,
+      matchPercentage,
+      applicationProgress: Math.floor(Math.random() * 100)
     };
   };
 
@@ -251,17 +272,19 @@ const NewOpportunities = () => {
     // Apply active filter
     if (activeFilter === 'new') {
       // Show opportunities created in the last 7 days
-      const createdAt = opp.createdAt ? new Date(opp.createdAt) : null;
+      const createdAt = opp.createdAt ? 
+        (typeof opp.createdAt === 'string' ? new Date(opp.createdAt) : 
+         typeof opp.createdAt.toDate === 'function' ? opp.createdAt.toDate() : 
+         new Date(opp.createdAt)) : null;
+      
       const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       
-      // Skip if no creation date
-      if (!createdAt) return false;
+      // Skip if no valid creation date
+      if (!createdAt || isNaN(createdAt.getTime())) {
+        return false;
+      }
       
-      // Handle both regular dates and Firebase timestamps
-      const createdAtTime = createdAt instanceof Date ? createdAt.getTime() : null;
-      if (!createdAtTime) return false;
-      
-      return createdAtTime >= sevenDaysAgo.getTime() && createdAtTime <= now.getTime();
+      return createdAt >= sevenDaysAgo && createdAt <= now;
     } else if (activeFilter === 'matches') {
       // Show opportunities with match percentage >= 90%
       return opp.matchPercentage >= 90;

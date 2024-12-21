@@ -1,6 +1,18 @@
 # Feedo Platform Changelog
 
 ## Latest Updates (December 21, 2024)
+
+### Fixed
+- Fixed "New Opportunities" filter to correctly handle different date formats
+- Improved date parsing for createdAt timestamps
+- Enhanced validation for date comparisons in filters
+- Fixed filtering logic to properly handle Firebase timestamps
+
+### Changed
+- Updated opportunity creation logic to generate more varied dates
+- Improved date handling in filtering logic
+- Enhanced demo opportunity generation with better date distribution
+
 ### Enhanced New Opportunities Page
 - Improved filtering functionality for opportunity cards
   - Fixed "New Opportunities" filter to correctly show items from last 7 days
@@ -268,3 +280,14 @@
 - Modified opportunity creation to generate more varied deadlines
 - Updated filtering logic to prevent unselecting active filters
 - Improved stats calculation for better accuracy
+
+### Fixed
+- Fixed "New Opportunities" filter to correctly handle different date formats
+- Improved date parsing for createdAt timestamps
+- Enhanced validation for date comparisons in filters
+- Fixed filtering logic to properly handle Firebase timestamps
+
+### Changed
+- Updated opportunity creation logic to generate more varied dates
+- Improved date handling in filtering logic
+- Enhanced demo opportunity generation with better date distribution
