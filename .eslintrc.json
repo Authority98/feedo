@@ -26,9 +26,12 @@
     "react/react-in-jsx-scope": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "dot-location": ["error", "property"],
+    "dot-location": "off",
     "no-mixed-operators": "warn",
-    "default-case": "warn"
+    "default-case": "warn",
+    "no-prototype-builtins": "off",
+    "no-case-declarations": "off",
+    "no-empty": "warn"
   },
   "settings": {
     "react": {
