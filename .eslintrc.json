@@ -1,9 +1,38 @@
 {
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
   "extends": [
-    "react-app",
-    "react-app/jest"
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "react-hooks"
   ],
   "rules": {
-    "no-console": ["warn", { "allow": ["warn", "error"] }]
+    "no-unused-vars": "warn",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "dot-location": ["error", "property"],
+    "no-mixed-operators": "warn",
+    "default-case": "warn"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 } 
