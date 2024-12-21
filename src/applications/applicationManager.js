@@ -376,10 +376,6 @@ export const opportunityOperations = {
         // Count highly matched opportunities (90% or higher)
         if (data.matchPercentage >= 90) {
           stats.highlyMatched++;
-        }
-
-        // Count perfect matches (100%)
-        if (data.matchPercentage === 100) {
           stats.perfectMatches++;
         }
 
