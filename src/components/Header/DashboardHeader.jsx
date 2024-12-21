@@ -25,6 +25,10 @@ const DashboardHeader = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading, signOut } = useAuth();
   const { sections, getMissingSteps, isLoading: sectionsLoading } = useProfileProgress();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const { refreshUser } = useAuth();
 
   // Add detailed debug logging
 

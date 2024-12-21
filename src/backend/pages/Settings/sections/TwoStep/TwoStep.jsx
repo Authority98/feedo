@@ -22,14 +22,37 @@ import SkeletonLoading from '../../../../../components/SkeletonLoading/SkeletonL
 
 const TwoStep = () => {
   const { user } = useAuth();
+  const { showToast } = useToast();
+  const [verificationId, setVerificationId] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [phoneNumber, setPhoneNumber] = useState(null);
+
+  useEffect(() => {
+    const fetchPhoneNumber = async () => {
+      if (user?.profile?.authUid) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.profile.authUid));
+          if (userDoc.exists()) {
+            setPhoneNumber(userDoc.data().phoneNumber || null);
+          }
+        } catch (error) {
+          console.error('Error fetching phone number:', error);
+          showToast('Failed to fetch phone number', 'error');
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchPhoneNumber();
+  }, [user?.profile?.authUid, showToast]);
+
   const [isEnabled, setIsEnabled] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
-  const [verificationCode, setVerificationCode] = useState('');
   const [error, setError] = useState('');
   const [secretKey, setSecretKey] = useState('');
-  const [isVerifying, setIsVerifying] = useState(false);
-  const toast = useToast();
-  const [loading, setLoading] = useState(true);
 
   // Check if user signed up with Google
   const isGoogleUser = user?.providerData?.[0]?.providerId === 'google.com' || user?.profile?.provider === 'google.com';
@@ -58,7 +81,7 @@ const TwoStep = () => {
   useEffect(() => {
     const fetch2FAStatus = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         if (user?.profile?.authUid) {
           const userDoc = await getDoc(doc(db, 'users', user.profile.authUid));
           const userData = userDoc.data();
@@ -67,16 +90,16 @@ const TwoStep = () => {
         }
       } catch (error) {
         console.error('Error fetching 2FA status:', error);
-        toast.showError('Failed to fetch 2FA status');
+        showToast('Failed to fetch 2FA status', 'error');
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetch2FAStatus();
-  }, [user?.profile?.authUid]);
+  }, [user?.profile?.authUid, showToast]);
 
-  if (loading) {
+  if (isLoading) {
     return /*#__PURE__*/React.createElement(SkeletonLoading, null);
   }
 
@@ -119,15 +142,15 @@ const TwoStep = () => {
         setIsEnabled(true);
         setShowQRCode(false);
         setVerificationCode('');
-        toast.showSuccess('Two-step authentication has been enabled successfully');
+        showToast('Two-step authentication has been enabled successfully', 'success');
       } else {
         setError('Invalid verification code. Please try again.');
-        toast.showError('Invalid verification code');
+        showToast('Invalid verification code', 'error');
       }
     } catch (err) {
       console.error('Error verifying code:', err);
       setError('Failed to verify code. Please try again.');
-      toast.showError('Failed to enable two-step authentication');
+      showToast('Failed to enable two-step authentication', 'error');
     } finally {
       setIsVerifying(false);
     }
@@ -149,11 +172,11 @@ const TwoStep = () => {
 
       setIsEnabled(false);
       setSecretKey('');
-      toast.showSuccess('Two-step authentication has been disabled');
+      showToast('Two-step authentication has been disabled', 'success');
     } catch (err) {
       console.error('Error disabling 2FA:', err);
       setError('Failed to disable 2FA. Please try again.');
-      toast.showError('Failed to disable two-step authentication');
+      showToast('Failed to disable two-step authentication', 'error');
     }
   };
 

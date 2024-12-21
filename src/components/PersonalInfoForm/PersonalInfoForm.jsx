@@ -1,5 +1,10 @@
-function _extends() {return _extends = Object.assign ? Object.assign.bind() : function (n) {for (var e = 1; e < arguments.length; e++) {var t = arguments[e];for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);}return n;}, _extends.apply(null, arguments);}import React, { useState } from 'react';
-import { Box, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { useAuth } from '../../auth/AuthContext';
+import { useToast } from '../Toast/ToastContext';
+import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
+import { updateProfile } from 'firebase/auth';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../../firebase/config';
 import './PersonalInfoForm.css';
 
 const PersonalInfoForm = ({ user, onSave, isGoogleUser }) => {

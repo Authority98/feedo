@@ -1,39 +1,11 @@
-function _extends() {return _extends = Object.assign ? Object.assign.bind() : function (n) {for (var e = 1; e < arguments.length; e++) {var t = arguments[e];for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);}return n;}, _extends.apply(null, arguments);} /**
- * QuestionDialog Component
- * Features:
- * - Material UI dialog design
- * - Question form with validation
- * - File upload support
- * - Rich text editor for details
- */
-
-import React, { useState, useRef } from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Button,
-  Box,
-  IconButton,
-  Typography,
-  LinearProgress,
-  Slide } from
-'@mui/material';
-import {
-  FiX,
-  FiUploadCloud,
-  FiFile,
-  FiTrash2,
-  FiPaperclip,
-  FiAlertCircle } from
-'react-icons/fi';
-import { useToast } from '../../components/Toast/ToastContext';
-
-const Transition = /*#__PURE__*/React.forwardRef(function Transition(props, ref) {
-  return /*#__PURE__*/React.createElement(Slide, _extends({ direction: "up", ref: ref }, props));
-});
+import React, { useState, useCallback } from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Typography, IconButton, LinearProgress } from '@mui/material';
+import { FiPaperclip, FiFile, FiTrash2 } from 'react-icons/fi';
+import { useAuth } from '../../auth/AuthContext';
+import { useToast } from '../Toast/ToastContext';
+import { storage } from '../../firebase/config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { formatFileSize } from '../../utils/formatters';
 
 const QuestionDialog = ({ open, onClose, currentSection }) => {
   const { showToast } = useToast();
@@ -116,12 +88,6 @@ const QuestionDialog = ({ open, onClose, currentSection }) => {
     } else {
       showToast('Please fill in all required fields', 'error');
     }
-  };
-
-  const formatFileSize = (bytes) => {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
   return (/*#__PURE__*/

@@ -23,10 +23,10 @@ export const useAutoSave = ({
     try {
       isSavingRef.current = true;
       
-      const changes = { ...pendingChangesRef.current };
+      const batchedChanges = { ...pendingChangesRef.current };
       pendingChangesRef.current = {};
 
-      const cleanedData = cleanUndefinedValues(changes);
+      const cleanedData = cleanUndefinedValues(batchedChanges);
       const mergedData = { ...formData, ...cleanedData };
       const profileSection = mapFormDataToProfileSection(mergedData, section, profileType);
 
@@ -42,7 +42,7 @@ export const useAutoSave = ({
 
       eventEmitter.emit(EVENTS.SECTION_DATA_UPDATED, { silent: true });
     } catch (error) {
-      pendingChangesRef.current = { ...pendingChangesRef.current, ...changes };
+      pendingChangesRef.current = { ...pendingChangesRef.current, ...batchedChanges };
       
       if (!error.message?.toLowerCase().includes('network')) {
         showToast(ERROR_MESSAGES.SECTION.SAVE_PENDING, 'warning');
