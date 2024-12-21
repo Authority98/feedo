@@ -251,9 +251,17 @@ const NewOpportunities = () => {
     // Apply active filter
     if (activeFilter === 'new') {
       // Show opportunities created in the last 7 days
-      const createdAt = new Date(opp.createdAt);
+      const createdAt = opp.createdAt ? new Date(opp.createdAt) : null;
       const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      return createdAt && !isNaN(createdAt.getTime()) && createdAt >= sevenDaysAgo && createdAt <= now;
+      
+      // Skip if no creation date
+      if (!createdAt) return false;
+      
+      // Handle both regular dates and Firebase timestamps
+      const createdAtTime = createdAt instanceof Date ? createdAt.getTime() : null;
+      if (!createdAtTime) return false;
+      
+      return createdAtTime >= sevenDaysAgo.getTime() && createdAtTime <= now.getTime();
     } else if (activeFilter === 'matches') {
       // Show opportunities with match percentage >= 90%
       return opp.matchPercentage >= 90;

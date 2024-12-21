@@ -353,10 +353,15 @@ export const opportunityOperations = {
         }
 
         // Count new opportunities (created in last 7 days)
-        const createdAt = new Date(data.createdAt);
+        const createdAt = data.createdAt ? (typeof data.createdAt.toDate === 'function' ? data.createdAt.toDate() : new Date(data.createdAt)) : null;
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        if (createdAt && !isNaN(createdAt.getTime()) && createdAt >= sevenDaysAgo && createdAt <= now) {
-          stats.newOpportunities++;
+        
+        // Only count if we have a valid creation date
+        if (createdAt && !isNaN(createdAt.getTime())) {
+          const createdAtTime = createdAt.getTime();
+          if (createdAtTime >= sevenDaysAgo.getTime() && createdAtTime <= now.getTime()) {
+            stats.newOpportunities++;
+          }
         }
 
         // Count highly matched opportunities (90% or higher)
