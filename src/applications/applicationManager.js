@@ -352,8 +352,10 @@ export const opportunityOperations = {
           stats.active++;
         }
 
-        // Count new opportunities
-        if (data.status === 'new') {
+        // Count new opportunities (created in last 7 days)
+        const createdAt = new Date(data.createdAt);
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        if (createdAt >= sevenDaysAgo) {
           stats.newOpportunities++;
         }
 
