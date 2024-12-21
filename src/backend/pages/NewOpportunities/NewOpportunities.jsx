@@ -250,9 +250,11 @@ const NewOpportunities = () => {
 
     // Apply active filter
     if (activeFilter === 'new') {
-      // Only show opportunities with status 'new'
-      filterResult = opp.status === 'new';
-      console.log(`Status check: ${opp.status} - ${filterResult ? '✅' : '❌'} Is new`);
+      // Show opportunities created in the last 7 days
+      const createdAt = new Date(opp.createdAt);
+      const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      filterResult = !isNaN(createdAt.getTime()) && createdAt >= sevenDaysAgo && createdAt <= now;
+      console.log(`Creation date: ${createdAt.toISOString()} vs 7 days ago: ${sevenDaysAgo.toISOString()} - ${filterResult ? '✅' : '❌'} Is new`);
     } else if (activeFilter === 'matches') {
       // Show opportunities with match percentage >= 90%
       filterResult = opp.matchPercentage >= 90;
