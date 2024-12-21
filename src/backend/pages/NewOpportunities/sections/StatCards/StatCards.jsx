@@ -90,8 +90,8 @@ const StatCards = ({ refreshTrigger = 0, onFilterChange, activeFilter = null }) 
   }];
 
   const handleCardClick = (statId) => {
-    if (onFilterChange) {
-      onFilterChange(activeFilter === statId ? null : statId);
+    if (onFilterChange && activeFilter !== statId) {
+      onFilterChange(statId);
     }
   };
 
@@ -103,7 +103,7 @@ const StatCards = ({ refreshTrigger = 0, onFilterChange, activeFilter = null }) 
           onClick={() => handleCardClick(stat.id)}
           className={`${stat.bgColor} rounded-xl p-6 text-white transition-all duration-300 cursor-pointer
             ${activeFilter === stat.id 
-              ? 'scale-105 shadow-lg shadow-black/20 active-card' 
+              ? 'scale-105 shadow-[0_0_15px_rgba(0,0,0,0.2)]' 
               : 'hover:scale-105 hover:shadow-lg hover:shadow-black/20'
             }
           `}
@@ -135,9 +135,7 @@ const StatCards = ({ refreshTrigger = 0, onFilterChange, activeFilter = null }) 
 
 const styles = `
   .active-card {
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25),
-                inset 0 -2px 4px rgba(255, 255, 255, 0.1),
-                0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
   }
 `;
 

@@ -247,3 +247,24 @@
 ### Help Center Improvements
 - Fixed Support section height to use auto-height instead of full container height
 - Enhanced FAQ link styling with distinct colors and hover effects
+
+## [Unreleased]
+
+### Added
+- Enhanced filtering functionality in New Opportunities page
+- Improved stat cards interactivity and visual effects
+- Added inner shadow effect for active cards
+- Updated stat cards to match My Applications page styling
+
+### Fixed
+- Fixed "Closing Soon" filter and stats calculation
+- Improved opportunity filtering logic to handle date validations
+- Updated deadline generation to increase frequency of closing soon opportunities (40% chance)
+- Fixed filter deselection behavior to match My Applications page
+- Ensured proper counting of active opportunities in stats
+
+### Changed
+- Adjusted deadline generation logic for more realistic distribution
+- Modified opportunity creation to generate more varied deadlines
+- Updated filtering logic to prevent unselecting active filters
+- Improved stats calculation for better accuracy

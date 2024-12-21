@@ -345,6 +345,15 @@ export const opportunityOperations = {
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
+        
+        // Check if the opportunity has a valid deadline and hasn't passed
+        const deadline = data.deadline ? new Date(data.deadline) : null;
+        const isActive = deadline && deadline > now;
+        
+        if (!isActive) {
+          return; // Skip inactive opportunities
+        }
+
         stats.total++;
 
         // Count active opportunities
@@ -374,31 +383,25 @@ export const opportunityOperations = {
           stats.perfectMatches++;
         }
 
-        // Check deadlines
-        if (data.deadline) {
-          const deadlineDate = new Date(data.deadline);
+        // Calculate days until deadline
+        const daysUntilDeadline = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
 
-          // Only count future deadlines
-          if (deadlineDate > now) {
-            // Closing today
-            if (deadlineDate <= new Date(today.getTime() + 24 * 60 * 60 * 1000)) {
-              stats.closingToday++;
-            }
+        // Count closing soon (within 7 days)
+        if (daysUntilDeadline <= 7 && daysUntilDeadline > 0) {
+          stats.closingSoon++;
+        }
 
-            // Closing this week (within 7 days)
-            if (deadlineDate <= oneWeek) {
-              stats.closingThisWeek++;
-              stats.closingSoon++;  // Only increment closingSoon for opportunities within 7 days
-            }
-
-            // Closing this month
-            if (deadlineDate <= oneMonth) {
-              stats.closingThisMonth++;
-            }
-          }
+        // Count other deadline categories
+        if (deadline <= new Date(today.getTime() + 24 * 60 * 60 * 1000)) {
+          stats.closingToday++;
+        }
+        if (deadline <= oneWeek) {
+          stats.closingThisWeek++;
+        }
+        if (deadline <= oneMonth) {
+          stats.closingThisMonth++;
         }
       });
-
 
       return stats;
     } catch (error) {
@@ -425,9 +428,22 @@ export const createOpportunityDataStructure = (data) => {
   const randomProgress = Math.floor(Math.random() * 100);
 
   // Generate random deadline between 7-60 days from now
-  const randomDays = Math.floor(Math.random() * 54) + 7; // Changed to be between 7 and 60 days
-  const deadline = new Date();
-  deadline.setDate(deadline.getDate() + randomDays);
+  const generateDeadline = () => {
+    // 40% chance of deadline within next 7 days
+    if (Math.random() < 0.4) {
+      const daysUntilDeadline = Math.floor(Math.random() * 7) + 1; // 1-7 days
+      const deadline = new Date();
+      deadline.setDate(deadline.getDate() + daysUntilDeadline);
+      return deadline;
+    }
+    // Otherwise, generate deadline between 8-30 days
+    const randomDays = Math.floor(Math.random() * 23) + 8; // 8-30 days
+    const deadline = new Date();
+    deadline.setDate(deadline.getDate() + randomDays);
+    return deadline;
+  };
+
+  const deadline = generateDeadline();
 
   // Generate match percentage with higher probability of good matches
   const generateMatchPercentage = () => {
