@@ -19,8 +19,9 @@
 /* Support Section Container */
 .support-section {
   @apply bg-white rounded-lg p-6 flex flex-col items-start
-         shadow-sm overflow-hidden relative h-full;  /* Base container styles */
+         shadow-sm overflow-hidden relative;  /* Removed h-full */
   transition: box-shadow 0.3s ease;  /* Smooth shadow transition */
+  min-height: fit-content;  /* Use minimum height instead of full height */
 }
 
 /* Container hover effect */

@@ -217,3 +217,7 @@
 ### Security
 - Removed direct integration of sensitive information from logs
 - Enhanced security in file handling operations
+
+### Help Center Improvements
+- Fixed Support section height to use auto-height instead of full container height
+- Enhanced FAQ link styling with distinct colors and hover effects
