@@ -340,8 +340,9 @@ export const opportunityOperations = {
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const oneWeek = new Date(today);
       oneWeek.setDate(oneWeek.getDate() + 7);
-      const oneMonth = new Date(today);
-      oneMonth.setMonth(oneMonth.getMonth() + 1);
+      
+      // Get the last day of current month
+      const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
@@ -387,7 +388,8 @@ export const opportunityOperations = {
             stats.closingThisWeek++;
             stats.closingSoon++;
           }
-          if (daysUntilDeadline <= 30) {
+          // Check if deadline is within current month
+          if (deadline <= lastDayOfMonth) {
             stats.closingThisMonth++;
           }
         }
