@@ -352,10 +352,10 @@ export const opportunityOperations = {
           stats.active++;
         }
 
-        // Count new opportunities (created in last 7 days)
+        // Count new opportunities (created in last 24 hours)
         const createdAt = new Date(data.createdAt);
-        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        if (createdAt && !isNaN(createdAt.getTime()) && createdAt >= sevenDaysAgo && createdAt <= now) {
+        const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        if (createdAt && !isNaN(createdAt.getTime()) && createdAt >= oneDayAgo && createdAt <= now) {
           stats.newOpportunities++;
         }
 
