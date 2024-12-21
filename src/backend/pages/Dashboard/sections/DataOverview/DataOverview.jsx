@@ -415,9 +415,7 @@ const DataOverview = () => {
   },
   {
     title: "Deadlines",
-    value: (stats.opportunities.closingToday || 0) + (
-    stats.opportunities.closingThisWeek || 0) + (
-    stats.opportunities.closingThisMonth || 0),
+    value: stats.opportunities.closingThisMonth || 0,
     icon: FiClock,
     color: "bg-[#ff7a15]",
     onViewMore: handleViewOpportunities,
@@ -497,6 +495,7 @@ const DataOverview = () => {
     React.createElement(stat.icon, { className: `stats-row-icon ${stat.customColor || ''}` }), /*#__PURE__*/
     React.createElement("span", { className: "stats-row-label" }, stat.label), /*#__PURE__*/
     React.createElement("span", { className: `stats-row-value ${stat.customColor || ''}` }, stat.value)
+    )
     )
     )
     )
