@@ -26,7 +26,7 @@ const FAQ = () => {
    * State Management
    */
   const [openIndex, setOpenIndex] = useState(null); // Tracks currently open FAQ item
-  const [totalQuestions] = useState(8); // Updated total
+  const [totalQuestions] = useState(15); // Updated total
   const [answeredQuestions, setAnsweredQuestions] = useState(0); // Tracks viewed questions
 
   /**
@@ -37,38 +37,67 @@ const FAQ = () => {
    * - Optional metadata
    */
   const faqItems = [
-  {
-    question: "What is Feedo AI and how does it help with job applications?",
-    answer: "Feedo AI is an intelligent application management platform that streamlines your job application process. It uses advanced AI to help you auto-fill applications, track your progress, and manage multiple applications efficiently. The platform provides smart suggestions, deadline reminders, and helps maintain consistency across all your applications."
-  },
-  {
-    question: "How does the AI auto-fill feature work?",
-    answer: "The AI auto-fill feature analyzes your profile information and previous applications to intelligently populate new application forms. It learns from your past submissions to ensure accuracy and consistency. The feature can auto-fill common fields like personal information, work experience, and education details, while allowing you to review and customize the content before submission."
-  },
-  {
-    question: "Can I track the status of multiple applications at once?",
-    answer: "Yes! Feedo AI provides a comprehensive dashboard where you can track all your applications in real-time. You can see the status of each application (pending, approved, rejected, etc.), upcoming deadlines, required actions, and progress indicators. The platform also sends timely notifications for important updates and deadlines."
-  },
-  {
-    question: "How secure is my personal information on Feedo?",
-    answer: "We take data security very seriously. All your personal information is encrypted using industry-standard protocols, and we follow strict data protection guidelines. We use secure cloud storage, implement regular security audits, and never share your information with third parties without your explicit consent. Our platform complies with GDPR and other relevant data protection regulations."
-  },
-  {
-    question: "What should I do if I need help with a specific application?",
-    answer: "If you need assistance with a specific application, you have several options:\n\n<ol><li><span>Use the AI assistant feature for immediate guidance</span></li><li><span>Check our detailed help documentation</span></li><li><span>Contact our support team through the help center</span></li><li><span>Use the community forum to get advice from other users</span></li></ol>\n\nOur support team typically responds within 24 hours for any specific queries."
-  },
-  {
-    question: "Can I customize the application tracking process?",
-    answer: "Absolutely! Feedo AI offers extensive customization options:\n\n<ul><li>Create custom status labels</li><li>Set up personalized notification preferences</li><li>Design custom application workflows</li><li>Add custom fields to track specific information</li><li>Create templates for different types of applications</li></ul>\n\nYou can tailor the platform to match your specific application tracking needs."
-  },
-  {
-    question: "Is there a limit to how many applications I can manage?",
-    answer: "The number of applications you can manage depends on your subscription plan:\n\n<ul><li>Free Plan: Up to 5 active applications</li><li>Basic Plan: Up to 20 active applications</li><li>Premium Plan: Unlimited applications</li></ul>\n\nAll plans include core features like status tracking, notifications, and basic AI assistance."
-  },
-  {
-    question: "How can I improve my application success rate using Feedo?",
-    answer: "Feedo AI provides several tools to improve your success rate:\n\n<ol><li><span>AI-powered application optimization suggestions</span></li><li><span>Analytics dashboard showing application performance metrics</span></li><li><span>Best practices recommendations based on successful applications</span></li><li><span>Automated deadline reminders to ensure timely submissions</span></li><li><span>Document version control for resumes and cover letters</span></li></ol>\n\nRegularly checking these insights and following the recommendations can significantly improve your application success rate."
-  }];
+    {
+      question: "What is Feedo, and how can it help me with applications?",
+      answer: "Feedo is an AI-powered platform that automates application processes for Entrepreneurs, Job Seekers, Students, and Startups. Our goal is to help you save time by using advanced autofill technology, so you can focus on growing your career or business. Learn more about our features at <a href='https://www.feedo.ai/features' target='_blank' rel='noopener noreferrer'>www.feedo.ai/features</a>."
+    },
+    {
+      question: "How do I download the Feedo Chrome extension?",
+      answer: "You can easily download the Feedo extension from the Chrome Web Store. Visit <a href='https://www.feedo.ai/download-extension' target='_blank' rel='noopener noreferrer'>www.feedo.ai/download-extension</a> to get started. Once installed, our AI-driven extension integrates seamlessly to autofill forms and simplify your application experience."
+    },
+    {
+      question: "How do I use Feedo, and is there a demo available?",
+      answer: "Feedo is simple to use! After setting up your account, our AI will guide you through application processes, helping you autofill fields and manage submissions. Watch our step-by-step demo on YouTube at <a href='https://www.feedo.ai/demo' target='_blank' rel='noopener noreferrer'>www.feedo.ai/demo</a>, where you can see Feedo in action."
+    },
+    {
+      question: "What types of users benefit from Feedo?",
+      answer: "Feedo is designed for various users, including Job Seekers, Entrepreneurs seeking investment or acceleration, Students applying for scholarships, and Companies pursuing tenders or grants. Each user type has unique tools and resources for success. Check out our User Types page at <a href='https://www.feedo.ai/user-types' target='_blank' rel='noopener noreferrer'>www.feedo.ai/user-types</a> for more information."
+    },
+    {
+      question: "How does Feedo's pricing work?",
+      answer: "Feedo offers flexible pricing plans for different needs, including a free plan and premium options with advanced features. For detailed pricing information, please visit <a href='https://www.feedo.ai/pricing' target='_blank' rel='noopener noreferrer'>www.feedo.ai/pricing</a>."
+    },
+    {
+      question: "Can I use Feedo for free?",
+      answer: "Yes, Feedo offers a free version with essential features. For enhanced tools like personalized opportunity recommendations and AI-based insights, you can upgrade to one of our premium plans. Check <a href='https://www.feedo.ai/pricing' target='_blank' rel='noopener noreferrer'>www.feedo.ai/pricing</a> for details."
+    },
+    {
+      question: "How does Feedo's AI work for autofilling applications?",
+      answer: "Feedo's AI learns from your submitted data to autofill similar fields in different applications, saving you valuable time. It also recommends opportunities based on your profile, increasing your chances of finding the perfect fit. Discover more on our AI Technology page at <a href='https://www.feedo.ai/ai-technology' target='_blank' rel='noopener noreferrer'>www.feedo.ai/ai-technology</a>."
+    },
+    {
+      question: "How secure is my data on Feedo?",
+      answer: "Data security is our top priority. Feedo uses advanced encryption to protect your information, ensuring only you have access. Learn more about our data security measures at <a href='https://www.feedo.ai/security' target='_blank' rel='noopener noreferrer'>www.feedo.ai/security</a>."
+    },
+    {
+      question: "How can I subscribe to Feedo?",
+      answer: "To subscribe, go to <a href='https://www.feedo.ai/login' target='_blank' rel='noopener noreferrer'>www.feedo.ai/login</a>, create an account, and choose the plan that fits your needs. You'll gain immediate access to our features, including AI autofill and personalized recommendations."
+    },
+    {
+      question: "Can I manage multiple applications within Feedo?",
+      answer: "Yes, Feedo's dashboard allows you to manage, edit, and track multiple applications in one place, keeping you organized and up-to-date on each application's progress. See how our Dashboard can help you stay organized at <a href='https://www.feedo.ai/dashboard' target='_blank' rel='noopener noreferrer'>www.feedo.ai/dashboard</a>."
+    },
+    {
+      question: "What payment methods are accepted on Feedo?",
+      answer: "We accept major payment methods, including credit cards and PayPal, for easy and secure transactions. For more details, please check our Payment Options at <a href='https://www.feedo.ai/payment-options' target='_blank' rel='noopener noreferrer'>www.feedo.ai/payment-options</a>."
+    },
+    {
+      question: "Does Feedo support different languages?",
+      answer: "Yes, Feedo offers multi-language support to serve our global users. You can adjust the language preference in Settings at <a href='https://www.feedo.ai/settings' target='_blank' rel='noopener noreferrer'>www.feedo.ai/settings</a>."
+    },
+    {
+      question: "Can Feedo help with my pitch deck or business plan?",
+      answer: "Absolutely. Feedo's premium AI tools assist Entrepreneurs and Startups with creating pitch decks, business plans, and other essential documents for funding applications. Learn more about our Business Tools at <a href='https://www.feedo.ai/business-tools' target='_blank' rel='noopener noreferrer'>www.feedo.ai/business-tools</a>."
+    },
+    {
+      question: "How do I upgrade my Feedo plan?",
+      answer: "To upgrade, log in to Feedo, go to <a href='https://www.feedo.ai/plans' target='_blank' rel='noopener noreferrer'>www.feedo.ai/plans</a>, and select the plan that suits you best. Upgraded features are available instantly."
+    },
+    {
+      question: "What should I do if I encounter issues with the Feedo extension?",
+      answer: "Visit our Help Center for troubleshooting tips at <a href='https://www.feedo.ai/help-center' target='_blank' rel='noopener noreferrer'>www.feedo.ai/help-center</a> or contact our support team via Live Chat at <a href='https://www.feedo.ai/livechat' target='_blank' rel='noopener noreferrer'>www.feedo.ai/livechat</a>. We're here to help!"
+    }
+  ];
 
 
   /**

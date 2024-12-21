@@ -155,6 +155,33 @@
 
 ## Recent Updates
 
+### FAQ Updates
+- Updated FAQ section with 15 new comprehensive questions and answers
+- Added hyperlinks to all relevant URLs with proper security attributes
+- Updated progress tracking to reflect the new total number of FAQs
+- Improved FAQ content to cover a wider range of user types and features
+
+### ESLint and Build Fixes
+- Added missing Babel plugin for private property in object
+- Fixed ESLint errors across multiple files
+- Resolved undefined variables and conditional hook issues
+- Added formatters utility for file size formatting
+- Updated import orders and removed unused variables
+
+### OpenAI Integration
+- Created serverless function for secure OpenAI API handling
+- Updated OpenAI service to use serverless function
+- Improved security by removing client-side API key exposure
+
+### Data Management Improvements
+- Fixed section navigation after auto-save
+- Improved handling of group fields in sections
+- Enhanced event emission handling for better state management
+
+### File Structure
+- Renamed maintenance-log.md to CHANGELOG.md for better convention
+- Organized changes in a more structured format
+
 ### Fixed
 - ESLint configuration updated to fix build issues on Netlify
   - Disabled problematic ESLint rules for production builds
