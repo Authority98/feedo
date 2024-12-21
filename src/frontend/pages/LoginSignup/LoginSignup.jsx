@@ -13,84 +13,46 @@
 
 // React core imports
 import React, { useState, useEffect } from 'react';
-
-// Styles
-import './LoginSignup.css';
-
-// SVG icons as React components
-import { ReactComponent as GoogleIcon } from '../../../assets/icons/google.svg'; // Google icon for OAuth button
-import { ReactComponent as EyeIcon } from '../../../assets/icons/eye.svg'; // Eye icon for password visibility toggle
-
-// Static assets
-import feedoLogo from '../../../assets/images/feedo-logo.png'; // Feedo company logo
-import awardBadge from '../../../assets/images/award-badge.png'; // Award badge image for testimonials
-
-// Routing
-import { Link, useNavigate } from 'react-router-dom'; // React Router components for navigation
+import { Link, useNavigate } from 'react-router-dom';
 
 // Firebase imports
-import { auth, db } from '../../../firebase/config'; // Firebase authentication and database instances
-
-// Firebase authentication methods
+import { auth, db } from '../../../firebase/config';
 import {
-  createUserWithEmailAndPassword, // Email/password signup
-  signInWithPopup, // OAuth popup handler
-  GoogleAuthProvider, // Google authentication provider
-  updateProfile, // User profile updater
-  sendPasswordResetEmail // Password reset email sender
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  updateProfile,
+  sendPasswordResetEmail
 } from 'firebase/auth';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
-// Firestore database methods
-import {
-  doc, // Document reference creator
-  setDoc, // Document setter
-  getDoc // Document getter
-} from 'firebase/firestore';
-
-// Add AuthContext import
+// Context imports
 import { useAuth } from '../../../auth/AuthContext';
+import { useToast } from '../../../components/Toast/ToastContext';
 
-// Update imports
-import { userOperations, createUserDataStructure } from '../../../auth/userManager';
-
-// Helper function to generate a unique user ID from first and last name
-// Parameters:
-// - firstName: User's first name
-// - lastName: User's last name
-// - randomSuffix: Boolean to determine if a random suffix should be added (default: true)
-// Returns: A lowercase, hyphenated string with optional random suffix
-const createCustomUserId = (firstName, lastName, randomSuffix = true) => {
-  // Convert to lowercase and remove special characters
-  const cleanFirst = firstName.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const cleanLast = lastName.toLowerCase().replace(/[^a-z0-9]/g, '');
-
-  // Create base ID
-  let customId = `${cleanFirst}-${cleanLast}`;
-
-  // Add random suffix for uniqueness if requested
-  if (randomSuffix) {
-    const timestamp = Date.now().toString().slice(-4); // Last 4 digits of timestamp
-    const random = Math.random().toString(36).substring(2, 6); // 4 random alphanumeric characters
-    customId += `-${timestamp}${random}`;
-  }
-
-  return customId;
-};
-
+// Component imports
 import TwoFactorVerification from '../../../components/TwoFactorVerification/TwoFactorVerification';
 import SocialLogin from '../../../components/SocialLogin/SocialLogin';
 import AuthToggle from '../../../components/AuthToggle/AuthToggle';
 import AuthButton from '../../../components/AuthButton/AuthButton';
-
-import { validateUserData } from '../../../auth/validation';
-import { AUTH_NOTIFICATIONS, handleAuthError } from '../../../components/Toast/toastnotifications';
-
-import { useToast } from '../../../components/Toast/ToastContext';
-
 import ForgotPassword from '../../components/ForgotPassword/ForgotPassword';
 
-// Add import for password utilities
+// Utility imports
+import { validateUserData } from '../../../auth/validation';
+import { AUTH_NOTIFICATIONS, handleAuthError } from '../../../components/Toast/toastnotifications';
 import { calculatePasswordStrength, isPasswordValid } from '../../../utils/passwordUtils';
+
+// Static assets
+import { ReactComponent as GoogleIcon } from '../../../assets/icons/google.svg';
+import { ReactComponent as EyeIcon } from '../../../assets/icons/eye.svg';
+import feedoLogo from '../../../assets/images/feedo-logo.png';
+import awardBadge from '../../../assets/images/award-badge.png';
+
+// Styles
+import './LoginSignup.css';
+
+// Operations
+import { userOperations, createUserDataStructure } from '../../../auth/userManager';
 
 const LoginSignup = () => {
   const { signup, login, googleSignIn, verifyTwoFactor } = useAuth();
@@ -469,48 +431,12 @@ const LoginSignup = () => {
 
   // Handle LinkedIn Sign Up
   const handleLinkedInSignUp = async () => {
-    setIsLoading('linkedin');
-    setErrors({});
-
-    try {
-      await loginWithPopup({
-        connection: 'linkedin',
-        prompt: 'login',
-        scope: 'openid profile email'
-      });
-      // Auth0Callback component will handle the rest
-    } catch (error) {
-      console.error('LinkedIn Sign Up error:', error);
-      setErrors({
-        submit: error.message || 'Failed to sign up with LinkedIn. Please try again.'
-      });
-      showToast('LinkedIn sign up failed. Please try again.', 'error');
-    } finally {
-      setIsLoading(false);
-    }
+    showToast('LinkedIn sign up is not available at the moment', 'info');
   };
 
   // Handle LinkedIn Sign In
   const handleLinkedInSignIn = async () => {
-    setIsLoading('linkedin');
-    setErrors({});
-
-    try {
-      await loginWithPopup({
-        connection: 'linkedin',
-        prompt: 'login',
-        scope: 'openid profile email'
-      });
-      // Auth0Callback component will handle the rest
-    } catch (error) {
-      console.error('LinkedIn Sign In error:', error);
-      setErrors({
-        submit: error.message || 'Failed to sign in with LinkedIn. Please try again.'
-      });
-      showToast('LinkedIn sign in failed. Please try again.', 'error');
-    } finally {
-      setIsLoading(false);
-    }
+    showToast('LinkedIn sign in is not available at the moment', 'info');
   };
 
   // Add this new handler function inside LoginSignup component

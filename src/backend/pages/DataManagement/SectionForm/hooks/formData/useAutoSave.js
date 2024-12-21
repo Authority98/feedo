@@ -22,7 +22,6 @@ export const useAutoSave = ({
 
     try {
       isSavingRef.current = true;
-      
       const batchedChanges = { ...pendingChangesRef.current };
       pendingChangesRef.current = {};
 

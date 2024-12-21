@@ -1,11 +1,16 @@
-import React, { useState, useCallback } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Typography, IconButton, LinearProgress } from '@mui/material';
-import { FiPaperclip, FiFile, FiTrash2 } from 'react-icons/fi';
+import React, { useState, useCallback, useRef } from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Typography, IconButton, LinearProgress, Slide } from '@mui/material';
+import { FiPaperclip, FiFile, FiTrash2, FiX, FiUploadCloud } from 'react-icons/fi';
 import { useAuth } from '../../auth/AuthContext';
 import { useToast } from '../Toast/ToastContext';
 import { storage } from '../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { formatFileSize } from '../../utils/formatters';
+
+// Transition component for dialog
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const QuestionDialog = ({ open, onClose, currentSection }) => {
   const { showToast } = useToast();

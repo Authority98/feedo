@@ -28,27 +28,6 @@ const TwoStep = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState(null);
-
-  useEffect(() => {
-    const fetchPhoneNumber = async () => {
-      if (user?.profile?.authUid) {
-        try {
-          const userDoc = await getDoc(doc(db, 'users', user.profile.authUid));
-          if (userDoc.exists()) {
-            setPhoneNumber(userDoc.data().phoneNumber || null);
-          }
-        } catch (error) {
-          console.error('Error fetching phone number:', error);
-          showToast('Failed to fetch phone number', 'error');
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    fetchPhoneNumber();
-  }, [user?.profile?.authUid, showToast]);
-
   const [isEnabled, setIsEnabled] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [error, setError] = useState('');
@@ -57,27 +36,6 @@ const TwoStep = () => {
   // Check if user signed up with Google
   const isGoogleUser = user?.providerData?.[0]?.providerId === 'google.com' || user?.profile?.provider === 'google.com';
 
-  // If Google user, show message instead of 2FA options
-  if (isGoogleUser) {
-    return (/*#__PURE__*/
-      React.createElement("div", { className: "two-step-section" }, /*#__PURE__*/
-      React.createElement("h2", { className: "section-title" }, "Two-Step Authentication"), /*#__PURE__*/
-      React.createElement("div", { className: "two-step-content" }, /*#__PURE__*/
-      React.createElement("div", { className: "security-status" }, /*#__PURE__*/
-      React.createElement(FiShield, { className: "status-icon disabled" }), /*#__PURE__*/
-      React.createElement("div", { className: "status-info" }, /*#__PURE__*/
-      React.createElement("h3", { className: "status-title" }, "Not Available for Google Sign-In"), /*#__PURE__*/
-      React.createElement("p", { className: "status-description" }, "Two-step authentication is not available for accounts using Google Sign-In as Google already provides its own security features."
-
-      )
-      )
-      )
-      )
-      ));
-
-  }
-
-  // Fetch 2FA status on component mount
   useEffect(() => {
     const fetch2FAStatus = async () => {
       try {
@@ -99,8 +57,24 @@ const TwoStep = () => {
     fetch2FAStatus();
   }, [user?.profile?.authUid, showToast]);
 
-  if (isLoading) {
-    return /*#__PURE__*/React.createElement(SkeletonLoading, null);
+  // If Google user, show message instead of 2FA options
+  if (isGoogleUser) {
+    return (/*#__PURE__*/
+      React.createElement("div", { className: "two-step-section" }, /*#__PURE__*/
+      React.createElement("h2", { className: "section-title" }, "Two-Step Authentication"), /*#__PURE__*/
+      React.createElement("div", { className: "two-step-content" }, /*#__PURE__*/
+      React.createElement("div", { className: "security-status" }, /*#__PURE__*/
+      React.createElement(FiShield, { className: "status-icon disabled" }), /*#__PURE__*/
+      React.createElement("div", { className: "status-info" }, /*#__PURE__*/
+      React.createElement("h3", { className: "status-title" }, "Not Available for Google Sign-In"), /*#__PURE__*/
+      React.createElement("p", { className: "status-description" }, "Two-step authentication is not available for accounts using Google Sign-In as Google already provides its own security features."
+
+      )
+      )
+      )
+      )
+      ));
+
   }
 
   const generateSecretKey = () => {
@@ -222,6 +196,7 @@ const TwoStep = () => {
       onClick: handleSetupAuthenticator },
     "Set up authenticator"
 
+    )
     )
     )
     )
