@@ -153,11 +153,7 @@
   - Improved code readability and maintainability
   - Ensured proper component nesting and closing tags
 
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-## [Unreleased]
+## Recent Updates
 
 ### Fixed
 - ESLint configuration updated to fix build issues on Netlify
@@ -173,8 +169,6 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New `.env.production` file with build-specific settings
 - ESLint rule configurations for better development experience
-
-## [0.1.0] - 2024-02-14
 
 ### Fixed
 - Percentage not updating immediately when file is deleted on data management page
