@@ -103,6 +103,16 @@
   font-size: 0.95rem;
 }
 
+/* FAQ Answer Links */
+.faq-answer a {
+  @apply text-blue-600 hover:text-blue-700 transition-colors duration-200;
+  text-decoration: none;
+}
+
+.faq-answer a:hover {
+  text-decoration: underline;
+}
+
 /* List Styles in Answers */
 .faq-answer ul {
   @apply ml-6 mb-3 list-none;

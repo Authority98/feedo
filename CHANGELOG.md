@@ -160,6 +160,7 @@
 - Added hyperlinks to all relevant URLs with proper security attributes
 - Updated progress tracking to reflect the new total number of FAQs
 - Improved FAQ content to cover a wider range of user types and features
+- Enhanced FAQ link styling with distinct colors and hover effects
 
 ### ESLint and Build Fixes
 - Added missing Babel plugin for private property in object
