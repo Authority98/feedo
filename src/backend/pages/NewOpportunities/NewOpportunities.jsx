@@ -246,32 +246,33 @@ const NewOpportunities = () => {
       return false;
     }
 
-    // If no active filter, show all opportunities
-    if (!activeFilter) {
+    // If no active filter or total filter, show all opportunities
+    if (!activeFilter || activeFilter === 'total') {
       return true;
     }
-
-    let filterResult = true;
 
     // Apply active filter
     if (activeFilter === 'new') {
       // Show opportunities created in the last 7 days
       const createdAt = new Date(opp.createdAt);
       const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      filterResult = createdAt && !isNaN(createdAt.getTime()) && createdAt >= sevenDaysAgo && createdAt <= now;
-      console.log(`Creation date: ${createdAt.toISOString()} vs 7 days ago: ${sevenDaysAgo.toISOString()} - ${filterResult ? '✅' : '❌'} Is new`);
+      const isNew = createdAt && !isNaN(createdAt.getTime()) && createdAt >= sevenDaysAgo && createdAt <= now;
+      console.log(`Creation date: ${createdAt.toISOString()} vs 7 days ago: ${sevenDaysAgo.toISOString()} - ${isNew ? '✅' : '❌'} Is new`);
+      return isNew;
     } else if (activeFilter === 'matches') {
       // Show opportunities with match percentage >= 90%
-      filterResult = opp.matchPercentage >= 90;
-      console.log(`Match percentage: ${opp.matchPercentage}% - ${filterResult ? '✅ High match' : '❌ Low match'}`);
+      const isHighMatch = opp.matchPercentage >= 90;
+      console.log(`Match percentage: ${opp.matchPercentage}% - ${isHighMatch ? '✅ High match' : '❌ Low match'}`);
+      return isHighMatch;
     } else if (activeFilter === 'closing') {
       // Show opportunities closing within 7 days
       const daysUntilDeadline = Math.ceil((new Date(opp.deadline) - now) / (1000 * 60 * 60 * 24));
-      filterResult = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
-      console.log(`Days until deadline: ${daysUntilDeadline} - ${filterResult ? '✅ Closing soon' : '❌ Not closing soon'}`);
+      const isClosingSoon = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
+      console.log(`Days until deadline: ${daysUntilDeadline} - ${isClosingSoon ? '✅ Closing soon' : '❌ Not closing soon'}`);
+      return isClosingSoon;
     }
 
-    return filterResult;
+    return false;
   });
 
   // Log pagination info
