@@ -1,5 +1,26 @@
 # Feedo Platform Changelog
 
+## Latest Updates (December 21, 2024)
+### Enhanced New Opportunities Page
+- Improved filtering functionality for opportunity cards
+  - Fixed "New Opportunities" filter to correctly show items from last 7 days
+  - Fixed "Matches" filter to show opportunities with ≥90% match
+  - Fixed "Closing Soon" filter to show opportunities closing within 7 days
+  - Added proper handling of Firebase timestamps and regular dates
+  - Improved date validation and comparison logic
+  - Enhanced filter state management
+  - Removed console logs for cleaner production code
+
+### UI/UX Improvements
+- Enhanced StatCards component interactivity
+  - Added filtering functionality to stat cards
+  - Implemented advanced hover and active state effects
+  - Added inner shadow effect for active cards
+  - Maintained visual effects on selected cards
+  - Updated stat cards to match My Applications page styling
+
+## Previous Updates
+
 ## New Features
 - Enhanced Data Management Form UI/UX
   - Improved repeater group layout with delete button below fields
