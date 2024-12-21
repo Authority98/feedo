@@ -419,8 +419,8 @@ export const createOpportunityDataStructure = (data) => {
   // Generate random progress between 0-100
   const randomProgress = Math.floor(Math.random() * 100);
 
-  // Generate random deadline between 1-60 days from now
-  const randomDays = Math.floor(Math.random() * 60) + 1; // Changed to start from 1
+  // Generate random deadline between 7-60 days from now
+  const randomDays = Math.floor(Math.random() * 54) + 7; // Changed to be between 7 and 60 days
   const deadline = new Date();
   deadline.setDate(deadline.getDate() + randomDays);
 

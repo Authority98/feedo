@@ -218,12 +218,22 @@ const NewOpportunities = () => {
     }
   };
 
-  // Filter opportunities based on search term
+  // Filter opportunities based on search term and deadline
   const filteredOpportunities = opportunities.filter((opp) => {
+    // Check if the opportunity has passed its deadline
+    const deadline = new Date(opp.deadline);
+    const now = new Date();
+    const hasPassedDeadline = deadline < now;
+
+    // Only include opportunities that haven't passed their deadline
+    const isActive = !hasPassedDeadline;
+
+    // Check if it matches the search term
     const matchesSearch = !searchTerm ||
-    opp.title && opp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    opp.description && opp.description.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch;
+      (opp.title && opp.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (opp.description && opp.description.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    return isActive && matchesSearch;
   });
 
   // Pagination calculations
