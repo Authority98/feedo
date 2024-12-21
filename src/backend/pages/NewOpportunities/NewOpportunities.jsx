@@ -85,6 +85,7 @@ const NewOpportunities = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statsRefreshTrigger, setStatsRefreshTrigger] = useState(0);
+  const [activeFilter, setActiveFilter] = useState(null);
 
   // Effect to handle navigation state
   useEffect(() => {
@@ -218,7 +219,7 @@ const NewOpportunities = () => {
     }
   };
 
-  // Filter opportunities based on search term and deadline
+  // Filter opportunities based on search term, deadline, and active filter
   const filteredOpportunities = opportunities.filter((opp) => {
     // Check if the opportunity has passed its deadline
     const deadline = new Date(opp.deadline);
@@ -233,7 +234,36 @@ const NewOpportunities = () => {
       (opp.title && opp.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (opp.description && opp.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    return isActive && matchesSearch;
+    // Check if it matches the active filter
+    let matchesFilter = true;
+    if (activeFilter) {
+      switch (activeFilter) {
+        case 'new':
+          // New opportunities (created in the last 7 days)
+          const createdDate = new Date(opp.createdAt);
+          const sevenDaysAgo = new Date();
+          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+          matchesFilter = createdDate >= sevenDaysAgo;
+          break;
+        case 'matches':
+          // Opportunities with match percentage >= 90%
+          matchesFilter = opp.matchPercentage >= 90;
+          break;
+        case 'closing':
+          // Opportunities closing in the next 7 days
+          const daysUntilDeadline = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
+          matchesFilter = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
+          break;
+        case 'total':
+          // Show all opportunities (no additional filtering needed)
+          matchesFilter = true;
+          break;
+        default:
+          matchesFilter = true;
+      }
+    }
+
+    return isActive && matchesSearch && matchesFilter;
   });
 
   // Pagination calculations
@@ -270,7 +300,7 @@ const NewOpportunities = () => {
     )
     ), /*#__PURE__*/
 
-    React.createElement(StatCards, { refreshTrigger: statsRefreshTrigger }), /*#__PURE__*/
+    React.createElement(StatCards, { refreshTrigger: statsRefreshTrigger, onFilterChange: setActiveFilter, activeFilter: activeFilter }), /*#__PURE__*/
 
 
     React.createElement("div", { className: "opportunities-section" }, /*#__PURE__*/
