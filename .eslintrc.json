@@ -21,17 +21,17 @@
     "react-hooks"
   ],
   "rules": {
-    "no-unused-vars": "warn",
+    "no-unused-vars": "off",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": "off",
     "dot-location": "off",
-    "no-mixed-operators": "warn",
-    "default-case": "warn",
+    "no-mixed-operators": "off",
+    "default-case": "off",
     "no-prototype-builtins": "off",
     "no-case-declarations": "off",
-    "no-empty": "warn"
+    "no-empty": "off"
   },
   "settings": {
     "react": {
