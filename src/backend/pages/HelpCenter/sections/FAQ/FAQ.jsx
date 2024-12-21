@@ -30,6 +30,33 @@ const FAQ = () => {
   const [answeredQuestions, setAnsweredQuestions] = useState(0); // Tracks viewed questions
 
   /**
+   * Handle FAQ item toggle
+   * - Updates open/closed state
+   * - Tracks viewed questions
+   * - Manages animations
+   * @param {number} index - Index of clicked FAQ item
+   */
+  const toggleFaq = (index) => {
+    if (openIndex !== index) {
+      setAnsweredQuestions((prev) => Math.min(prev + 1, totalQuestions));
+    }
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  /**
+   * Handle live chat link click
+   * @param {Event} e - Click event
+   */
+  const handleLiveChatClick = (e) => {
+    // Check if the clicked link is the live chat link
+    if (e.target.href && e.target.href.includes('feedo.ai/livechat')) {
+      e.preventDefault();
+      // Open Crisp chat
+      window.$crisp.push(['do', 'chat:open']);
+    }
+  };
+
+  /**
    * FAQ data array
    * Each item contains:
    * - Question text
@@ -39,7 +66,7 @@ const FAQ = () => {
   const faqItems = [
     {
       question: "What is Feedo, and how can it help me with applications?",
-      answer: "Feedo is an AI-powered platform that automates application processes for Entrepreneurs, Job Seekers, Students, and Startups. Our goal is to help you save time by using advanced autofill technology, so you can focus on growing your career or business. Learn more about our features at <a href='https://www.feedo.ai/features' target='_blank' rel='noopener noreferrer'>www.feedo.ai/features</a>."
+      answer: "Feedo is an AI-powered platform that automates application processes for Entrepreneurs, Job Seekers, Students, and Startups. Our goal is to help you save time by using advanced autofill technology, so you can focus on growing your career or business. Learn more about our features at <a href='https://feedo.ai/solution' target='_blank' rel='noopener noreferrer'>feedo.ai/solution</a>."
     },
     {
       question: "How do I download the Feedo Chrome extension?",
@@ -95,71 +122,44 @@ const FAQ = () => {
     },
     {
       question: "What should I do if I encounter issues with the Feedo extension?",
-      answer: "Visit our Help Center for troubleshooting tips at <a href='https://www.feedo.ai/help-center' target='_blank' rel='noopener noreferrer'>www.feedo.ai/help-center</a> or contact our support team via Live Chat at <a href='https://www.feedo.ai/livechat' target='_blank' rel='noopener noreferrer'>www.feedo.ai/livechat</a>. We're here to help!"
+      answer: "Visit our Help Center for troubleshooting tips at <a href='https://www.feedo.ai/help-center' target='_blank' rel='noopener noreferrer'>www.feedo.ai/help-center</a> or contact our support team via Live Chat at <a href='https://feedo.ai/livechat' onClick={handleLiveChatClick}>feedo.ai/livechat</a>. We're here to help!"
     }
   ];
 
+  return (
+    <div className="faq-section">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="section-title">Frequently Asked Questions</h2>
+        <div className="text-sm text-gray-500">
+          <AnimatedNumber value={answeredQuestions} /> of <AnimatedNumber value={totalQuestions} /> questions answered
+        </div>
+      </div>
 
-  /**
-   * Handle FAQ item toggle
-   * - Updates open/closed state
-   * - Tracks viewed questions
-   * - Manages animations
-   * @param {number} index - Index of clicked FAQ item
-   */
-  const toggleFaq = (index) => {
-    if (openIndex !== index) {
-      setAnsweredQuestions((prev) => Math.min(prev + 1, totalQuestions));
-    }
-    setOpenIndex(openIndex === index ? null : index);
-  };
+      <div className="faq-list">
+        {faqItems.map((item, index) => (
+          <div
+            key={index}
+            className={`faq-item ${openIndex === index ? 'active' : ''}`}
+          >
+            <button
+              className="faq-question"
+              onClick={() => toggleFaq(index)}
+              aria-expanded={openIndex === index}
+            >
+              <span>{item.question}</span>
+              <FiChevronDown className="faq-icon" />
+            </button>
 
-  return (/*#__PURE__*/
-    React.createElement("div", { className: "faq-section" }, /*#__PURE__*/
-
-    React.createElement("div", { className: "flex items-center justify-between mb-6" }, /*#__PURE__*/
-    React.createElement("h2", { className: "section-title" }, "Frequently Asked Questions"), /*#__PURE__*/
-    React.createElement("div", { className: "text-sm text-gray-500" }, /*#__PURE__*/
-    React.createElement(AnimatedNumber, { value: answeredQuestions }), " of ", /*#__PURE__*/React.createElement(AnimatedNumber, { value: totalQuestions }), " questions answered"
-    )
-    ), /*#__PURE__*/
-
-
-    React.createElement("div", { className: "faq-list" },
-    faqItems.map((item, index) => /*#__PURE__*/
-    React.createElement("div", {
-      key: index,
-      className: `faq-item ${openIndex === index ? 'active' : ''}` }, /*#__PURE__*/
-
-
-    React.createElement("button", {
-      className: "faq-question",
-      onClick: () => toggleFaq(index),
-      "aria-expanded": openIndex === index }, /*#__PURE__*/
-
-    React.createElement("span", null, item.question), /*#__PURE__*/
-    React.createElement(FiChevronDown, { className: "faq-icon" })
-    ), /*#__PURE__*/
-
-
-    React.createElement("div", {
-      className: "faq-answer",
-      dangerouslySetInnerHTML: { __html: item.answer.split('\n\n').map((p) => `<p>${p}</p>`).join('') } }
-    )
-    )
-    )
-    )
-    ));
-
+            <div
+              className="faq-answer"
+              onClick={handleLiveChatClick}
+              dangerouslySetInnerHTML={{ __html: item.answer.split('\n\n').map((p) => `<p>${p}</p>`).join('') }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
-/**
- * Export the FAQ component
- * This component provides:
- * - Interactive FAQ functionality
- * - Progress tracking
- * - Animated transitions
- * - Accessibility features
- * - Responsive design
- */
 export default FAQ;
