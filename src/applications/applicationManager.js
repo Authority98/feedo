@@ -376,19 +376,17 @@ export const opportunityOperations = {
             // Closing today
             if (deadlineDate <= new Date(today.getTime() + 24 * 60 * 60 * 1000)) {
               stats.closingToday++;
-              stats.closingSoon++;
             }
 
-            // Closing this week
+            // Closing this week (within 7 days)
             if (deadlineDate <= oneWeek) {
               stats.closingThisWeek++;
-              if (!stats.closingSoon) stats.closingSoon++;
+              stats.closingSoon++;  // Only increment closingSoon for opportunities within 7 days
             }
 
             // Closing this month
             if (deadlineDate <= oneMonth) {
               stats.closingThisMonth++;
-              if (!stats.closingSoon) stats.closingSoon++;
             }
           }
         }
