@@ -240,17 +240,22 @@ const NewOpportunities = () => {
       switch (activeFilter) {
         case 'new':
           // New opportunities (created in the last 7 days)
+          if (!opp.createdAt) return false;
           const createdDate = new Date(opp.createdAt);
           const sevenDaysAgo = new Date();
           sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-          matchesFilter = createdDate >= sevenDaysAgo;
+          matchesFilter = !isNaN(createdDate.getTime()) && createdDate >= sevenDaysAgo;
           break;
         case 'matches':
           // Opportunities with match percentage >= 90%
-          matchesFilter = opp.matchPercentage >= 90;
+          matchesFilter = typeof opp.matchPercentage === 'number' && opp.matchPercentage >= 90;
           break;
         case 'closing':
           // Opportunities closing in the next 7 days
+          if (!opp.deadline) return false;
+          const deadline = new Date(opp.deadline);
+          if (isNaN(deadline.getTime())) return false;
+          const now = new Date();
           const daysUntilDeadline = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
           matchesFilter = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
           break;
