@@ -227,102 +227,43 @@ const NewOpportunities = () => {
     setCurrentPage(1);
   }, [activeFilter, searchTerm]);
 
-  // Filter opportunities based on search term, deadline, and active filter
-  const filteredOpportunities = opportunities.filter((opp) => {
-    console.group(`Filtering opportunity: ${opp.title} (ID: ${opp.id})`);
-    
-    // Check if it matches the search term first (most lightweight check)
-    const matchesSearch = !searchTerm ||
-      (opp.title && opp.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (opp.description && opp.description.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Filter opportunities based on search term and active filter
+  const filteredOpportunities = opportunities.filter(opp => {
+    // First check if opportunity matches search term
+    const matchesSearch = !searchTerm || 
+      opp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      opp.company.toLowerCase().includes(searchTerm.toLowerCase());
 
     if (!matchesSearch) {
-      console.log('❌ Failed search term match');
-      console.groupEnd();
-      return false;
-    }
-    console.log('✅ Passed search term match');
-
-    // Check if the opportunity is still active (not passed deadline)
-    let isActive = true;
-    if (opp.deadline) {
-      const deadline = new Date(opp.deadline);
-      if (!isNaN(deadline.getTime())) {
-        const now = new Date();
-        isActive = deadline > now;
-        console.log(`Deadline check: ${deadline.toISOString()} vs Now: ${now.toISOString()} - ${isActive ? '✅ Active' : '❌ Expired'}`);
-      } else {
-        console.log('⚠️ Invalid deadline date format');
-      }
-    } else {
-      console.log('ℹ️ No deadline set');
-    }
-
-    if (!isActive) {
-      console.groupEnd();
+      console.log(`❌ Does not match search term: ${searchTerm}`);
       return false;
     }
 
-    // Check if it matches the active filter
-    if (!activeFilter) {
-      console.log('✅ No active filter, including opportunity');
-      console.groupEnd();
-      return true;
-    }
-
+    // Check if opportunity is still active (deadline not passed)
     const now = new Date();
-    console.log(`Applying filter: ${activeFilter}`);
-    
-    let filterResult = false;
-    switch (activeFilter) {
-      case 'new':
-        if (!opp.createdAt) {
-          console.log('❌ No creation date');
-          break;
-        }
-        const createdDate = new Date(opp.createdAt);
-        if (isNaN(createdDate.getTime())) {
-          console.log('❌ Invalid creation date format');
-          break;
-        }
-        const sevenDaysAgo = new Date(now);
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-        filterResult = createdDate >= sevenDaysAgo;
-        console.log(`Creation date: ${createdDate.toISOString()} vs 7 days ago: ${sevenDaysAgo.toISOString()} - ${filterResult ? '✅ New' : '❌ Old'}`);
-        break;
-
-      case 'matches':
-        filterResult = typeof opp.matchPercentage === 'number' && opp.matchPercentage >= 90;
-        console.log(`Match percentage: ${opp.matchPercentage}% - ${filterResult ? '✅ High match' : '❌ Low match'}`);
-        break;
-
-      case 'closing':
-        if (!opp.deadline) {
-          console.log('❌ No deadline set');
-          break;
-        }
-        const deadline = new Date(opp.deadline);
-        if (isNaN(deadline.getTime())) {
-          console.log('❌ Invalid deadline format');
-          break;
-        }
-        const daysUntilDeadline = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
-        filterResult = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
-        console.log(`Days until deadline: ${daysUntilDeadline} - ${filterResult ? '✅ Closing soon' : '❌ Not closing soon'}`);
-        break;
-
-      case 'total':
-        filterResult = true;
-        console.log('✅ Showing all opportunities');
-        break;
-
-      default:
-        filterResult = true;
-        console.log('⚠️ Unknown filter, including opportunity');
+    if (!opp.deadline || new Date(opp.deadline) <= now) {
+      console.log('❌ Deadline passed or invalid');
+      return false;
     }
 
-    console.log(`Final filter result: ${filterResult ? '✅ Included' : '❌ Excluded'}`);
-    console.groupEnd();
+    let filterResult = true;
+
+    // Apply active filter
+    if (activeFilter === 'new') {
+      // Only show opportunities with status 'new'
+      filterResult = opp.status === 'new';
+      console.log(`Status check: ${opp.status} - ${filterResult ? '✅' : '❌'} Is new`);
+    } else if (activeFilter === 'matches') {
+      // Show opportunities with match percentage >= 90%
+      filterResult = opp.matchPercentage >= 90;
+      console.log(`Match percentage: ${opp.matchPercentage}% - ${filterResult ? '✅ High match' : '❌ Low match'}`);
+    } else if (activeFilter === 'closing') {
+      // Show opportunities closing within 7 days
+      const daysUntilDeadline = Math.ceil((new Date(opp.deadline) - now) / (1000 * 60 * 60 * 24));
+      filterResult = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
+      console.log(`Days until deadline: ${daysUntilDeadline} - ${filterResult ? '✅ Closing soon' : '❌ Not closing soon'}`);
+    }
+
     return filterResult;
   });
 
