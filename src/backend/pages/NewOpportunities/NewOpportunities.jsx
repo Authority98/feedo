@@ -221,17 +221,27 @@ const NewOpportunities = () => {
 
   // Add effect to reset pagination when filter changes
   useEffect(() => {
+    if (activeFilter || searchTerm) {
+      console.log(`Filter/Search changed - Resetting to page 1. Active Filter: ${activeFilter}, Search Term: ${searchTerm}`);
+    }
     setCurrentPage(1);
   }, [activeFilter, searchTerm]);
 
   // Filter opportunities based on search term, deadline, and active filter
   const filteredOpportunities = opportunities.filter((opp) => {
+    console.group(`Filtering opportunity: ${opp.title} (ID: ${opp.id})`);
+    
     // Check if it matches the search term first (most lightweight check)
     const matchesSearch = !searchTerm ||
       (opp.title && opp.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (opp.description && opp.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    if (!matchesSearch) return false;
+    if (!matchesSearch) {
+      console.log('❌ Failed search term match');
+      console.groupEnd();
+      return false;
+    }
+    console.log('✅ Passed search term match');
 
     // Check if the opportunity is still active (not passed deadline)
     let isActive = true;
@@ -240,46 +250,94 @@ const NewOpportunities = () => {
       if (!isNaN(deadline.getTime())) {
         const now = new Date();
         isActive = deadline > now;
+        console.log(`Deadline check: ${deadline.toISOString()} vs Now: ${now.toISOString()} - ${isActive ? '✅ Active' : '❌ Expired'}`);
+      } else {
+        console.log('⚠️ Invalid deadline date format');
       }
+    } else {
+      console.log('ℹ️ No deadline set');
     }
 
-    if (!isActive) return false;
+    if (!isActive) {
+      console.groupEnd();
+      return false;
+    }
 
     // Check if it matches the active filter
-    if (!activeFilter) return true;
+    if (!activeFilter) {
+      console.log('✅ No active filter, including opportunity');
+      console.groupEnd();
+      return true;
+    }
 
     const now = new Date();
+    console.log(`Applying filter: ${activeFilter}`);
     
+    let filterResult = false;
     switch (activeFilter) {
       case 'new':
-        // New opportunities (created in the last 7 days)
-        if (!opp.createdAt) return false;
+        if (!opp.createdAt) {
+          console.log('❌ No creation date');
+          break;
+        }
         const createdDate = new Date(opp.createdAt);
-        if (isNaN(createdDate.getTime())) return false;
+        if (isNaN(createdDate.getTime())) {
+          console.log('❌ Invalid creation date format');
+          break;
+        }
         const sevenDaysAgo = new Date(now);
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-        return createdDate >= sevenDaysAgo;
+        filterResult = createdDate >= sevenDaysAgo;
+        console.log(`Creation date: ${createdDate.toISOString()} vs 7 days ago: ${sevenDaysAgo.toISOString()} - ${filterResult ? '✅ New' : '❌ Old'}`);
+        break;
 
       case 'matches':
-        // Opportunities with match percentage >= 90%
-        return typeof opp.matchPercentage === 'number' && opp.matchPercentage >= 90;
+        filterResult = typeof opp.matchPercentage === 'number' && opp.matchPercentage >= 90;
+        console.log(`Match percentage: ${opp.matchPercentage}% - ${filterResult ? '✅ High match' : '❌ Low match'}`);
+        break;
 
       case 'closing':
-        // Opportunities closing in the next 7 days
-        if (!opp.deadline) return false;
+        if (!opp.deadline) {
+          console.log('❌ No deadline set');
+          break;
+        }
         const deadline = new Date(opp.deadline);
-        if (isNaN(deadline.getTime())) return false;
+        if (isNaN(deadline.getTime())) {
+          console.log('❌ Invalid deadline format');
+          break;
+        }
         const daysUntilDeadline = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
-        return daysUntilDeadline <= 7 && daysUntilDeadline > 0;
+        filterResult = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
+        console.log(`Days until deadline: ${daysUntilDeadline} - ${filterResult ? '✅ Closing soon' : '❌ Not closing soon'}`);
+        break;
 
       case 'total':
-        // Show all opportunities (no additional filtering needed)
-        return true;
+        filterResult = true;
+        console.log('✅ Showing all opportunities');
+        break;
 
       default:
-        return true;
+        filterResult = true;
+        console.log('⚠️ Unknown filter, including opportunity');
     }
+
+    console.log(`Final filter result: ${filterResult ? '✅ Included' : '❌ Excluded'}`);
+    console.groupEnd();
+    return filterResult;
   });
+
+  // Log pagination info
+  useEffect(() => {
+    console.log(`
+Pagination Update:
+- Total opportunities: ${opportunities.length}
+- Filtered opportunities: ${filteredOpportunities.length}
+- Current page: ${currentPage}
+- Items per page: ${itemsPerPage}
+- Total pages: ${totalPages}
+- Showing items ${indexOfFirstItem + 1} to ${Math.min(indexOfLastItem, filteredOpportunities.length)}
+    `);
+  }, [currentPage, filteredOpportunities.length, opportunities.length]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredOpportunities.length / itemsPerPage);
