@@ -42,7 +42,8 @@ export const useSectionData = (user, section) => {
   // Listen for section updates
   useEffect(() => {
     const unsubscribe = eventEmitter.on(EVENTS.SECTION_DATA_UPDATED, ({ silent } = {}) => {
-      if (!silent) {
+      // Always fetch data when silent is true, as this means it's a local update
+      if (silent) {
         fetchSectionData();
       }
     });

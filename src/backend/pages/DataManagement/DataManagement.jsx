@@ -32,7 +32,7 @@ const DataManagement = () => {
   const [openQuestionDialog, setOpenQuestionDialog] = useState(false);
 
   // Fetch sections data
-  const fetchSections = async () => {
+  const fetchSections = async (preserveTab = false) => {
     try {
       setLoading(true);
       if (!user?.profile?.userType) {
@@ -66,8 +66,8 @@ const DataManagement = () => {
 
       setSections(sectionsArray);
 
-      // Set initial active tab if not set
-      if (!activeTab && sectionsArray.length > 0) {
+      // Set initial active tab if not set and not preserving current tab
+      if (!preserveTab && !activeTab && sectionsArray.length > 0) {
         setActiveTab(sectionsArray[0].id);
         setSearchParams({ tab: sectionsArray[0].id });
       }
@@ -81,20 +81,27 @@ const DataManagement = () => {
 
   // Initial fetch
   useEffect(() => {
-    fetchSections();
+    fetchSections(false);
   }, [user?.profile?.userType]);
 
   // Listen for section updates
   useEffect(() => {
-    const unsubscribe = eventEmitter.on(EVENTS.SECTION_DATA_UPDATED, () => {
-
-      fetchSections();
+    const unsubscribe = eventEmitter.on(EVENTS.SECTION_DATA_UPDATED, ({ silent } = {}) => {
+      if (!silent) {
+        const currentTab = searchParams.get('tab');
+        fetchSections(true).then(() => {
+          if (currentTab) {
+            setActiveTab(currentTab);
+            setSearchParams({ tab: currentTab });
+          }
+        });
+      }
     });
 
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [searchParams, setSearchParams, fetchSections]);
 
   // Update URL when tab changes
   const handleTabChange = (event, newValue) => {

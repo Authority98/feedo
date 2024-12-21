@@ -115,7 +115,7 @@ export const useFileHandling = ({
             }
           }).then(() => {
             // 4. Emit update event after successful save
-            eventEmitter.emit(EVENTS.SECTION_DATA_UPDATED);
+            eventEmitter.emit(EVENTS.SECTION_DATA_UPDATED, { silent: true });
           });
         }
 
