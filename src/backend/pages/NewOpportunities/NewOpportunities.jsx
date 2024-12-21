@@ -307,7 +307,7 @@ const NewOpportunities = () => {
           break;
         }
         const daysUntilDeadline = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
-        filterResult = daysUntilDeadline <= 30 && daysUntilDeadline > 0;
+        filterResult = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
         console.log(`Days until deadline: ${daysUntilDeadline} - ${filterResult ? '✅ Closing soon' : '❌ Not closing soon'}`);
         break;
 
