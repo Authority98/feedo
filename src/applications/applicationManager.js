@@ -355,11 +355,12 @@ export const opportunityOperations = {
         }
 
         stats.total++;
+        stats.active++; // Count all valid opportunities as active
 
-        // Count active opportunities
-        if (data.status === 'active') {
-          stats.active++;
-        }
+        // Remove old active count based on status
+        // if (data.status === 'active') {
+        //   stats.active++;
+        // }
 
         // Count new opportunities (created in last 7 days)
         const createdAt = data.createdAt ? (typeof data.createdAt.toDate === 'function' ? data.createdAt.toDate() : new Date(data.createdAt)) : null;
