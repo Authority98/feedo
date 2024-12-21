@@ -222,9 +222,8 @@ const NewOpportunities = () => {
   // Add effect to reset pagination when filter changes
   useEffect(() => {
     if (activeFilter || searchTerm) {
-      console.log(`Filter/Search changed - Resetting to page 1. Active Filter: ${activeFilter}, Search Term: ${searchTerm}`);
+      setCurrentPage(1);
     }
-    setCurrentPage(1);
   }, [activeFilter, searchTerm]);
 
   // Filter opportunities based on search term and active filter
@@ -235,14 +234,12 @@ const NewOpportunities = () => {
       opp.company.toLowerCase().includes(searchTerm.toLowerCase());
 
     if (!matchesSearch) {
-      console.log(`❌ Does not match search term: ${searchTerm}`);
       return false;
     }
 
     // Check if opportunity is still active (deadline not passed)
     const now = new Date();
     if (!opp.deadline || new Date(opp.deadline) <= now) {
-      console.log('❌ Deadline passed or invalid');
       return false;
     }
 
@@ -256,37 +253,18 @@ const NewOpportunities = () => {
       // Show opportunities created in the last 7 days
       const createdAt = new Date(opp.createdAt);
       const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      const isNew = createdAt && !isNaN(createdAt.getTime()) && createdAt >= sevenDaysAgo && createdAt <= now;
-      console.log(`Creation date: ${createdAt.toISOString()} vs 7 days ago: ${sevenDaysAgo.toISOString()} - ${isNew ? '✅' : '❌'} Is new`);
-      return isNew;
+      return createdAt && !isNaN(createdAt.getTime()) && createdAt >= sevenDaysAgo && createdAt <= now;
     } else if (activeFilter === 'matches') {
       // Show opportunities with match percentage >= 90%
-      const isHighMatch = opp.matchPercentage >= 90;
-      console.log(`Match percentage: ${opp.matchPercentage}% - ${isHighMatch ? '✅ High match' : '❌ Low match'}`);
-      return isHighMatch;
+      return opp.matchPercentage >= 90;
     } else if (activeFilter === 'closing') {
       // Show opportunities closing within 7 days
       const daysUntilDeadline = Math.ceil((new Date(opp.deadline) - now) / (1000 * 60 * 60 * 24));
-      const isClosingSoon = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
-      console.log(`Days until deadline: ${daysUntilDeadline} - ${isClosingSoon ? '✅ Closing soon' : '❌ Not closing soon'}`);
-      return isClosingSoon;
+      return daysUntilDeadline <= 7 && daysUntilDeadline > 0;
     }
 
     return false;
   });
-
-  // Log pagination info
-  useEffect(() => {
-    console.log(`
-Pagination Update:
-- Total opportunities: ${opportunities.length}
-- Filtered opportunities: ${filteredOpportunities.length}
-- Current page: ${currentPage}
-- Items per page: ${itemsPerPage}
-- Total pages: ${totalPages}
-- Showing items ${indexOfFirstItem + 1} to ${Math.min(indexOfLastItem, filteredOpportunities.length)}
-    `);
-  }, [currentPage, filteredOpportunities.length, opportunities.length]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredOpportunities.length / itemsPerPage);
