@@ -357,11 +357,6 @@ export const opportunityOperations = {
         stats.total++;
         stats.active++; // Count all valid opportunities as active
 
-        // Remove old active count based on status
-        // if (data.status === 'active') {
-        //   stats.active++;
-        // }
-
         // Count new opportunities (created in last 7 days)
         const createdAt = data.createdAt ? (typeof data.createdAt.toDate === 'function' ? data.createdAt.toDate() : new Date(data.createdAt)) : null;
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -383,20 +378,18 @@ export const opportunityOperations = {
         // Calculate days until deadline
         const daysUntilDeadline = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
 
-        // Count closing soon (within 7 days)
-        if (daysUntilDeadline <= 7 && daysUntilDeadline > 0) {
-          stats.closingSoon++;
-        }
-
-        // Count other deadline categories
-        if (deadline <= new Date(today.getTime() + 24 * 60 * 60 * 1000)) {
-          stats.closingToday++;
-        }
-        if (deadline <= oneWeek) {
-          stats.closingThisWeek++;
-        }
-        if (deadline <= oneMonth) {
-          stats.closingThisMonth++;
+        // Count deadline categories
+        if (daysUntilDeadline > 0) {
+          if (daysUntilDeadline <= 1) {
+            stats.closingToday++;
+          }
+          if (daysUntilDeadline <= 7) {
+            stats.closingThisWeek++;
+            stats.closingSoon++;
+          }
+          if (daysUntilDeadline <= 30) {
+            stats.closingThisMonth++;
+          }
         }
       });
 
