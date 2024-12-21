@@ -29,7 +29,8 @@ const StatCards = ({ refreshTrigger = 0 }) => {
     perfectMatches: 0,
     newOpportunities: 0,
     successRate: 0,
-    closingSoon: 0
+    closingSoon: 0,
+    highlyMatched: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -73,11 +74,10 @@ const StatCards = ({ refreshTrigger = 0 }) => {
   {
     id: 3,
     icon: FiTrendingUp,
-    title: "Highly Matched",
-    value: stats.successRate,
-    trend: "+3%",
-    bgColor: "bg-[#34b800]",
-    isPercentage: true
+    title: "90%+ Matches",
+    value: stats.highlyMatched,
+    trend: "Match ≥ 90%",
+    bgColor: "bg-[#34b800]"
   },
   {
     id: 4,

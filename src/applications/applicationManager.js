@@ -311,7 +311,8 @@ export const opportunityOperations = {
           closingToday: 0,
           closingThisWeek: 0,
           closingThisMonth: 0,
-          successRate: 0
+          successRate: 0,
+          highlyMatched: 0
         };
       }
 
@@ -331,7 +332,8 @@ export const opportunityOperations = {
         closingToday: 0,
         closingThisWeek: 0,
         closingThisMonth: 0,
-        successRate: 0
+        successRate: 0,
+        highlyMatched: 0
       };
 
       const now = new Date();
@@ -340,9 +342,6 @@ export const opportunityOperations = {
       oneWeek.setDate(oneWeek.getDate() + 7);
       const oneMonth = new Date(today);
       oneMonth.setMonth(oneMonth.getMonth() + 1);
-
-      // Generate random success rate between 70 and 100
-      stats.successRate = Math.floor(Math.random() * (100 - 70 + 1)) + 70;
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
@@ -358,7 +357,12 @@ export const opportunityOperations = {
           stats.newOpportunities++;
         }
 
-        // Count perfect matches (assuming matchPercentage is 100)
+        // Count highly matched opportunities (90% or higher)
+        if (data.matchPercentage >= 90) {
+          stats.highlyMatched++;
+        }
+
+        // Count perfect matches (100%)
         if (data.matchPercentage === 100) {
           stats.perfectMatches++;
         }
@@ -403,7 +407,8 @@ export const opportunityOperations = {
         closingToday: 0,
         closingThisWeek: 0,
         closingThisMonth: 0,
-        successRate: 0
+        successRate: 0,
+        highlyMatched: 0
       };
     }
   }
