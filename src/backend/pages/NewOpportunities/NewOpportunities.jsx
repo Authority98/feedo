@@ -246,6 +246,11 @@ const NewOpportunities = () => {
       return false;
     }
 
+    // If no active filter, show all opportunities
+    if (!activeFilter) {
+      return true;
+    }
+
     let filterResult = true;
 
     // Apply active filter
