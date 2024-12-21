@@ -152,3 +152,46 @@
   - Fixed syntax errors in component structure
   - Improved code readability and maintainability
   - Ensured proper component nesting and closing tags
+
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+### Fixed
+- ESLint configuration updated to fix build issues on Netlify
+  - Disabled problematic ESLint rules for production builds
+  - Added production environment variables to handle ESLint during build
+  - Created `.env.production` to manage build-specific settings
+
+### Changed
+- Renamed maintenance-log.md to CHANGELOG.md for better clarity and convention
+- Updated ESLint configuration to be more permissive in production
+- Added environment variables to prevent ESLint errors from blocking builds
+
+### Added
+- New `.env.production` file with build-specific settings
+- ESLint rule configurations for better development experience
+
+## [0.1.0] - 2024-02-14
+
+### Fixed
+- Percentage not updating immediately when file is deleted on data management page
+  - Added immediate Firebase update after file deletion
+  - Improved event emission for section data updates
+  - Enhanced error handling in file deletion process
+
+### Added
+- Missing Babel plugin for private property handling
+  - Added @babel/plugin-proposal-private-property-in-object as dev dependency
+  - Fixed ESLint errors related to the plugin
+
+### Changed
+- Improved file handling in useFileHandling hook
+- Enhanced auto-save functionality in useAutoSave hook
+- Updated error handling in file operations
+
+### Security
+- Removed direct integration of sensitive information from logs
+- Enhanced security in file handling operations
