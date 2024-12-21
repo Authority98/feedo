@@ -219,56 +219,66 @@ const NewOpportunities = () => {
     }
   };
 
+  // Add effect to reset pagination when filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilter, searchTerm]);
+
   // Filter opportunities based on search term, deadline, and active filter
   const filteredOpportunities = opportunities.filter((opp) => {
-    // Check if the opportunity has passed its deadline
-    const deadline = new Date(opp.deadline);
-    const now = new Date();
-    const hasPassedDeadline = deadline < now;
-
-    // Only include opportunities that haven't passed their deadline
-    const isActive = !hasPassedDeadline;
-
-    // Check if it matches the search term
+    // Check if it matches the search term first (most lightweight check)
     const matchesSearch = !searchTerm ||
       (opp.title && opp.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (opp.description && opp.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    // Check if it matches the active filter
-    let matchesFilter = true;
-    if (activeFilter) {
-      switch (activeFilter) {
-        case 'new':
-          // New opportunities (created in the last 7 days)
-          if (!opp.createdAt) return false;
-          const createdDate = new Date(opp.createdAt);
-          const sevenDaysAgo = new Date();
-          sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-          matchesFilter = !isNaN(createdDate.getTime()) && createdDate >= sevenDaysAgo;
-          break;
-        case 'matches':
-          // Opportunities with match percentage >= 90%
-          matchesFilter = typeof opp.matchPercentage === 'number' && opp.matchPercentage >= 90;
-          break;
-        case 'closing':
-          // Opportunities closing in the next 7 days
-          if (!opp.deadline) return false;
-          const deadline = new Date(opp.deadline);
-          if (isNaN(deadline.getTime())) return false;
-          const now = new Date();
-          const daysUntilDeadline = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
-          matchesFilter = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
-          break;
-        case 'total':
-          // Show all opportunities (no additional filtering needed)
-          matchesFilter = true;
-          break;
-        default:
-          matchesFilter = true;
+    if (!matchesSearch) return false;
+
+    // Check if the opportunity is still active (not passed deadline)
+    let isActive = true;
+    if (opp.deadline) {
+      const deadline = new Date(opp.deadline);
+      if (!isNaN(deadline.getTime())) {
+        const now = new Date();
+        isActive = deadline > now;
       }
     }
 
-    return isActive && matchesSearch && matchesFilter;
+    if (!isActive) return false;
+
+    // Check if it matches the active filter
+    if (!activeFilter) return true;
+
+    const now = new Date();
+    
+    switch (activeFilter) {
+      case 'new':
+        // New opportunities (created in the last 7 days)
+        if (!opp.createdAt) return false;
+        const createdDate = new Date(opp.createdAt);
+        if (isNaN(createdDate.getTime())) return false;
+        const sevenDaysAgo = new Date(now);
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        return createdDate >= sevenDaysAgo;
+
+      case 'matches':
+        // Opportunities with match percentage >= 90%
+        return typeof opp.matchPercentage === 'number' && opp.matchPercentage >= 90;
+
+      case 'closing':
+        // Opportunities closing in the next 7 days
+        if (!opp.deadline) return false;
+        const deadline = new Date(opp.deadline);
+        if (isNaN(deadline.getTime())) return false;
+        const daysUntilDeadline = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
+        return daysUntilDeadline <= 7 && daysUntilDeadline > 0;
+
+      case 'total':
+        // Show all opportunities (no additional filtering needed)
+        return true;
+
+      default:
+        return true;
+    }
   });
 
   // Pagination calculations
