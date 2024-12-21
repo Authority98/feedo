@@ -75,6 +75,34 @@ const verifyCustomerOwnership = async (userId, customerId) => {
   }
 };
 
+/**
+ * Updates subscription information in both stripe_customers and users collections
+ */
+const updateSubscriptionInFirestore = async (userId, subscriptionDetails) => {
+  try {
+    verifyDbConnection();
+
+    // Update in stripe_customers collection
+    const customerRef = doc(db, 'stripe_customers', userId);
+    await setDoc(customerRef, {
+      subscription: subscriptionDetails,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+
+    // Update in users collection
+    const userRef = doc(db, 'users', userId);
+    await setDoc(userRef, {
+      subscription: {
+        ...subscriptionDetails,
+        updatedAt: serverTimestamp()
+      }
+    }, { merge: true });
+  } catch (error) {
+    console.error('Error updating subscription in Firestore:', error);
+    throw error;
+  }
+};
+
 export const stripeApi = {
   // Check if Stripe is properly configured
   isConfigured: () => stripeConfig.isConfigured,
@@ -494,11 +522,50 @@ export const stripeApi = {
         if (confirmedPaymentIntent.status === 'succeeded') {
           // Refresh the subscription to get the latest status
           const updatedSubscription = await stripe.subscriptions.retrieve(subscription.id);
+          
+          // Get product details
+          const product = await stripe.products.retrieve(updatedSubscription.items.data[0].price.product);
+          
+          // Format subscription details
+          const subscriptionDetails = {
+            id: updatedSubscription.id,
+            status: updatedSubscription.status,
+            planName: product.name,
+            currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000),
+            currentPeriodStart: new Date(updatedSubscription.current_period_start * 1000),
+            cancelAtPeriodEnd: updatedSubscription.cancel_at_period_end,
+            interval: updatedSubscription.items.data[0].price.recurring.interval,
+            amount: updatedSubscription.items.data[0].price.unit_amount / 100,
+            currency: updatedSubscription.items.data[0].price.currency
+          };
+
+          // Update subscription in Firestore
+          await updateSubscriptionInFirestore(user.uid, subscriptionDetails);
+
           return { subscription: updatedSubscription };
         } else {
           throw new Error('Payment confirmation failed');
         }
       }
+
+      // Get product details
+      const product = await stripe.products.retrieve(subscription.items.data[0].price.product);
+      
+      // Format subscription details
+      const subscriptionDetails = {
+        id: subscription.id,
+        status: subscription.status,
+        planName: product.name,
+        currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+        currentPeriodStart: new Date(subscription.current_period_start * 1000),
+        cancelAtPeriodEnd: subscription.cancel_at_period_end,
+        interval: subscription.items.data[0].price.recurring.interval,
+        amount: subscription.items.data[0].price.unit_amount / 100,
+        currency: subscription.items.data[0].price.currency
+      };
+
+      // Update subscription in Firestore
+      await updateSubscriptionInFirestore(user.uid, subscriptionDetails);
 
       return { subscription };
     } catch (error) {
@@ -536,6 +603,25 @@ export const stripeApi = {
         proration_behavior: 'create_prorations'
       });
 
+      // Get product details
+      const product = await stripe.products.retrieve(updatedSubscription.items.data[0].price.product);
+      
+      // Format subscription details
+      const subscriptionDetails = {
+        id: updatedSubscription.id,
+        status: updatedSubscription.status,
+        planName: product.name,
+        currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000),
+        currentPeriodStart: new Date(updatedSubscription.current_period_start * 1000),
+        cancelAtPeriodEnd: updatedSubscription.cancel_at_period_end,
+        interval: updatedSubscription.items.data[0].price.recurring.interval,
+        amount: updatedSubscription.items.data[0].price.unit_amount / 100,
+        currency: updatedSubscription.items.data[0].price.currency
+      };
+
+      // Update subscription in Firestore
+      await updateSubscriptionInFirestore(user.uid, subscriptionDetails);
+
       return updatedSubscription;
     } catch (error) {
       console.error('Error updating subscription:', error);
@@ -563,17 +649,38 @@ export const stripeApi = {
       // Verify ownership of the customer this subscription belongs to
       await verifyCustomerOwnership(user.uid, subscription.customer);
 
+      let updatedSubscription;
       if (cancelAtPeriodEnd) {
         // Cancel at period end
-        const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
+        updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
           cancel_at_period_end: true
         });
-        return updatedSubscription;
       } else {
         // Cancel immediately
-        const canceledSubscription = await stripe.subscriptions.cancel(subscriptionId);
-        return canceledSubscription;
+        updatedSubscription = await stripe.subscriptions.cancel(subscriptionId);
       }
+
+      // Get product details
+      const product = await stripe.products.retrieve(updatedSubscription.items.data[0].price.product);
+      
+      // Format subscription details
+      const subscriptionDetails = {
+        id: updatedSubscription.id,
+        status: updatedSubscription.status,
+        planName: product.name,
+        currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000),
+        currentPeriodStart: new Date(updatedSubscription.current_period_start * 1000),
+        cancelAtPeriodEnd: updatedSubscription.cancel_at_period_end,
+        interval: updatedSubscription.items.data[0].price.recurring.interval,
+        amount: updatedSubscription.items.data[0].price.unit_amount / 100,
+        currency: updatedSubscription.items.data[0].price.currency,
+        canceledAt: updatedSubscription.canceled_at ? new Date(updatedSubscription.canceled_at * 1000) : null
+      };
+
+      // Update subscription in Firestore
+      await updateSubscriptionInFirestore(user.uid, subscriptionDetails);
+
+      return updatedSubscription;
     } catch (error) {
       console.error('Error canceling subscription:', error);
       throw error;
@@ -604,6 +711,25 @@ export const stripeApi = {
       const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
         cancel_at_period_end: false
       });
+
+      // Get product details
+      const product = await stripe.products.retrieve(updatedSubscription.items.data[0].price.product);
+      
+      // Format subscription details
+      const subscriptionDetails = {
+        id: updatedSubscription.id,
+        status: updatedSubscription.status,
+        planName: product.name,
+        currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000),
+        currentPeriodStart: new Date(updatedSubscription.current_period_start * 1000),
+        cancelAtPeriodEnd: updatedSubscription.cancel_at_period_end,
+        interval: updatedSubscription.items.data[0].price.recurring.interval,
+        amount: updatedSubscription.items.data[0].price.unit_amount / 100,
+        currency: updatedSubscription.items.data[0].price.currency
+      };
+
+      // Update subscription in Firestore
+      await updateSubscriptionInFirestore(user.uid, subscriptionDetails);
 
       return updatedSubscription;
     } catch (error) {
